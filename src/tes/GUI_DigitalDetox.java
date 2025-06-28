@@ -11,7 +11,7 @@ public class GUI_DigitalDetox extends Application{
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
-        
+        //halo
         Scene scene = new Scene(root);
         
         stage.setScene(scene);
