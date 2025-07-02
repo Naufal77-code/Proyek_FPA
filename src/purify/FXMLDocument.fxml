@@ -6,13 +6,12 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="561.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tes.FXMLDocumentController">
+<AnchorPane prefHeight="627.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tes.FXMLDocumentController">
     <children>
-        <Label layoutX="246.0" layoutY="29.0" prefHeight="66.0" prefWidth="147.0" text="BLOKIR HP">
+        <Label layoutX="246.0" layoutY="14.0" prefHeight="66.0" prefWidth="147.0" text="BLOKIR HP">
             <font>
                 <Font name="Calibri Bold" size="31.0" />
             </font>
@@ -22,23 +21,22 @@
         
         <TextField fx:id="durasiField" layoutX="172.0" layoutY="83.0" />
         
-        <Button fx:id="btnBlokir" layoutX="270.0" layoutY="449.0" mnemonicParsing="false" onAction="#handleBlokir" prefHeight="47.0" prefWidth="86.0" text="Blokir" />
+        <Button fx:id="btnBlokir" layoutX="278.0" layoutY="543.0" mnemonicParsing="false" onAction="#handleBlokir" prefHeight="47.0" prefWidth="86.0" text="Blokir" />
         
-        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="97.0" layoutX="53.0" layoutY="128.0" stroke="BLACK" strokeType="INSIDE" width="521.0" />
-        
-        <Label fx:id="statusLabel" layoutX="151.0" layoutY="135.0" prefHeight="79.0" prefWidth="343.0" textAlignment="CENTER">
-            <font>
-                <Font size="33.0" />
-            </font>
-        </Label>
-        
-        <TableView fx:id="riwayatTable" layoutX="53.0" layoutY="239.0" prefHeight="176.0" prefWidth="522.0">
+        <TableView fx:id="riwayatTable" layoutX="58.0" layoutY="173.0" prefHeight="305.0" prefWidth="522.0">
             <columns>
-                <TableColumn fx:id="colNomor" prefWidth="79.0" text="Nomor" />
-                <TableColumn fx:id="colRiwayat" prefWidth="441.0" text="Riwayat Blokir" />
+                <TableColumn fx:id="colRiwayat" prefWidth="40.800048828125" text="No" />
+            <TableColumn fx:id="colRiwayat1" prefWidth="93.60003662109375" text="Riwayat" />
+            <TableColumn fx:id="colRiwayat11" prefWidth="113.60003662109375" text="Durasi" />
+            <TableColumn fx:id="colRiwayat111" prefWidth="93.5999755859375" text="Status" />
+            <TableColumn fx:id="colRiwayat2" prefWidth="177.60001220703123" text="Aktivitas" />
             </columns>
         </TableView>
-      <Button layoutX="357.0" layoutY="83.0" mnemonicParsing="false" text="Kode darurat" />
-      <TextField layoutX="460.0" layoutY="83.0" />
+      <TextField fx:id="kodeDaruratField" layoutX="460.0" layoutY="83.0" prefHeight="26.0" prefWidth="120.0" />
+      <Text layoutX="358.0" layoutY="101.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Kode darurat" />
+      <Button fx:id="btnEditRiwayat" layoutX="89.0" layoutY="490.0" mnemonicParsing="false" text="Edit Riwayat Aktivitas" />
+      <Button fx:id="btnHapusRiwayat" layoutX="393.0" layoutY="490.0" mnemonicParsing="false" text="Hapus Riwayat Terlama" />
+      <TextField fx:id="aktivitasField" layoutX="298.0" layoutY="135.0" prefHeight="26.0" prefWidth="120.0" />
+      <Text layoutX="212.0" layoutY="153.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Aktivitas" />
     </children>
 </AnchorPane>
