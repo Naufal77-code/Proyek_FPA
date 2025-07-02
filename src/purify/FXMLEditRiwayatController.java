@@ -1,4 +1,4 @@
-package tes;
+package purify;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

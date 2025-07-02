@@ -1,26 +1,19 @@
-package tes;
+package purify;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.property.IntegerProperty;
 
 public class RiwayatBlokir {
-<<<<<<< HEAD:src/purify/RiwayatBlokir.java
-    private final SimpleStringProperty nomor;
-    private final SimpleStringProperty riwayat;
-    
-    public RiwayatBlokir(String nomor, String riwayat) {
-        this.nomor = new SimpleStringProperty(nomor);
-        this.riwayat = new SimpleStringProperty(riwayat);
-=======
-    private SimpleIntegerProperty nomor;
-    private SimpleStringProperty tanggalMulai;
-    private SimpleIntegerProperty durasi;
-    private SimpleStringProperty status;
-    private SimpleStringProperty aktivitas;
+    private final IntegerProperty nomor;
+    private final StringProperty tanggalMulai;
+    private final IntegerProperty durasi;
+    private final StringProperty status;
+    private final StringProperty aktivitas;
 
     public RiwayatBlokir() {
         this(0, "", 0, "", "");
->>>>>>> 58019ee (baru):src/tes/RiwayatBlokir.java
     }
 
     public RiwayatBlokir(int nomor, String tanggalMulai, int durasi, String status, String aktivitas) {
@@ -39,6 +32,11 @@ public class RiwayatBlokir {
         this.nomor.set(nomor);
     }
 
+    public IntegerProperty nomorProperty() {
+        return nomor;
+    }
+
+
     public String getTanggalMulai() {
         return tanggalMulai.get();
     }
@@ -47,12 +45,21 @@ public class RiwayatBlokir {
         this.tanggalMulai.set(tanggalMulai);
     }
 
+    public StringProperty tanggalMulaiProperty() {
+        return tanggalMulai;
+    }
+
+
     public int getDurasi() {
         return durasi.get();
     }
 
     public void setDurasi(int durasi) {
         this.durasi.set(durasi);
+    }
+
+    public IntegerProperty durasiProperty() {
+        return durasi;
     }
 
     public String getStatus() {
@@ -63,11 +70,30 @@ public class RiwayatBlokir {
         this.status.set(status);
     }
 
+    public StringProperty statusProperty() {
+        return status;
+    }
+
     public String getAktivitas() {
         return aktivitas.get();
     }
 
     public void setAktivitas(String aktivitas) {
         this.aktivitas.set(aktivitas);
+    }
+
+    public StringProperty aktivitasProperty() {
+        return aktivitas;
+    }
+
+    @Override
+    public String toString() {
+        return "RiwayatBlokir{" +
+                "nomor=" + getNomor() +
+                ", tanggalMulai='" + getTanggalMulai() + '\'' +
+                ", durasi=" + getDurasi() +
+                ", status='" + getStatus() + '\'' +
+                ", aktivitas='" + getAktivitas() + '\'' +
+                '}';
     }
 }

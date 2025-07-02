@@ -1,4 +1,4 @@
-package tes;
+package purify;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -10,7 +10,8 @@ public class GUI_DigitalDetox extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-         Parent root = FXMLLoader.load(getClass().getResource("/tes/FXMLDocument.fxml"));
+         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
+
         
         Scene scene = new Scene(root);
         

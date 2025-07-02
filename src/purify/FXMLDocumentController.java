@@ -1,4 +1,4 @@
-package tes;
+package purify;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -66,6 +66,8 @@ public class FXMLDocumentController implements Initializable {
 
         btnEditRiwayat.setOnAction(this::handleEditRiwayat);
         btnHapusRiwayat.setOnAction(this::handleHapusRiwayat);
+
+        
     }
 
     @FXML
@@ -144,7 +146,7 @@ public class FXMLDocumentController implements Initializable {
 
     private void openBlockingScreen() {
     try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/tes/FXMLBlokirStatus.fxml")); 
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/purify/FXMLBlokirStatus.fxml")); 
         Parent root = loader.load();
 
         FXMLBlokirStatusController controller = loader.getController();

@@ -1,4 +1,4 @@
-package tes;
+package purify;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -112,7 +112,7 @@ public class FXMLBlokirStatusController implements Initializable {
 
     private void returnToMainMenu() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/tes/FXMLDocument.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/purify/FXMLDocument.fxml"));
             Parent root = loader.load();
 
             Stage currentStage = (Stage) timerLabel.getScene().getWindow();
