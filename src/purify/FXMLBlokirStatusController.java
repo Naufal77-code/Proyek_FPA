@@ -112,7 +112,7 @@ public class FXMLBlokirStatusController implements Initializable {
 
     private void returnToMainMenu() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/purify/FXMLDocument.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/purify/FXMLBlokirHP.fxml"));
             Parent root = loader.load();
 
             Stage currentStage = (Stage) timerLabel.getScene().getWindow();

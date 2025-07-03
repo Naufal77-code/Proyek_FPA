@@ -1,0 +1,67 @@
+<RiwayatBlokirList>
+  <dataList class="com.sun.javafx.collections.ObservableListWrapper">
+    <listenerHelper class="com.sun.javafx.collections.ListListenerHelper$Generic">
+      <changeListeners>
+        <javafx.collections.WeakListChangeListener>
+          <ref>
+            <referent class="null"/>
+            <queue class="java.lang.ref.ReferenceQueue$Null">
+              <lock/>
+              <queueLength>0</queueLength>
+            </queue>
+          </ref>
+        </javafx.collections.WeakListChangeListener>
+        <null/>
+        <javafx.collections.WeakListChangeListener>
+          <ref>
+            <referent class="null"/>
+            <queue class="java.lang.ref.ReferenceQueue$Null" reference="../../../javafx.collections.WeakListChangeListener/ref/queue"/>
+          </ref>
+        </javafx.collections.WeakListChangeListener>
+        <javafx.collections.WeakListChangeListener>
+          <ref>
+            <referent class="null"/>
+            <queue class="java.lang.ref.ReferenceQueue$Null" reference="../../../javafx.collections.WeakListChangeListener/ref/queue"/>
+          </ref>
+        </javafx.collections.WeakListChangeListener>
+      </changeListeners>
+      <invalidationSize>0</invalidationSize>
+      <changeSize>4</changeSize>
+      <locked>false</locked>
+    </listenerHelper>
+    <changeBuilder>
+      <list class="com.sun.javafx.collections.ObservableListWrapper" reference="../.."/>
+      <changeLock>0</changeLock>
+      <addRemoveChanges/>
+    </changeBuilder>
+    <backingList>
+      <RiwayatBlokir>
+        <nomor class="javafx.beans.property.SimpleIntegerProperty">
+          <value>1</value>
+          <valid>true</valid>
+          <name></name>
+        </nomor>
+        <tanggalMulai class="javafx.beans.property.SimpleStringProperty">
+          <value>03/07/2025 22:28</value>
+          <valid>true</valid>
+          <name></name>
+        </tanggalMulai>
+        <durasi class="javafx.beans.property.SimpleIntegerProperty">
+          <value>1</value>
+          <valid>true</valid>
+          <name></name>
+        </durasi>
+        <status class="javafx.beans.property.SimpleStringProperty">
+          <value>GAGAL</value>
+          <valid>true</valid>
+          <name></name>
+        </status>
+        <aktivitas class="javafx.beans.property.SimpleStringProperty">
+          <value>dgth</value>
+          <valid>true</valid>
+          <name></name>
+        </aktivitas>
+      </RiwayatBlokir>
+    </backingList>
+  </dataList>
+</RiwayatBlokirList>
