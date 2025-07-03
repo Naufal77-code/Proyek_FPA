@@ -4,17 +4,9 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.property.IntegerProperty;
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
-import com.thoughtworks.xstream.security.NoTypePermission;
-import com.thoughtworks.xstream.security.PrimitiveTypePermission;
-import java.io.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class RiwayatBlokir {
-    private static final Logger logger = Logger.getLogger(RiwayatBlokir.class.getName());
-    private static final String XML_FILE = "riwayat_blokir_single.xml";
+
     private final IntegerProperty nomor;
     private final StringProperty tanggalMulai;
     private final IntegerProperty durasi;
@@ -105,52 +97,4 @@ public class RiwayatBlokir {
                 ", aktivitas='" + getAktivitas() + '\'' +
                 '}';
     }
-
-public void saveToXML(){
-    XStream xstream = new XStream(new DomDriver());
-    xstream.alias("RiwayatBlokir", RiwayatBlokir.class);
-    xstream.alias("RiwayatBlokirList", RiwayatBlokir.class);
-
-    try (FileOutputStream fos = new FileOutputStream(XML_FILE)) {
-        xstream.toXML(this,fos);
-        logger.log(Level.INFO, "Data riwayat berhasil disimpam ke "+XML_FILE);
-    } catch (Exception e) {
-        logger.log(Level.SEVERE, "Gagal menyimpan data riwayat ke XML",e);
-    }
-}
-
-public static RiwayatBlokir loadFromXML(){
-   File file = new File(XML_FILE);
-   if (!file.exists()){
-    logger.log(Level.INFO,"File "+XML_FILE+" tidak ditemukan");
-    return null;
-   }
-
-   XStream xstream = createSecureXStream();
-   xstream.alias("RiwayatBlokir", RiwayatBlokir.class);
-
-   try (FileInputStream fis = new FileInputStream(file)) {
-            RiwayatBlokir loadedRiwayat = (RiwayatBlokir) xstream.fromXML(fis);
-            logger.log(Level.INFO, "Data riwayat berhasil dimuat dari " + XML_FILE);
-            return loadedRiwayat;
-        } catch (IOException e) {
-            logger.log(Level.SEVERE, "Gagal memuat data riwayat dari XML", e);
-            return null;
-        }
-}
-
-
-    private static XStream createSecureXStream() {
-        XStream xstream = new XStream(new DomDriver());
-        
-        xstream.addPermission(NoTypePermission.NONE);
-        xstream.addPermission(PrimitiveTypePermission.PRIMITIVES);
-        xstream.allowTypeHierarchy(RiwayatBlokir.class);
-        xstream.allowTypesByWildcard(new String[] {
-            "purify.**"
-        });
-        
-        return xstream;
-    }
-
 }
