@@ -43,8 +43,12 @@ public class FXMLEditRiwayatController implements Initializable {
     @FXML
     private Button btnSubmit;
 
+    @FXML
+    private Button btnHapus;
+
     private RiwayatBlokirList riwayatList;
     private FXMLDocumentController mainController;
+    private RiwayatBlokir selectedRiwayat;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -55,42 +59,100 @@ public class FXMLEditRiwayatController implements Initializable {
         colRiwayat2.setCellValueFactory(new PropertyValueFactory<>("aktivitas"));
 
         btnSubmit.setOnAction(this::handleSubmit);
+        btnHapus.setOnAction(this::handleHapus);
+        
+        // Add table selection listener
+        riwayatTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                selectedRiwayat = newValue;
+                // Auto-fill the fields when a row is selected
+                nomorField.setText(String.valueOf(newValue.getNomor()));
+                aktivitasBaruField.setText(newValue.getAktivitas());
+                
+                // Enable buttons when row is selected
+                btnSubmit.setDisable(false);
+                btnHapus.setDisable(false);
+            } else {
+                // Disable buttons when no row is selected
+                btnSubmit.setDisable(true);
+                btnHapus.setDisable(true);
+            }
+        });
+        
+        // Make the nomor field read-only since it's auto-filled
+        nomorField.setEditable(false);
+        nomorField.setStyle("-fx-background-color: #f0f0f0;");
+        
+        // Initially disable buttons until a row is selected
+        btnSubmit.setDisable(true);
+        btnHapus.setDisable(true);
     }
 
     @FXML
     private void handleSubmit(ActionEvent event) {
-        String nomorText = nomorField.getText().trim();
-        String aktivitasBaru = aktivitasBaruField.getText().trim();
-
-        if (nomorText.isEmpty()) {
-            showAlert("Error", "Nomor riwayat tidak boleh kosong!");
+        if (selectedRiwayat == null) {
+            showAlert("Error", "Pilih salah satu riwayat dari tabel terlebih dahulu!");
             return;
         }
+        
+        String aktivitasBaru = aktivitasBaruField.getText().trim();
+        int nomor = selectedRiwayat.getNomor();
 
-        try {
-            int nomor = Integer.parseInt(nomorText);
+        if (riwayatList != null) {
+            riwayatList.editAktivitas(nomor, aktivitasBaru);
+        }
+        
+        if (mainController != null) {
+            mainController.refreshTable();
+        }
+
+        showAlert("Success", "Aktivitas berhasil diubah!");
+        
+        // Clear selection and fields
+        clearSelection();
+        
+        // Don't close the window so user can continue editing other records
+        // Stage stage = (Stage) btnSubmit.getScene().getWindow();
+        // stage.close();
+    }
+
+    @FXML
+    private void handleHapus(ActionEvent event) {
+        if (selectedRiwayat == null) {
+            showAlert("Error", "Pilih salah satu riwayat dari tabel terlebih dahulu!");
+            return;
+        }
+        
+        // Show confirmation dialog
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Konfirmasi Hapus");
+        confirm.setHeaderText("Hapus Riwayat");
+        confirm.setContentText("Apakah Anda yakin ingin menghapus riwayat nomor " + selectedRiwayat.getNomor() + "?");
+        
+        // Wait for user response
+        if (confirm.showAndWait().orElse(null) == javafx.scene.control.ButtonType.OK) {
+            int nomor = selectedRiwayat.getNomor();
             
-            if (nomor <= 0 || nomor > riwayatList.getData().size()) {
-                showAlert("Error", "Nomor riwayat tidak valid!");
-                return;
-            }
-
             if (riwayatList != null) {
-                riwayatList.editAktivitas(nomor, aktivitasBaru);
-}
+                riwayatList.remove(nomor);
+            }
             
             if (mainController != null) {
                 mainController.refreshTable();
             }
-
-            showAlert("Success", "Aktivitas berhasil diubah!");
             
-            Stage stage = (Stage) btnSubmit.getScene().getWindow();
-            stage.close();
-
-        } catch (NumberFormatException e) {
-            showAlert("Error", "Nomor harus berupa angka!");
+            showAlert("Success", "Riwayat berhasil dihapus!");
+            
+            // Clear selection and fields
+            clearSelection();
         }
+    }
+
+    private void clearSelection() {
+        riwayatTable.getSelectionModel().clearSelection();
+        selectedRiwayat = null;
+        nomorField.clear();
+        aktivitasBaruField.clear();
     }
 
     public void setRiwayatList(RiwayatBlokirList riwayatList) {
