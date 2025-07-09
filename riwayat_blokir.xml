@@ -42,12 +42,12 @@
           <name></name>
         </nomor>
         <tanggalMulai class="javafx.beans.property.SimpleStringProperty">
-          <value>07/07/2025 16:51</value>
+          <value>09/07/2025 10:27</value>
           <valid>true</valid>
           <name></name>
         </tanggalMulai>
         <durasi class="javafx.beans.property.SimpleIntegerProperty">
-          <value>120</value>
+          <value>1</value>
           <valid>true</valid>
           <name></name>
         </durasi>
@@ -57,7 +57,7 @@
           <name></name>
         </status>
         <aktivitas class="javafx.beans.property.SimpleStringProperty">
-          <value>stop hp</value>
+          <value>sfdcvs</value>
           <valid>true</valid>
           <name></name>
         </aktivitas>

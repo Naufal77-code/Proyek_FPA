@@ -105,7 +105,7 @@
           <name></name>
         </nomor>
         <tanggalMulai class="javafx.beans.property.SimpleStringProperty">
-          <value>07/07/2025 16:43</value>
+          <value>09/07/2025 10:26</value>
           <valid>true</valid>
           <helper class="com.sun.javafx.binding.ExpressionHelper$Generic">
             <observable class="javafx.beans.property.SimpleStringProperty" reference="../.."/>
@@ -180,7 +180,7 @@
           <name></name>
         </status>
         <aktivitas class="javafx.beans.property.SimpleStringProperty">
-          <value>website terlarang</value>
+          <value>dvcjk</value>
           <valid>false</valid>
           <helper class="com.sun.javafx.binding.ExpressionHelper$Generic">
             <observable class="javafx.beans.property.SimpleStringProperty" reference="../.."/>

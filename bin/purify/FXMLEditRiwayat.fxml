@@ -10,10 +10,11 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="purify.FXMLEditRiwayatController">
    <children>
-      <TextField fx:id="nomorField" layoutX="131.0" layoutY="397.0" />
+      <TextField fx:id="nomorField" layoutX="131.0" layoutY="397.0" editable="false" />
       <TextField fx:id="aktivitasBaruField" layoutX="355.0" layoutY="397.0" />
-      <Button fx:id="btnSubmit" layoutX="266.0" layoutY="443.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="74.0" text="Submit" />
-      <Label layoutX="102.0" layoutY="368.0" prefHeight="34.0" prefWidth="207.0" text="Pilih riwayat (berdasarkan nomor)" textAlignment="JUSTIFY">
+      <Button fx:id="btnSubmit" layoutX="200.0" layoutY="443.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="74.0" text="Edit" />
+      <Button fx:id="btnHapus" layoutX="320.0" layoutY="443.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="74.0" text="Hapus" />
+      <Label layoutX="50.0" layoutY="368.0" prefHeight="34.0" prefWidth="259.0" text="Nomor riwayat yang dipilih (otomatis terisi)" textAlignment="JUSTIFY">
          <font>
             <Font name="Calibri" size="14.0" />
          </font>
@@ -32,5 +33,10 @@
             <TableColumn fx:id="colRiwayat2" prefWidth="177.60001220703123" text="Aktivitas" />
          </columns>
       </TableView>
+      <Label layoutX="120.0" layoutY="14.0" prefHeight="34.0" prefWidth="360.0" text="Klik salah satu baris untuk mengedit atau menghapus" textAlignment="CENTER">
+         <font>
+            <Font name="Calibri Bold" size="16.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

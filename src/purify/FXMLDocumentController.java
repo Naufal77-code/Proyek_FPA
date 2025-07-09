@@ -32,9 +32,6 @@ public class FXMLDocumentController implements Initializable {
     private Button btnEditRiwayat;
 
     @FXML
-    private Button btnHapusRiwayat;
-
-    @FXML
     private TableView<RiwayatBlokir> riwayatTable;
 
     @FXML
@@ -65,9 +62,6 @@ public class FXMLDocumentController implements Initializable {
         riwayatTable.setItems(riwayatList.getData());
 
         btnEditRiwayat.setOnAction(this::handleEditRiwayat);
-        btnHapusRiwayat.setOnAction(this::handleHapusRiwayat);
-
-        
     }
 
     @FXML
@@ -99,7 +93,6 @@ public class FXMLDocumentController implements Initializable {
 
             DetoxSession.getInstance().startDetox(durasi, aktivitas, kodeDarurat);
 
-
             openBlockingScreen();
 
         } catch (NumberFormatException e) {
@@ -108,6 +101,11 @@ public class FXMLDocumentController implements Initializable {
     }
 
     private void handleEditRiwayat(ActionEvent event) {
+        if (riwayatList.getData().isEmpty()) {
+            showAlert("Info", "Tidak ada riwayat untuk dikelola!");
+            return;
+        }
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLEditRiwayat.fxml"));
             Parent root = loader.load();
@@ -117,49 +115,32 @@ public class FXMLDocumentController implements Initializable {
             controller.setMainController(this);
 
             Stage stage = new Stage();
-            stage.setTitle("Edit Riwayat Aktivitas");
+            stage.setTitle("Kelola Riwayat Aktivitas");
             stage.setScene(new Scene(root));
             stage.show();
 
         } catch (IOException e) {
             e.printStackTrace();
-            showAlert("Error", "Gagal membuka halaman edit riwayat!");
-        }
-    }
-
-    private void handleHapusRiwayat(ActionEvent event) {
-        if (riwayatList.getData().isEmpty()) {
-            showAlert("Info", "Tidak ada riwayat untuk dihapus!");
-            return;
-        }
-
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setTitle("Konfirmasi");
-        confirm.setHeaderText("Hapus Riwayat Terlama");
-        confirm.setContentText("Apakah Anda yakin ingin menghapus riwayat terlama?");
-
-        if (confirm.showAndWait().get() == ButtonType.OK) {
-            riwayatList.removeOldest();
-            showAlert("Info", "Riwayat terlama berhasil dihapus!");
+            showAlert("Error", "Gagal membuka halaman kelola riwayat!");
         }
     }
 
     private void openBlockingScreen() {
-    try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/purify/FXMLBlokirStatus.fxml")); 
-        Parent root = loader.load();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/purify/FXMLBlokirStatus.fxml")); 
+            Parent root = loader.load();
 
-        FXMLBlokirStatusController controller = loader.getController();
-        controller.setMainController(this);
+            FXMLBlokirStatusController controller = loader.getController();
+            controller.setMainController(this);
 
-        Stage currentStage = (Stage) btnBlokir.getScene().getWindow();
-        currentStage.setScene(new Scene(root));
+            Stage currentStage = (Stage) btnBlokir.getScene().getWindow();
+            currentStage.setScene(new Scene(root));
 
-    } catch (IOException e) {
-        e.printStackTrace();
-        showAlert("Error", "Gagal membuka halaman blokir!");
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Error", "Gagal membuka halaman blokir!");
+        }
     }
-}
 
     public void addToRiwayat(String status) {
         DetoxSession session = DetoxSession.getInstance();

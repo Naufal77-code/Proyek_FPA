@@ -34,8 +34,7 @@
         </TableView>
       <TextField fx:id="kodeDaruratField" layoutX="460.0" layoutY="83.0" prefHeight="26.0" prefWidth="120.0" />
       <Text layoutX="358.0" layoutY="101.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Kode darurat" />
-      <Button fx:id="btnEditRiwayat" layoutX="89.0" layoutY="490.0" mnemonicParsing="false" text="Edit Riwayat Aktivitas" />
-      <Button fx:id="btnHapusRiwayat" layoutX="393.0" layoutY="490.0" mnemonicParsing="false" text="Hapus Riwayat Terlama" />
+      <Button fx:id="btnEditRiwayat" layoutX="241.0" layoutY="490.0" mnemonicParsing="false" text="Kelola Riwayat" />
       <TextField fx:id="aktivitasField" layoutX="298.0" layoutY="135.0" prefHeight="26.0" prefWidth="120.0" />
       <Text layoutX="212.0" layoutY="153.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Aktivitas" />
     </children>
