@@ -1,100 +1,100 @@
 package purify;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.StringProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 public class RiwayatBlokir {
 
-    private final IntegerProperty nomor;
-    private final StringProperty tanggalMulai;
-    private final IntegerProperty durasi;
-    private final StringProperty status;
-    private final StringProperty aktivitas;
+    // 1. Tambahkan field untuk menyimpan data murni (primitive)
+    private int nomor;
+    private String tanggalMulai;
+    private int durasi;
+    private String status;
+    private String aktivitas;
+
+    // 2. Jadikan semua properti JavaFX sebagai "transient"
+    // Ini memberitahu XStream untuk MENGABAIKAN field ini saat menyimpan/memuat
+    private transient IntegerProperty nomorProperty;
+    private transient StringProperty tanggalMulaiProperty;
+    private transient IntegerProperty durasiProperty;
+    private transient StringProperty statusProperty;
+    private transient StringProperty aktivitasProperty;
 
     public RiwayatBlokir() {
-        this(0, "", 0, "", "");
+        // Konstruktor kosong dibutuhkan oleh beberapa framework
     }
 
     public RiwayatBlokir(int nomor, String tanggalMulai, int durasi, String status, String aktivitas) {
-        this.nomor = new SimpleIntegerProperty(nomor);
-        this.tanggalMulai = new SimpleStringProperty(tanggalMulai);
-        this.durasi = new SimpleIntegerProperty(durasi);
-        this.status = new SimpleStringProperty(status);
-        this.aktivitas = new SimpleStringProperty(aktivitas);
+        this.nomor = nomor;
+        this.tanggalMulai = tanggalMulai;
+        this.durasi = durasi;
+        this.status = status;
+        this.aktivitas = aktivitas;
     }
 
-    public int getNomor() {
-        return nomor.get();
-    }
+    // --- GETTER & SETTER untuk DATA MURNI ---
 
+    public int getNomor() { return nomor; }
     public void setNomor(int nomor) {
-        this.nomor.set(nomor);
+        this.nomor = nomor;
+        if (nomorProperty != null) nomorProperty.set(nomor);
     }
+
+    public String getTanggalMulai() { return tanggalMulai; }
+    public void setTanggalMulai(String tanggalMulai) { this.tanggalMulai = tanggalMulai; }
+
+    public int getDurasi() { return durasi; }
+    public void setDurasi(int durasi) { this.durasi = durasi; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+
+    public String getAktivitas() { return aktivitas; }
+    public void setAktivitas(String aktivitas) {
+        this.aktivitas = aktivitas;
+        if (aktivitasProperty != null) aktivitasProperty.set(aktivitas);
+    }
+
+    // --- PROPERTY GETTERS (untuk TableView) ---
+    // Inisialisasi properti saat pertama kali dibutuhkan (lazy initialization)
 
     public IntegerProperty nomorProperty() {
-        return nomor;
-    }
-
-
-    public String getTanggalMulai() {
-        return tanggalMulai.get();
-    }
-
-    public void setTanggalMulai(String tanggalMulai) {
-        this.tanggalMulai.set(tanggalMulai);
+        if (nomorProperty == null) nomorProperty = new SimpleIntegerProperty(this, "nomor", nomor);
+        return nomorProperty;
     }
 
     public StringProperty tanggalMulaiProperty() {
-        return tanggalMulai;
-    }
-
-
-    public int getDurasi() {
-        return durasi.get();
-    }
-
-    public void setDurasi(int durasi) {
-        this.durasi.set(durasi);
+        if (tanggalMulaiProperty == null) tanggalMulaiProperty = new SimpleStringProperty(this, "tanggalMulai", tanggalMulai);
+        return tanggalMulaiProperty;
     }
 
     public IntegerProperty durasiProperty() {
-        return durasi;
-    }
-
-    public String getStatus() {
-        return status.get();
-    }
-
-    public void setStatus(String status) {
-        this.status.set(status);
+        if (durasiProperty == null) durasiProperty = new SimpleIntegerProperty(this, "durasi", durasi);
+        return durasiProperty;
     }
 
     public StringProperty statusProperty() {
-        return status;
-    }
-
-    public String getAktivitas() {
-        return aktivitas.get();
-    }
-
-    public void setAktivitas(String aktivitas) {
-        this.aktivitas.set(aktivitas);
+        if (statusProperty == null) statusProperty = new SimpleStringProperty(this, "status", status);
+        return statusProperty;
     }
 
     public StringProperty aktivitasProperty() {
-        return aktivitas;
+        if (aktivitasProperty == null) aktivitasProperty = new SimpleStringProperty(this, "aktivitas", aktivitas);
+        return aktivitasProperty;
     }
 
-    @Override
-    public String toString() {
-        return "RiwayatBlokir{" +
-                "nomor=" + getNomor() +
-                ", tanggalMulai='" + getTanggalMulai() + '\'' +
-                ", durasi=" + getDurasi() +
-                ", status='" + getStatus() + '\'' +
-                ", aktivitas='" + getAktivitas() + '\'' +
-                '}';
+    /**
+     * 3. Metode ini dipanggil secara otomatis oleh XStream setelah objek dibuat dari XML.
+     * Fungsinya untuk menginisialisasi ulang semua field 'transient'.
+     */
+    private Object readResolve() {
+        nomorProperty();
+        tanggalMulaiProperty();
+        durasiProperty();
+        statusProperty();
+        aktivitasProperty();
+        return this;
     }
 }
