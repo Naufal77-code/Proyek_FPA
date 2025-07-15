@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="purify.FXMLStatistikController">
+   <children>
+      <VBox layoutX="50.0" layoutY="20.0" spacing="15.0" prefWidth="800.0">
+         <Label text="STATISTIK DIGITAL DETOX" textAlignment="CENTER">
+            <font>
+               <Font name="Calibri Bold" size="24.0" />
+            </font>
+         </Label>
+         
+         <HBox spacing="10.0" alignment="CENTER">
+            <Label text="Tampilkan per:" />
+            <ComboBox fx:id="periodeComboBox" prefWidth="150.0" />
+         </HBox>
+         
+         <BarChart fx:id="durasiChart" prefHeight="250.0" prefWidth="800.0" animated="false">
+            <xAxis>
+               <CategoryAxis label="Periode" />
+            </xAxis>
+            <yAxis>
+               <NumberAxis label="Durasi (menit)" />
+            </yAxis>
+         </BarChart>
+         
+         <TableView fx:id="riwayatTable" prefHeight="300.0" prefWidth="800.0">
+            <columns>
+               <TableColumn fx:id="colNomor" prefWidth="50.0" text="No" />
+               <TableColumn fx:id="colTanggal" prefWidth="150.0" text="Waktu Mulai" />
+               <TableColumn fx:id="colDurasi" prefWidth="100.0" text="Durasi (menit)" />
+               <TableColumn fx:id="colStatus" prefWidth="120.0" text="Status" />
+               <TableColumn fx:id="colAktivitas" prefWidth="280.0" text="Aktivitas" />
+            </columns>
+         </TableView>
+         
+         <HBox spacing="10.0" alignment="CENTER_LEFT">
+            <Label text="Nomor Riwayat:" />
+            <TextField fx:id="nomorField" prefWidth="50.0" />
+            <Label text="Aktivitas Baru:" />
+            <TextField fx:id="aktivitasBaruField" prefWidth="300.0" />
+            <Button fx:id="btnEdit" mnemonicParsing="false" prefWidth="120.0" text="Edit Aktivitas" />
+         </HBox>
+         
+         <Button fx:id="btnKembali" mnemonicParsing="false" prefWidth="100.0" text="Kembali" />
+      </VBox>
+   </children>
+</AnchorPane>

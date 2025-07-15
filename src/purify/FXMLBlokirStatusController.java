@@ -1,4 +1,4 @@
-package Cpurify;
+package purify;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -8,13 +8,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import purify.DetoxSession;
 
 import java.io.IOException;
 import java.net.URL;
@@ -22,30 +18,23 @@ import java.util.ResourceBundle;
 
 public class FXMLBlokirStatusController implements Initializable {
 
-    @FXML
-    private Label timerLabel;
-
-    @FXML
-    private TextField kodeDaruratField;
-
-    @FXML
-    private Button btnBatalkan;
+    @FXML private Label timerLabel;
+    @FXML private TextField kodeDaruratField;
+    @FXML private Button btnBatalkan;
 
     private Timeline timeline;
     private int remainingSeconds;
-    private FXMLDocumentController mainController;
+    private FXMLBlokirHPController mainController;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         DetoxSession session = DetoxSession.getInstance();
-        remainingSeconds = session.getDurasi() * 60; // Convert minutes to seconds
+        remainingSeconds = (int) session.getRemainingTimeInSeconds();
 
         setupTimer();
         startTimer();
 
-        if (btnBatalkan != null) {
-            btnBatalkan.setOnAction(this::handleBatalkan);
-        }
+        btnBatalkan.setOnAction(this::handleBatalkan);
     }
 
     private void setupTimer() {
@@ -67,20 +56,15 @@ public class FXMLBlokirStatusController implements Initializable {
     }
 
     private void updateTimerDisplay() {
-        int hours = remainingSeconds / 3600; 
-        int minutes = (remainingSeconds % 3600) / 60; 
-        int seconds = remainingSeconds % 60; 
+        int hours = remainingSeconds / 3600;
+        int minutes = (remainingSeconds % 3600) / 60;
+        int seconds = remainingSeconds % 60;
         
-        String timeText;
-        if (hours > 0) {
-            timeText = String.format("%02d:%02d:%02d", hours, minutes, seconds); 
-        } else {
-            timeText = String.format("%02d:%02d", minutes, seconds); 
-        }
+        String timeText = hours > 0 
+            ? String.format("%02d:%02d:%02d", hours, minutes, seconds)
+            : String.format("%02d:%02d", minutes, seconds);
         
-        if (timerLabel != null) {
-            timerLabel.setText(timeText);
-        }
+        timerLabel.setText(timeText);
     }
 
     @FXML
@@ -108,23 +92,24 @@ public class FXMLBlokirStatusController implements Initializable {
             mainController.addToRiwayat(status);
         }
 
-        returnToMainMenu();
+        returnToBlokirHP();
     }
 
-    private void returnToMainMenu() {
+    private void returnToBlokirHP() {
+        if (timeline != null) {
+            timeline.stop();
+        }
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXMLpurify/FXMLBlokirHP.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/purify/FXMLBlokirHP.fxml"));
             Parent root = loader.load();
-
             Stage currentStage = (Stage) timerLabel.getScene().getWindow();
             currentStage.setScene(new Scene(root));
-
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void setMainController(FXMLDocumentController controller) {
+    public void setMainController(FXMLBlokirHPController controller) {
         this.mainController = controller;
     }
 
