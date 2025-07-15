@@ -7,25 +7,25 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="640.0" prefWidth="380.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Cpurify.FXMLBlokirStatusController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="580.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Cpurify.FXMLBlokirStatusController">
    <children>
-      <Label layoutX="48.0" layoutY="151.0" prefHeight="66.0" prefWidth="284.0" text="HP SEDANG DIBLOKIR" textAlignment="CENTER">
+      <Label layoutX="223.0" layoutY="109.0" prefHeight="66.0" prefWidth="277.0" text="LAYAR TERBLOKIR" textAlignment="CENTER">
          <font>
-            <Font name="Calibri Bold" size="31.0" />
+            <Font name="Calibri Bold" size="36.0" />
          </font>
       </Label>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="117.0" layoutX="29.0" layoutY="232.0" stroke="BLACK" strokeType="INSIDE" width="323.0" />
-      <TextField fx:id="kodeDaruratField" layoutX="113.0" layoutY="431.0" />
-      <Label layoutX="95.0" layoutY="378.0" prefHeight="66.0" prefWidth="191.0" text="Masukkan kode darurat!" textAlignment="JUSTIFY">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="117.0" layoutX="199.0" layoutY="197.0" stroke="BLACK" strokeType="INSIDE" width="323.0" />
+      <TextField fx:id="kodeDaruratField" layoutX="286.0" layoutY="397.0" />
+      <Label layoutX="269.0" layoutY="344.0" prefHeight="66.0" prefWidth="185.0" text="Masukkan kode darurat!" textAlignment="JUSTIFY">
          <font>
             <Font name="Calibri Bold" size="18.0" />
          </font>
       </Label>
-      <Label fx:id="timerLabel" layoutX="154.0" layoutY="263.0" prefHeight="55.0" prefWidth="73.0" text="00:00" textAlignment="JUSTIFY">
+      <Label fx:id="timerLabel" layoutX="324.0" layoutY="228.0" prefHeight="55.0" prefWidth="73.0" text="00:00" textAlignment="JUSTIFY">
          <font>
             <Font name="Calibri Bold" size="31.0" />
          </font>
       </Label>
-      <Button fx:id="btnBatalkan" layoutX="143.0" layoutY="476.0" mnemonicParsing="false" text="Batalkan Detox" />
+      <Button fx:id="btnBatalkan" layoutX="312.0" layoutY="440.0" mnemonicParsing="false" text="Batalkan Detox" />
    </children>
 </AnchorPane>

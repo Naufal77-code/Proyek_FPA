@@ -35,6 +35,9 @@ public class FXMLDocumentController implements Initializable {
     private Button btnEditRiwayat;
 
     @FXML
+    private Button btnKembaliMainMenu;
+
+    @FXML
     private TableView<RiwayatBlokir> riwayatTable;
 
     @FXML
@@ -172,5 +175,21 @@ public class FXMLDocumentController implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    @FXML
+    private void handleKembaliMainMenu(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXMLpurify/FXMLMainMenu.fxml"));
+            Parent root = loader.load();
+
+            Stage currentStage = (Stage) btnKembaliMainMenu.getScene().getWindow();
+            currentStage.setScene(new Scene(root));
+            currentStage.setTitle("Purify - Digital Detox");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Error", "Gagal kembali ke menu utama!");
+        }
     }
 }
