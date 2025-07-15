@@ -19,6 +19,7 @@ public class FXMLBlokirHPController implements Initializable {
     @FXML private TextField kodeDaruratField;
     @FXML private TextField aktivitasField;
     @FXML private Button btnBlokir;
+    @FXML private Button btnMainMenu;
     @FXML private Button btnStatistik;
 
     private static final RiwayatBlokirList riwayatList = new RiwayatBlokirList();
@@ -63,6 +64,26 @@ public class FXMLBlokirHPController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
             showAlert("Error", "Gagal membuka halaman statistik!");
+        }
+    }
+
+    @FXML
+    private void handleMainMenu(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLMainMenu.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Purify - Digital Detox");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+            // Close the current window
+            Stage currentStage = (Stage) btnMainMenu.getScene().getWindow();
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Error", "Gagal membuka halaman utama!");
         }
     }
 

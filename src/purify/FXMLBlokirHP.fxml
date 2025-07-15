@@ -7,24 +7,39 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="purify.FXMLBlokirHPController">
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="580.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="purify.FXMLBlokirHPController">
     <children>
-        <Label layoutX="350.0" layoutY="20.0" prefHeight="66.0" prefWidth="141.0" text="BLOKIR HP" textAlignment="CENTER">
+        <Label layoutX="290.0" layoutY="20.0" prefHeight="66.0" prefWidth="141.0" text="BLOKIR HP" textAlignment="CENTER">
             <font>
                 <Font name="Calibri Bold" size="31.0" />
             </font>
         </Label>
         
-        <Text layoutX="50.0" layoutY="120.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Durasi blokir (menit):" />
-        <TextField fx:id="durasiField" layoutX="200.0" layoutY="100.0" prefWidth="150.0" />
+        <Text layoutX="50.0" layoutY="143.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Durasi blokir :">
+         <font>
+            <Font name="Arial" size="20.0" />
+         </font></Text>
+        <TextField fx:id="durasiField" layoutX="200.0" layoutY="123.0" prefHeight="25.0" prefWidth="150.0" />
         
-        <Text layoutX="50.0" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Kode darurat:" />
-        <TextField fx:id="kodeDaruratField" layoutX="200.0" layoutY="150.0" prefWidth="150.0" />
+        <Text layoutX="50.0" layoutY="193.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Kode darurat :">
+         <font>
+            <Font name="Arial" size="20.0" />
+         </font></Text>
+        <TextField fx:id="kodeDaruratField" layoutX="200.0" layoutY="173.0" prefHeight="25.0" prefWidth="150.0" />
         
-        <Text layoutX="50.0" layoutY="220.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Aktivitas:" />
-        <TextField fx:id="aktivitasField" layoutX="200.0" layoutY="200.0" prefWidth="400.0" />
+        <Text layoutX="50.0" layoutY="243.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Aktivitas :">
+         <font>
+            <Font name="Arial" size="20.0" />
+         </font></Text>
+        <TextField fx:id="aktivitasField" layoutX="200.0" layoutY="223.0" prefHeight="25.0" prefWidth="150.0" />
         
-        <Button fx:id="btnBlokir" layoutX="350.0" layoutY="300.0" mnemonicParsing="false" onAction="#handleBlokir" prefHeight="40.0" prefWidth="100.0" text="Blokir" />
-        <Button fx:id="btnStatistik" layoutX="350.0" layoutY="350.0" mnemonicParsing="false" onAction="#handleStatistik" prefHeight="40.0" prefWidth="100.0" text="Statistik" />
+        <Button fx:id="btnBlokir" layoutX="310.0" layoutY="514.0" mnemonicParsing="false" onAction="#handleBlokir" prefHeight="40.0" prefWidth="100.0" text="Blokir" />
+        <Button fx:id="btnStatistik" layoutX="570.0" layoutY="514.0" mnemonicParsing="false" onAction="#handleStatistik" prefHeight="40.0" prefWidth="100.0" text="Statistik" />
+      <Text layoutX="584.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Purify">
+         <font>
+            <Font name="Calibri" size="36.0" />
+         </font>
+      </Text>
+      <Button fx:id="btnMainMenu" layoutX="50.0" layoutY="514.0" mnemonicParsing="false" onAction="#handleMainMenu" prefHeight="40.0" prefWidth="100.0" text="Kembali" />
     </children>
 </AnchorPane>
