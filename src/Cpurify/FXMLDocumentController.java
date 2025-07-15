@@ -35,7 +35,7 @@ public class FXMLDocumentController implements Initializable {
     private Button btnEditRiwayat;
 
     @FXML
-    private Button btnKembaliMainMenu;
+    private Button btnMainMenu;
 
     @FXML
     private TableView<RiwayatBlokir> riwayatTable;
@@ -178,12 +178,12 @@ public class FXMLDocumentController implements Initializable {
     }
 
     @FXML
-    private void handleKembaliMainMenu(ActionEvent event) {
+    private void handleMainMenu(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXMLpurify/FXMLMainMenu.fxml"));
             Parent root = loader.load();
 
-            Stage currentStage = (Stage) btnKembaliMainMenu.getScene().getWindow();
+            Stage currentStage = (Stage) btnMainMenu.getScene().getWindow();
             currentStage.setScene(new Scene(root));
             currentStage.setTitle("Purify - Digital Detox");
 

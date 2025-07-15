@@ -8,7 +8,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.Button;
 import javafx.event.ActionEvent;
 
 import java.net.URL;
@@ -65,12 +64,48 @@ public class FXMLMainMenuController implements Initializable {
 
     @FXML
     private void handleBlokirAplikasi(ActionEvent event) {
-    
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXMLpurify/FXMLBlokirAplikasi.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Blokir Aplikasi");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+            // Close the current window
+            Stage currentStage = (Stage) blokirAplikasi.getScene().getWindow();
+            currentStage.close();
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Failed to open Blokir Aplikasi screen");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
     }
 
     @FXML
     private void handleLihatStatistik(ActionEvent event) {
-        
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXMLpurify/FXMLStatistik.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Lihat Statistik");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+            // Close the current window
+            Stage currentStage = (Stage) lihatStatistik.getScene().getWindow();
+            currentStage.close();
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Failed to open Statistik screen");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        } 
     }
 
     @FXML
