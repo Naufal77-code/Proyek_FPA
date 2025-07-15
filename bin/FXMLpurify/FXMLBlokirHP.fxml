@@ -26,10 +26,10 @@
         <TableView fx:id="riwayatTable" layoutX="50.0" layoutY="187.0" prefHeight="305.0" prefWidth="620.0">
             <columns>
                 <TableColumn fx:id="colRiwayat" prefWidth="40.800048828125" text="No" />
-            <TableColumn fx:id="colRiwayat1" prefWidth="93.60003662109375" text="Riwayat" />
-            <TableColumn fx:id="colRiwayat11" prefWidth="113.60003662109375" text="Durasi" />
-            <TableColumn fx:id="colRiwayat111" prefWidth="93.5999755859375" text="Status" />
-            <TableColumn fx:id="colRiwayat2" prefWidth="177.60001220703123" text="Aktivitas" />
+            <TableColumn fx:id="colRiwayat1" prefWidth="216.0" text="Riwayat" />
+            <TableColumn fx:id="colRiwayat11" prefWidth="103.0" text="Durasi" />
+            <TableColumn fx:id="colRiwayat111" prefWidth="167.0" text="Status" />
+            <TableColumn fx:id="colRiwayat2" prefWidth="92.0" text="Aktivitas" />
             </columns>
         </TableView>
       <TextField fx:id="kodeDaruratField" layoutX="171.0" layoutY="116.0" prefHeight="26.0" prefWidth="120.0" />
