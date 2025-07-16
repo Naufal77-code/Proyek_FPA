@@ -25,7 +25,7 @@ public class DetoxSession {
         }
         return instance;
     }
-    
+
     public void startDetox(long durasiDetik, String aktivitas, String kodeDarurat) {
         if (durasiDetik <= 0) {
             throw new IllegalArgumentException("Durasi harus lebih dari 0 detik");
@@ -47,8 +47,8 @@ public class DetoxSession {
     public long getDurasiInSeconds() {
         return durasiInSeconds;
     }
-    
-    public int getDurasiInMinutes() { 
+
+    public int getDurasiInMinutes() {
         return (int) Math.round(durasiInSeconds / 60.0);
     }
 
@@ -59,7 +59,7 @@ public class DetoxSession {
     public String getKodeDarurat() {
         return kodeDarurat;
     }
-    
+
     public String getFormattedWaktuMulai() {
         if (waktuMulai != null) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");

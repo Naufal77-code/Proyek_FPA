@@ -35,25 +35,42 @@ import javafx.stage.Stage;
 public class FXMLStatistikController implements Initializable {
 
     // Komponen FXML yang sudah ada
-    @FXML private BarChart<String, Number> durasiChart;
-    @FXML private TableView<RiwayatBlokir> riwayatTable;
-    @FXML private TableColumn<RiwayatBlokir, Integer> colNomor;
-    @FXML private TableColumn<RiwayatBlokir, String> colTanggal;
-    @FXML private TableColumn<RiwayatBlokir, Integer> colDurasi;
-    @FXML private TableColumn<RiwayatBlokir, String> colStatus;
-    @FXML private TableColumn<RiwayatBlokir, String> colAktivitas;
-    @FXML private TextField nomorField;
-    @FXML private TextField aktivitasBaruField;
-    @FXML private Button btnEdit;
-    @FXML private Button btnDelete;
-    @FXML private Button btnKembali;
-    @FXML private ComboBox<String> periodeComboBox;
-    
+    @FXML
+    private BarChart<String, Number> durasiChart;
+    @FXML
+    private TableView<RiwayatBlokir> riwayatTable;
+    @FXML
+    private TableColumn<RiwayatBlokir, Integer> colNomor;
+    @FXML
+    private TableColumn<RiwayatBlokir, String> colTanggal;
+    @FXML
+    private TableColumn<RiwayatBlokir, Integer> colDurasi;
+    @FXML
+    private TableColumn<RiwayatBlokir, String> colStatus;
+    @FXML
+    private TableColumn<RiwayatBlokir, String> colAktivitas;
+    @FXML
+    private TextField nomorField;
+    @FXML
+    private TextField aktivitasBaruField;
+    @FXML
+    private Button btnEdit;
+    @FXML
+    private Button btnDelete;
+    @FXML
+    private Button btnKembali;
+    @FXML
+    private ComboBox<String> periodeComboBox;
+
     // Komponen FXML baru untuk navigasi minggu
-    @FXML private HBox weekNavigationBox;
-    @FXML private Button btnPreviousWeek;
-    @FXML private Button btnNextWeek;
-    @FXML private Label weekRangeLabel;
+    @FXML
+    private HBox weekNavigationBox;
+    @FXML
+    private Button btnPreviousWeek;
+    @FXML
+    private Button btnNextWeek;
+    @FXML
+    private Label weekRangeLabel;
 
     private RiwayatBlokirList riwayatList;
     private LocalDate selectedWeekDate; // Menyimpan tanggal acuan untuk minggu yang ditampilkan
@@ -71,23 +88,22 @@ public class FXMLStatistikController implements Initializable {
         setupPeriodComboBox();
         setupButtonActions();
         setupTableSelectionListener();
-    }    
-    
+    }
+
     public void setRiwayatList(RiwayatBlokirList riwayatList) {
         this.riwayatList = riwayatList;
         riwayatTable.setItems(riwayatList.getData());
         updateChart();
     }
-    
+
     private void setupPeriodComboBox() {
-    // Ubah urutan item di sini
-    periodeComboBox.setItems(FXCollections.observableArrayList(
-        "Harian (Per Jam)", "Mingguan", "Bulanan"
-    ));
-    // Atur default ke "Harian (Per Jam)"
-    periodeComboBox.getSelectionModel().select("Harian (Per Jam)");
-    periodeComboBox.setOnAction(e -> updateChart());
-}
+        // Ubah urutan item di sini
+        periodeComboBox.setItems(FXCollections.observableArrayList(
+                "Harian (Per Jam)", "Mingguan", "Bulanan"));
+        // Atur default ke "Harian (Per Jam)"
+        periodeComboBox.getSelectionModel().select("Harian (Per Jam)");
+        periodeComboBox.setOnAction(e -> updateChart());
+    }
 
     private void setupTableColumns() {
         colNomor.setCellValueFactory(new PropertyValueFactory<>("nomor"));
@@ -107,21 +123,22 @@ public class FXMLStatistikController implements Initializable {
 
     private void setupTableSelectionListener() {
         riwayatTable.getSelectionModel().selectedItemProperty().addListener(
-            (obs, oldSelection, newSelection) -> {
-                if (newSelection != null) {
-                    nomorField.setText(String.valueOf(newSelection.getNomor()));
-                    aktivitasBaruField.setText(newSelection.getAktivitas());
-                }
-            });
+                (obs, oldSelection, newSelection) -> {
+                    if (newSelection != null) {
+                        nomorField.setText(String.valueOf(newSelection.getNomor()));
+                        aktivitasBaruField.setText(newSelection.getAktivitas());
+                    }
+                });
     }
 
     private void navigateWeek(int direction) {
         selectedWeekDate = selectedWeekDate.plusWeeks(direction);
         updateChart();
     }
-    
+
     private void updateChart() {
-        if (riwayatList == null) return;
+        if (riwayatList == null)
+            return;
         durasiChart.getData().clear();
         String selectedPeriod = periodeComboBox.getSelectionModel().getSelectedItem();
         XYChart.Series<String, Number> series = new XYChart.Series<>();
@@ -146,40 +163,42 @@ public class FXMLStatistikController implements Initializable {
         }
         durasiChart.getData().add(series);
     }
-    
+
     private void updateHourlyChart(XYChart.Series<String, Number> series) {
         durasiChart.getXAxis().setLabel("Jam");
         Map<LocalDateTime, Integer> hourStats = riwayatList.getData().stream()
-            .collect(Collectors.groupingBy(
-                r -> LocalDateTime.parse(r.getTanggalMulai(), inputFormatter).withMinute(0).withSecond(0),
-                Collectors.summingInt(RiwayatBlokir::getDurasi)
-            ));
+                .collect(Collectors.groupingBy(
+                        r -> LocalDateTime.parse(r.getTanggalMulai(), inputFormatter).withMinute(0).withSecond(0),
+                        Collectors.summingInt(RiwayatBlokir::getDurasi)));
         hourStats.entrySet().stream()
-            .sorted(Map.Entry.comparingByKey())
-            .forEach(entry -> series.getData().add(new XYChart.Data<>(entry.getKey().format(hourFormatter), entry.getValue())));
+                .sorted(Map.Entry.comparingByKey())
+                .forEach(entry -> series.getData()
+                        .add(new XYChart.Data<>(entry.getKey().format(hourFormatter), entry.getValue())));
     }
 
     // --- METODE UTAMA YANG DIUBAH ---
     private void updateWeeklyChart(XYChart.Series<String, Number> series) {
         durasiChart.getXAxis().setLabel("Hari dalam Seminggu");
-        
+
         // 1. Tentukan awal (Senin) dan akhir (Minggu) dari minggu yang dipilih
         LocalDate monday = selectedWeekDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
         LocalDate sunday = selectedWeekDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
-        
+
         // 2. Update label rentang tanggal
         weekRangeLabel.setText(String.format("%s - %s", monday.format(dayFormatter), sunday.format(dayFormatter)));
 
         // 3. Filter riwayat hanya untuk minggu ini
         Map<DayOfWeek, Integer> weeklyData = riwayatList.getData().stream()
-            .filter(r -> {
-                LocalDate tgl = LocalDate.parse(r.getTanggalMulai().split(" ")[0], DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-                return !tgl.isBefore(monday) && !tgl.isAfter(sunday);
-            })
-            .collect(Collectors.groupingBy(
-                r -> LocalDate.parse(r.getTanggalMulai().split(" ")[0], DateTimeFormatter.ofPattern("dd/MM/yyyy")).getDayOfWeek(),
-                Collectors.summingInt(RiwayatBlokir::getDurasi)
-            ));
+                .filter(r -> {
+                    LocalDate tgl = LocalDate.parse(r.getTanggalMulai().split(" ")[0],
+                            DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                    return !tgl.isBefore(monday) && !tgl.isAfter(sunday);
+                })
+                .collect(Collectors.groupingBy(
+                        r -> LocalDate
+                                .parse(r.getTanggalMulai().split(" ")[0], DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                                .getDayOfWeek(),
+                        Collectors.summingInt(RiwayatBlokir::getDurasi)));
 
         // 4. Buat data untuk setiap hari dari Senin hingga Minggu
         // Locale("id") untuk mendapatkan nama hari dalam Bahasa Indonesia
@@ -193,15 +212,16 @@ public class FXMLStatistikController implements Initializable {
     private void updateMonthlyChart(XYChart.Series<String, Number> series) {
         durasiChart.getXAxis().setLabel("Bulan");
         Map<YearMonth, Integer> monthlyStats = riwayatList.getData().stream()
-            .collect(Collectors.groupingBy(
-                r -> YearMonth.from(LocalDate.parse(r.getTanggalMulai().split(" ")[0], DateTimeFormatter.ofPattern("dd/MM/yyyy"))),
-                Collectors.summingInt(RiwayatBlokir::getDurasi)
-            ));
+                .collect(Collectors.groupingBy(
+                        r -> YearMonth.from(LocalDate.parse(r.getTanggalMulai().split(" ")[0],
+                                DateTimeFormatter.ofPattern("dd/MM/yyyy"))),
+                        Collectors.summingInt(RiwayatBlokir::getDurasi)));
         monthlyStats.entrySet().stream()
-            .sorted(Map.Entry.comparingByKey())
-            .forEach(entry -> series.getData().add(new XYChart.Data<>(entry.getKey().format(monthFormatter), entry.getValue())));
+                .sorted(Map.Entry.comparingByKey())
+                .forEach(entry -> series.getData()
+                        .add(new XYChart.Data<>(entry.getKey().format(monthFormatter), entry.getValue())));
     }
-    
+
     @FXML
     private void handleEdit(ActionEvent event) {
         try {
@@ -221,7 +241,7 @@ public class FXMLStatistikController implements Initializable {
             showAlert(Alert.AlertType.ERROR, "Error", "Nomor riwayat tidak valid!");
         }
     }
-    
+
     @FXML
     private void handleDelete(ActionEvent event) {
         try {
@@ -231,7 +251,7 @@ public class FXMLStatistikController implements Initializable {
             confirmation.setTitle("Konfirmasi Hapus");
             confirmation.setHeaderText("Anda akan menghapus riwayat nomor " + nomor);
             confirmation.setContentText("Apakah Anda yakin?");
-            
+
             Optional<ButtonType> result = confirmation.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 riwayatList.remove(nomor);
@@ -239,7 +259,7 @@ public class FXMLStatistikController implements Initializable {
                 updateChart();
                 clearFields();
             }
-            
+
         } catch (NumberFormatException e) {
             showAlert(Alert.AlertType.ERROR, "Error", "Nomor harus berupa angka!");
         } catch (IndexOutOfBoundsException e) {
@@ -252,7 +272,7 @@ public class FXMLStatistikController implements Initializable {
         Stage stage = (Stage) btnKembali.getScene().getWindow();
         stage.close();
     }
-    
+
     private void clearFields() {
         nomorField.clear();
         aktivitasBaruField.clear();

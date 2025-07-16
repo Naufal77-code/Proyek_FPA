@@ -10,12 +10,11 @@ public class GUI_DigitalDetox extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-         Parent root = FXMLLoader.load(getClass().getResource("FXMLBlokirHP.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("FXMLBlokirHP.fxml"));
 
-        
         Scene scene = new Scene(root);
-        
-        //stage.setTitle("Digital Detox - Blokir HP");
+
+        // stage.setTitle("Digital Detox - Blokir HP");
         stage.setTitle("Purify - Digital Detox");
         stage.setScene(scene);
         stage.show();

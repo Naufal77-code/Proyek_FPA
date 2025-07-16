@@ -16,13 +16,20 @@ import java.util.ResourceBundle;
 
 public class FXMLBlokirHPController implements Initializable {
 
-    @FXML private TextField durasiField;
-    @FXML private ComboBox<String> satuanWaktuComboBox;
-    @FXML private TextField kodeDaruratField;
-    @FXML private TextField aktivitasField;
-    @FXML private Button btnBlokir;
-    @FXML private Button btnMainMenu;
-    @FXML private Button btnStatistik;
+    @FXML
+    private TextField durasiField;
+    @FXML
+    private ComboBox<String> satuanWaktuComboBox;
+    @FXML
+    private TextField kodeDaruratField;
+    @FXML
+    private TextField aktivitasField;
+    @FXML
+    private Button btnBlokir;
+    @FXML
+    private Button btnMainMenu;
+    @FXML
+    private Button btnStatistik;
 
     private static final RiwayatBlokirList riwayatList = new RiwayatBlokirList();
 
@@ -39,7 +46,7 @@ public class FXMLBlokirHPController implements Initializable {
             long durasiValue = Long.parseLong(durasiField.getText().trim());
             String satuan = satuanWaktuComboBox.getValue();
             long durasiInSeconds = convertToSeconds(durasiValue, satuan);
-            
+
             String kodeDarurat = kodeDaruratField.getText().trim();
             String aktivitas = aktivitasField.getText().trim();
 
@@ -52,7 +59,7 @@ public class FXMLBlokirHPController implements Initializable {
             showAlert("Error", e.getMessage());
         }
     }
-    
+
     private long convertToSeconds(long value, String unit) {
         switch (unit) {
             case "Detik":
@@ -72,7 +79,7 @@ public class FXMLBlokirHPController implements Initializable {
         if (kodeDaruratField.getText().trim().isEmpty()) {
             throw new IllegalArgumentException("Kode darurat tidak boleh kosong!");
         }
-         if (satuanWaktuComboBox.getValue() == null) {
+        if (satuanWaktuComboBox.getValue() == null) {
             throw new IllegalArgumentException("Satuan waktu harus dipilih!");
         }
     }
@@ -81,12 +88,11 @@ public class FXMLBlokirHPController implements Initializable {
         DetoxSession session = DetoxSession.getInstance();
         int nextNumber = riwayatList.getData().size() + 1;
         riwayatList.setData(
-            nextNumber,
-            session.getFormattedWaktuMulai(),
-            session.getDurasiInMinutes(),
-            status,
-            session.getAktivitas()
-        );
+                nextNumber,
+                session.getFormattedWaktuMulai(),
+                session.getDurasiInMinutes(),
+                status,
+                session.getAktivitas());
         clearInputFields();
     }
 
@@ -103,7 +109,7 @@ public class FXMLBlokirHPController implements Initializable {
             showAlert("Error", "Gagal membuka halaman blokir! Pastikan file FXMLBlokirStatus.fxml sudah benar.");
         }
     }
-    
+
     @FXML
     private void handleStatistik(ActionEvent event) {
         try {

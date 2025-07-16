@@ -32,7 +32,7 @@ public class RiwayatBlokirList {
         dataList.add(newRiwayat);
         saveToXML();
     }
-    
+
     public void remove(int nomor) {
         if (nomor > 0 && nomor <= dataList.size()) {
             dataList.remove(nomor - 1);
@@ -42,7 +42,7 @@ public class RiwayatBlokirList {
             throw new IndexOutOfBoundsException("Nomor riwayat tidak valid untuk dihapus.");
         }
     }
-    
+
     private void updateNomor() {
         for (int i = 0; i < dataList.size(); i++) {
             dataList.get(i).setNomor(i + 1);
@@ -81,7 +81,8 @@ public class RiwayatBlokirList {
     @SuppressWarnings("unchecked")
     private void loadFromXML() {
         File file = new File(XML_FILE);
-        if (!file.exists()) return;
+        if (!file.exists())
+            return;
 
         XStream xstream = createXStream();
         try (FileInputStream fis = new FileInputStream(file)) {

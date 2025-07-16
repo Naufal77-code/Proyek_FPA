@@ -16,10 +16,13 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class FXMLBlokirStatusController implements Initializable {
-    @FXML private Label timerLabel;
-    @FXML private TextField kodeDaruratField;
-    @FXML private Button btnBatalkan;
-    
+    @FXML
+    private Label timerLabel;
+    @FXML
+    private TextField kodeDaruratField;
+    @FXML
+    private Button btnBatalkan;
+
     private Timeline timeline;
     private long remainingSeconds;
     private FXMLBlokirHPController mainController;
