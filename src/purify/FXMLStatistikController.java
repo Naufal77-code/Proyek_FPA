@@ -39,6 +39,7 @@ import javafx.stage.Stage;
 
 public class FXMLStatistikController implements Initializable {
 
+    // FXML Components
     @FXML private BarChart<String, Number> durasiChart;
     @FXML private TableView<RiwayatBlokir> riwayatTable;
     @FXML private ComboBox<String> periodeComboBox;
@@ -53,6 +54,7 @@ public class FXMLStatistikController implements Initializable {
     @FXML private Button btnDelete;
     @FXML private Button btnKembali;
     
+    // Navigation Components
     @FXML private HBox dayNavigationBox;
     @FXML private Button btnPreviousDay;
     @FXML private Button btnNextDay;
@@ -68,10 +70,10 @@ public class FXMLStatistikController implements Initializable {
     @FXML private CategoryAxis dayAxis;
     @FXML private NumberAxis durationAxis;
 
-
     private RiwayatBlokirList riwayatList;
     private LocalDate currentDisplayDate;
 
+    // Formatters
     private final DateTimeFormatter fullDateFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy", new Locale("id", "ID"));
     private final DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("dd/MM");
     private final DateTimeFormatter simpleHourFormatter = DateTimeFormatter.ofPattern("HH:00");
@@ -94,7 +96,7 @@ public class FXMLStatistikController implements Initializable {
     
     private void setupPeriodComboBox() {
         periodeComboBox.setItems(FXCollections.observableArrayList("Harian (Per Jam)", "Mingguan", "Bulanan"));
-        periodeComboBox.getSelectionModel().select("Bulanan");
+        periodeComboBox.getSelectionModel().select("Harian (Per Jam)");
         periodeComboBox.setOnAction(e -> updateChart());
     }
 
@@ -209,7 +211,6 @@ public class FXMLStatistikController implements Initializable {
                 Collectors.summingInt(RiwayatBlokir::getDurasi)
             ));
 
-        // Urutan hari Senin -> Minggu
         DayOfWeek[] daysOfWeek = { DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY };
         for (DayOfWeek day : daysOfWeek) {
             String dayName = day.getDisplayName(TextStyle.FULL, new Locale("id", "ID"));
@@ -245,14 +246,19 @@ public class FXMLStatistikController implements Initializable {
     private static class YearWeek implements Comparable<YearWeek> {
         private final int year;
         private final int week;
+        
         public YearWeek(int year, int week) { this.year = year; this.week = week; }
         public static YearWeek from(LocalDate date) { return new YearWeek(date.getYear(), date.get(WeekFields.ISO.weekOfYear())); }
         public int year() { return year; }
         public int week() { return week; }
+
         @Override
         public int compareTo(YearWeek other) {
-            return Comparator.comparingInt(YearWeek::year).thenComparingInt(YearWeek::week).compare(this, other);
+            return Comparator.comparingInt(YearWeek::year)
+                             .thenComparingInt(YearWeek::week)
+                             .compare(this, other);
         }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
@@ -260,6 +266,7 @@ public class FXMLStatistikController implements Initializable {
             YearWeek yearWeek = (YearWeek) o;
             return year == yearWeek.year && week == yearWeek.week;
         }
+
         @Override
         public int hashCode() { return Objects.hash(year, week); }
     }
