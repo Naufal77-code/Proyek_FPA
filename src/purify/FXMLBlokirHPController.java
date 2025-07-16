@@ -1,5 +1,6 @@
 package purify;
 
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,6 +17,7 @@ import java.util.ResourceBundle;
 public class FXMLBlokirHPController implements Initializable {
 
     @FXML private TextField durasiField;
+    @FXML private ComboBox<String> satuanWaktuComboBox;
     @FXML private TextField kodeDaruratField;
     @FXML private TextField aktivitasField;
     @FXML private Button btnBlokir;
@@ -26,18 +28,22 @@ public class FXMLBlokirHPController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // Inisialisasi jika diperlukan
+        satuanWaktuComboBox.setItems(FXCollections.observableArrayList("Detik", "Menit", "Jam"));
+        satuanWaktuComboBox.setValue("Menit");
     }
 
     @FXML
     private void handleBlokir(ActionEvent event) {
         try {
             validateInputs();
-            int durasi = Integer.parseInt(durasiField.getText().trim());
+            long durasiValue = Long.parseLong(durasiField.getText().trim());
+            String satuan = satuanWaktuComboBox.getValue();
+            long durasiInSeconds = convertToSeconds(durasiValue, satuan);
+            
             String kodeDarurat = kodeDaruratField.getText().trim();
             String aktivitas = aktivitasField.getText().trim();
 
-            DetoxSession.getInstance().startDetox(durasi, aktivitas, kodeDarurat);
+            DetoxSession.getInstance().startDetox(durasiInSeconds, aktivitas, kodeDarurat);
             openBlockingScreen();
 
         } catch (NumberFormatException e) {
@@ -46,58 +52,17 @@ public class FXMLBlokirHPController implements Initializable {
             showAlert("Error", e.getMessage());
         }
     }
-
-    @FXML
-    private void handleStatistik(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLStatistik.fxml"));
-            Parent root = loader.load();
-
-            FXMLStatistikController controller = loader.getController();
-            controller.setRiwayatList(riwayatList);
-
-            Stage stage = new Stage();
-            stage.setTitle("Statistik Digital Detox");
-            stage.setScene(new Scene(root));
-            stage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            showAlert("Error", "Gagal membuka halaman statistik!");
+    
+    private long convertToSeconds(long value, String unit) {
+        switch (unit) {
+            case "Detik":
+                return value;
+            case "Jam":
+                return value * 3600;
+            case "Menit":
+            default:
+                return value * 60;
         }
-    }
-
-    @FXML
-    private void handleMainMenu(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLMainMenu.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = new Stage();
-            stage.setTitle("Purify - Digital Detox");
-            stage.setScene(new Scene(root));
-            stage.show();
-
-            // Close the current window
-            Stage currentStage = (Stage) btnMainMenu.getScene().getWindow();
-            currentStage.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            showAlert("Error", "Gagal membuka halaman utama!");
-        }
-    }
-
-   public void addToRiwayat(String status) {
-        DetoxSession session = DetoxSession.getInstance();
-        int nextNumber = riwayatList.getData().size() + 1;
-        riwayatList.setData(
-            nextNumber,
-            session.getFormattedWaktuMulai(),
-            session.getDurasi(),
-            status,
-            session.getAktivitas()
-        );
-        clearInputFields();
     }
 
     private void validateInputs() {
@@ -107,23 +72,60 @@ public class FXMLBlokirHPController implements Initializable {
         if (kodeDaruratField.getText().trim().isEmpty()) {
             throw new IllegalArgumentException("Kode darurat tidak boleh kosong!");
         }
+         if (satuanWaktuComboBox.getValue() == null) {
+            throw new IllegalArgumentException("Satuan waktu harus dipilih!");
+        }
+    }
+
+    public void addToRiwayat(String status) {
+        DetoxSession session = DetoxSession.getInstance();
+        int nextNumber = riwayatList.getData().size() + 1;
+        riwayatList.setData(
+            nextNumber,
+            session.getFormattedWaktuMulai(),
+            session.getDurasiInMinutes(),
+            status,
+            session.getAktivitas()
+        );
+        clearInputFields();
     }
 
     private void openBlockingScreen() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/purify/FXMLBlokirStatus.fxml")); 
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLBlokirStatus.fxml"));
             Parent root = loader.load();
-
             FXMLBlokirStatusController controller = loader.getController();
             controller.setMainController(this);
-
             Stage currentStage = (Stage) btnBlokir.getScene().getWindow();
             currentStage.setScene(new Scene(root));
-
         } catch (IOException e) {
             e.printStackTrace();
-            showAlert("Error", "Gagal membuka halaman blokir!");
+            showAlert("Error", "Gagal membuka halaman blokir! Pastikan file FXMLBlokirStatus.fxml sudah benar.");
         }
+    }
+    
+    @FXML
+    private void handleStatistik(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLStatistik.fxml"));
+            Parent root = loader.load();
+            FXMLStatistikController controller = loader.getController();
+            controller.setRiwayatList(riwayatList);
+            Stage stage = new Stage();
+            stage.setTitle("Statistik Digital Detox");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Error", "Gagal membuka halaman statistik!");
+        }
+    }
+
+    @FXML
+    private void handleMainMenu(ActionEvent event) {
+        // Implementasi untuk kembali ke main menu jika ada
+        Stage currentStage = (Stage) btnMainMenu.getScene().getWindow();
+        currentStage.close();
     }
 
     private void clearInputFields() {

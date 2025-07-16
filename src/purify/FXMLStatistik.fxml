@@ -1,54 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="purify.FXMLStatistikController">
+<VBox alignment="TOP_CENTER" spacing="10.0" stylesheets="@purify-theme.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="purify.FXMLStatistikController">
+   <padding>
+      <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+   </padding>
    <children>
-      <VBox layoutX="50.0" layoutY="20.0" spacing="15.0" prefWidth="800.0">
-         <Label text="STATISTIK DIGITAL DETOX" textAlignment="CENTER">
-            <font>
-               <Font name="Calibri Bold" size="24.0" />
-            </font>
-         </Label>
-         
-         <HBox spacing="10.0" alignment="CENTER">
+      <Label styleClass="header-label" text="Statistik Digital Detox" />
+      <HBox alignment="CENTER" spacing="10.0">
+         <children>
             <Label text="Tampilkan per:" />
             <ComboBox fx:id="periodeComboBox" prefWidth="150.0" />
-         </HBox>
-         
-         <BarChart fx:id="durasiChart" prefHeight="250.0" prefWidth="800.0" animated="false">
-            <xAxis>
-               <CategoryAxis label="Periode" />
-            </xAxis>
-            <yAxis>
-               <NumberAxis label="Durasi (menit)" />
-            </yAxis>
-         </BarChart>
-         
-         <TableView fx:id="riwayatTable" prefHeight="300.0" prefWidth="800.0">
-            <columns>
-               <TableColumn fx:id="colNomor" prefWidth="50.0" text="No" />
-               <TableColumn fx:id="colTanggal" prefWidth="150.0" text="Waktu Mulai" />
-               <TableColumn fx:id="colDurasi" prefWidth="100.0" text="Durasi (menit)" />
-               <TableColumn fx:id="colStatus" prefWidth="120.0" text="Status" />
-               <TableColumn fx:id="colAktivitas" prefWidth="280.0" text="Aktivitas" />
-            </columns>
-         </TableView>
-         
-         <HBox spacing="10.0" alignment="CENTER_LEFT">
+         </children>
+      </HBox>
+      <HBox fx:id="weekNavigationBox" alignment="CENTER" managed="false" spacing="10.0" visible="false">
+         <children>
+            <Button fx:id="btnPreviousWeek" mnemonicParsing="false" text="&lt; Minggu Lalu" />
+            <Label fx:id="weekRangeLabel" style="-fx-font-weight: bold;" />
+            <Button fx:id="btnNextWeek" mnemonicParsing="false" text="Minggu Depan &gt;" />
+         </children>
+      </HBox>
+      <BarChart fx:id="durasiChart" animated="false" prefHeight="250.0">
+         <xAxis>
+            <CategoryAxis fx:id="dayAxis" label="Hari" />
+         </xAxis>
+         <yAxis>
+            <NumberAxis fx:id="durationAxis" label="Total Durasi (menit)" side="LEFT" />
+         </yAxis>
+      </BarChart>
+      <TableView fx:id="riwayatTable" prefHeight="250.0">
+         <columns>
+            <TableColumn fx:id="colNomor" prefWidth="50.0" text="No" />
+            <TableColumn fx:id="colTanggal" prefWidth="150.0" text="Waktu Mulai" />
+            <TableColumn fx:id="colDurasi" prefWidth="120.0" text="Durasi (menit)" />
+            <TableColumn fx:id="colStatus" prefWidth="120.0" text="Status" />
+            <TableColumn fx:id="colAktivitas" prefWidth="355.0" text="Aktivitas" />
+         </columns>
+      </TableView>
+      <HBox alignment="CENTER_LEFT" spacing="10.0">
+         <children>
             <Label text="Nomor Riwayat:" />
             <TextField fx:id="nomorField" prefWidth="50.0" />
             <Label text="Aktivitas Baru:" />
             <TextField fx:id="aktivitasBaruField" prefWidth="300.0" />
-            <Button fx:id="btnEdit" mnemonicParsing="false" prefWidth="120.0" text="Edit Aktivitas" />
-         </HBox>
-         
-         <Button fx:id="btnKembali" mnemonicParsing="false" prefWidth="100.0" text="Kembali" />
-      </VBox>
+            <Button fx:id="btnEdit" mnemonicParsing="false" text="Edit Aktivitas" />
+            <Button fx:id="btnDelete" mnemonicParsing="false" styleClass="delete-button" text="Delete Riwayat" />
+         </children>
+      </HBox>
+      <Button fx:id="btnKembali" mnemonicParsing="false" onAction="#handleKembali" styleClass="secondary-button" text="Kembali" />
    </children>
-</AnchorPane>
+</VBox>

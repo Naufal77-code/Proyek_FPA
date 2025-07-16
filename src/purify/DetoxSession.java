@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter;
 
 public class DetoxSession {
     private static DetoxSession instance;
-    private int durasi;
+    private long durasiInSeconds;
     private String aktivitas;
     private String kodeDarurat;
     private LocalDateTime waktuMulai;
@@ -13,7 +13,7 @@ public class DetoxSession {
 
     private DetoxSession() {
         this.isActive = false;
-        this.durasi = 0;
+        this.durasiInSeconds = 0;
         this.aktivitas = "";
         this.kodeDarurat = "";
         this.waktuMulai = null;
@@ -25,17 +25,15 @@ public class DetoxSession {
         }
         return instance;
     }
-
-    public void startDetox(int durasi, String aktivitas, String kodeDarurat) {
-        // Validate inputs
-        if (durasi <= 0) {
-            throw new IllegalArgumentException("Durasi harus lebih dari 0");
+    
+    public void startDetox(long durasiDetik, String aktivitas, String kodeDarurat) {
+        if (durasiDetik <= 0) {
+            throw new IllegalArgumentException("Durasi harus lebih dari 0 detik");
         }
         if (kodeDarurat == null || kodeDarurat.trim().isEmpty()) {
             throw new IllegalArgumentException("Kode darurat tidak boleh kosong");
         }
-        
-        this.durasi = durasi;
+        this.durasiInSeconds = durasiDetik;
         this.aktivitas = (aktivitas == null || aktivitas.trim().isEmpty()) ? "Aktivitas tidak ada" : aktivitas.trim();
         this.kodeDarurat = kodeDarurat.trim();
         this.waktuMulai = LocalDateTime.now();
@@ -46,35 +44,22 @@ public class DetoxSession {
         this.isActive = false;
     }
 
-    public void reset() {
-        this.durasi = 0;
-        this.aktivitas = "";
-        this.kodeDarurat = "";
-        this.waktuMulai = null;
-        this.isActive = false;
+    public long getDurasiInSeconds() {
+        return durasiInSeconds;
+    }
+    
+    public int getDurasiInMinutes() { 
+        return (int) Math.round(durasiInSeconds / 60.0);
     }
 
-    // Getters
-    public int getDurasi() { 
-        return durasi; 
-    }
-    
-    public String getAktivitas() { 
-        return aktivitas; 
-    }
-    
-    public String getKodeDarurat() { 
-        return kodeDarurat; 
-    }
-    
-    public LocalDateTime getWaktuMulai() { 
-        return waktuMulai; 
-    }
-    
-    public boolean isActive() { 
-        return isActive; 
+    public String getAktivitas() {
+        return aktivitas;
     }
 
+    public String getKodeDarurat() {
+        return kodeDarurat;
+    }
+    
     public String getFormattedWaktuMulai() {
         if (waktuMulai != null) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
@@ -87,29 +72,11 @@ public class DetoxSession {
         if (!isActive || waktuMulai == null) {
             return 0;
         }
-        
-        LocalDateTime endTime = waktuMulai.plusMinutes(durasi);
+        LocalDateTime endTime = waktuMulai.plusSeconds(durasiInSeconds);
         LocalDateTime now = LocalDateTime.now();
-        
         if (now.isAfter(endTime)) {
             return 0;
         }
-        
         return java.time.Duration.between(now, endTime).getSeconds();
-    }
-
-    public boolean isExpired() {
-        return isActive && getRemainingTimeInSeconds() <= 0;
-    }
-
-    @Override
-    public String toString() {
-        return "DetoxSession{" +
-                "durasi=" + durasi +
-                ", aktivitas='" + aktivitas + '\'' +
-                ", kodeDarurat='" + kodeDarurat + '\'' +
-                ", waktuMulai=" + waktuMulai +
-                ", isActive=" + isActive +
-                '}';
     }
 }

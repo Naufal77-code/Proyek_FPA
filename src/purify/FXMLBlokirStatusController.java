@@ -11,37 +11,32 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class FXMLBlokirStatusController implements Initializable {
-
     @FXML private Label timerLabel;
     @FXML private TextField kodeDaruratField;
     @FXML private Button btnBatalkan;
-
+    
     private Timeline timeline;
-    private int remainingSeconds;
+    private long remainingSeconds;
     private FXMLBlokirHPController mainController;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         DetoxSession session = DetoxSession.getInstance();
-        remainingSeconds = (int) session.getRemainingTimeInSeconds();
-
+        remainingSeconds = session.getRemainingTimeInSeconds();
         setupTimer();
         startTimer();
-
-        btnBatalkan.setOnAction(this::handleBatalkan);
     }
 
     private void setupTimer() {
         timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
             if (remainingSeconds > 0) {
-                updateTimerDisplay();
                 remainingSeconds--;
+                updateTimerDisplay();
             } else {
                 timeline.stop();
                 completeDetox("BERHASIL");
@@ -56,14 +51,10 @@ public class FXMLBlokirStatusController implements Initializable {
     }
 
     private void updateTimerDisplay() {
-        int hours = remainingSeconds / 3600;
-        int minutes = (remainingSeconds % 3600) / 60;
-        int seconds = remainingSeconds % 60;
-        
-        String timeText = hours > 0 
-            ? String.format("%02d:%02d:%02d", hours, minutes, seconds)
-            : String.format("%02d:%02d", minutes, seconds);
-        
+        long hours = remainingSeconds / 3600;
+        long minutes = (remainingSeconds % 3600) / 60;
+        long seconds = remainingSeconds % 60;
+        String timeText = String.format("%02d:%02d:%02d", hours, minutes, seconds);
         timerLabel.setText(timeText);
     }
 
@@ -71,12 +62,10 @@ public class FXMLBlokirStatusController implements Initializable {
     private void handleBatalkan(ActionEvent event) {
         String inputKode = kodeDaruratField.getText().trim();
         DetoxSession session = DetoxSession.getInstance();
-
         if (inputKode.isEmpty()) {
             showAlert("Error", "Masukkan kode darurat!");
             return;
         }
-
         if (inputKode.equals(session.getKodeDarurat())) {
             timeline.stop();
             completeDetox("GAGAL");
@@ -87,11 +76,9 @@ public class FXMLBlokirStatusController implements Initializable {
 
     private void completeDetox(String status) {
         DetoxSession.getInstance().endDetox();
-        
         if (mainController != null) {
             mainController.addToRiwayat(status);
         }
-
         returnToBlokirHP();
     }
 
@@ -100,7 +87,7 @@ public class FXMLBlokirStatusController implements Initializable {
             timeline.stop();
         }
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/purify/FXMLBlokirHP.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLBlokirHP.fxml"));
             Parent root = loader.load();
             Stage currentStage = (Stage) timerLabel.getScene().getWindow();
             currentStage.setScene(new Scene(root));

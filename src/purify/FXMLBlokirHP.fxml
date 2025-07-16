@@ -1,45 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="580.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="purify.FXMLBlokirHPController">
-    <children>
-        <Label layoutX="290.0" layoutY="20.0" prefHeight="66.0" prefWidth="141.0" text="BLOKIR HP" textAlignment="CENTER">
-            <font>
-                <Font name="Calibri Bold" size="31.0" />
-            </font>
-        </Label>
-        
-        <Text layoutX="50.0" layoutY="143.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Durasi blokir :">
-         <font>
-            <Font name="Arial" size="20.0" />
-         </font></Text>
-        <TextField fx:id="durasiField" layoutX="200.0" layoutY="123.0" prefHeight="25.0" prefWidth="150.0" />
-        
-        <Text layoutX="50.0" layoutY="193.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Kode darurat :">
-         <font>
-            <Font name="Arial" size="20.0" />
-         </font></Text>
-        <TextField fx:id="kodeDaruratField" layoutX="200.0" layoutY="173.0" prefHeight="25.0" prefWidth="150.0" />
-        
-        <Text layoutX="50.0" layoutY="243.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Aktivitas :">
-         <font>
-            <Font name="Arial" size="20.0" />
-         </font></Text>
-        <TextField fx:id="aktivitasField" layoutX="200.0" layoutY="223.0" prefHeight="25.0" prefWidth="150.0" />
-        
-        <Button fx:id="btnBlokir" layoutX="310.0" layoutY="514.0" mnemonicParsing="false" onAction="#handleBlokir" prefHeight="40.0" prefWidth="100.0" text="Blokir" />
-        <Button fx:id="btnStatistik" layoutX="570.0" layoutY="514.0" mnemonicParsing="false" onAction="#handleStatistik" prefHeight="40.0" prefWidth="100.0" text="Statistik" />
-      <Text layoutX="584.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Purify">
-         <font>
-            <Font name="Calibri" size="36.0" />
-         </font>
-      </Text>
-      <Button fx:id="btnMainMenu" layoutX="50.0" layoutY="514.0" mnemonicParsing="false" onAction="#handleMainMenu" prefHeight="40.0" prefWidth="100.0" text="Kembali" />
-    </children>
-</AnchorPane>
+<VBox alignment="TOP_CENTER" spacing="20.0" stylesheets="@purify-theme.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="purify.FXMLBlokirHPController">
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+   <children>
+      <Label styleClass="header-label" text="Mulai Sesi Digital Detox" />
+      <VBox alignment="CENTER" prefHeight="200.0" spacing="15.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 15; -fx-padding: 20; -fx-border-color: #C8E6C9; -fx-border-radius: 15;">
+         <children>
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+               <children>
+                  <Label prefWidth="120.0" text="Durasi blokir:" />
+                  <TextField fx:id="durasiField" promptText="Masukkan durasi" />
+                  <ComboBox fx:id="satuanWaktuComboBox" prefWidth="100.0" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+               <children>
+                  <Label prefWidth="120.0" text="Kode darurat:" />
+                  <TextField fx:id="kodeDaruratField" prefWidth="265.0" promptText="Kode untuk membatalkan" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+               <children>
+                  <Label prefWidth="120.0" text="Aktivitas:" />
+                  <TextField fx:id="aktivitasField" prefWidth="265.0" promptText="Aktivitas pengganti (opsional)" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <HBox alignment="CENTER" spacing="20.0">
+         <children>
+            <Button fx:id="btnMainMenu" mnemonicParsing="false" onAction="#handleMainMenu" styleClass="secondary-button" text="Kembali" />
+            <Button fx:id="btnBlokir" mnemonicParsing="false" onAction="#handleBlokir" text="Mulai Blokir" />
+            <Button fx:id="btnStatistik" mnemonicParsing="false" onAction="#handleStatistik" text="Lihat Statistik" />
+         </children>
+      </HBox>
+   </children>
+</VBox>

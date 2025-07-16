@@ -15,9 +15,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class RiwayatBlokirList {
-    private static final Logger logger = Logger.getLogger(RiwayatBlokirList.class.getName());
     private static final String XML_FILE = "riwayat_blokir.xml";
-
     private final ObservableList<RiwayatBlokir> dataList;
 
     public RiwayatBlokirList() {
@@ -25,55 +23,24 @@ public class RiwayatBlokirList {
         loadFromXML();
     }
 
-    // ===================================================================
-    // METODE INTI (Tidak ada perubahan)
-    // ===================================================================
-
     public ObservableList<RiwayatBlokir> getData() {
         return this.dataList;
     }
 
     public void setData(int nomor, String tanggalMulai, int durasi, String status, String aktivitas) {
-        if (tanggalMulai == null) tanggalMulai = "";
-        if (status == null) status = "";
-        if (aktivitas == null || aktivitas.trim().isEmpty()) {
-            aktivitas = "Aktivitas tidak ada";
-        }
-        
         RiwayatBlokir newRiwayat = new RiwayatBlokir(nomor, tanggalMulai, durasi, status, aktivitas);
         dataList.add(newRiwayat);
         saveToXML();
     }
-
+    
     public void remove(int nomor) {
-        // Pastikan nomor valid (lebih besar dari 0 dan tidak melebihi ukuran list)
         if (nomor > 0 && nomor <= dataList.size()) {
-            // Hapus item dari list. Ingat, list index dimulai dari 0, jadi gunakan nomor - 1.
             dataList.remove(nomor - 1);
-            
-            // Perbarui nomor urut untuk semua item yang tersisa
             updateNomor();
-            
-            // Simpan perubahan ke file XML
             saveToXML();
+        } else {
+            throw new IndexOutOfBoundsException("Nomor riwayat tidak valid untuk dihapus.");
         }
-    }
-
-    public void editAktivitas(int nomor, String aktivitasBaru) {
-        if (nomor > 0 && nomor <= dataList.size()) {
-            RiwayatBlokir riwayat = dataList.get(nomor - 1);
-            if (aktivitasBaru == null || aktivitasBaru.trim().isEmpty()) {
-                riwayat.setAktivitas("Aktivitas tidak ada");
-            } else {
-                riwayat.setAktivitas(aktivitasBaru.trim());
-            }
-            saveToXML();
-        }
-    }
-
-    public void clear() {
-        dataList.clear();
-        saveToXML();
     }
     
     private void updateNomor() {
@@ -82,68 +49,48 @@ public class RiwayatBlokirList {
         }
     }
 
-   private XStream createXStream() {
-    XStream.setupDefaultSecurity(null);
-    XStream xstream = new XStream(new StaxDriver());
-
-    // Konfigurasi keamanan
-    xstream.addPermission(NoTypePermission.NONE);
-    xstream.addPermission(PrimitiveTypePermission.PRIMITIVES);
-    xstream.allowTypeHierarchy(String.class);
-
-    // Izinkan kelas dari paket proyek Anda
-    xstream.allowTypesByWildcard(new String[] { "purify.**" });
-    
-    // Izinkan kelas koleksi yang digunakan
-    xstream.allowTypeHierarchy(java.util.List.class);
-    xstream.allowTypeHierarchy(ArrayList.class);
-
-    // Konfigurasi alias
-    xstream.alias("RiwayatBlokir", RiwayatBlokir.class);
-    xstream.alias("list", java.util.List.class); 
-
-    return xstream;
-}
-
-    /**
-     * Menyimpan state dari list ke file XML menggunakan konfigurasi XStream yang aman.
-     */
-    public void saveToXML() {
-    XStream xstream = createXStream();
-    try (FileOutputStream fos = new FileOutputStream(XML_FILE)) {
-        // Konversi ObservableList ke ArrayList biasa sebelum menyimpan
-        ArrayList<RiwayatBlokir> plainList = new ArrayList<>(this.dataList);
-        xstream.toXML(plainList, fos); // Simpan plainList, bukan "this"
-        logger.log(Level.INFO, "Data riwayat berhasil disimpan ke " + XML_FILE);
-    } catch (IOException e) {
-        logger.log(Level.SEVERE, "Gagal menyimpan data riwayat ke XML", e);
-    }
-}
-
-    /**
-     * Memuat state dari list dari file XML menggunakan konfigurasi XStream yang aman.
-     */
-    @SuppressWarnings("unchecked")
-private void loadFromXML() {
-    File file = new File(XML_FILE);
-    if (!file.exists()) {
-        logger.log(Level.INFO, "File " + XML_FILE + " tidak ditemukan.");
-        return;
-    }
-
-    XStream xstream = createXStream();
-    
-    try (FileInputStream fis = new FileInputStream(file)) {
-        // Baca data sebagai ArrayList
-        ArrayList<RiwayatBlokir> loadedList = (ArrayList<RiwayatBlokir>) xstream.fromXML(fis);
-        if (loadedList != null) {
-            // Set data ke ObservableList
-            dataList.setAll(loadedList);
-            logger.log(Level.INFO, "Data riwayat berhasil dimuat dari " + XML_FILE);
+    public void editAktivitas(int nomor, String aktivitasBaru) {
+        if (nomor > 0 && nomor <= dataList.size()) {
+            RiwayatBlokir riwayat = dataList.get(nomor - 1);
+            riwayat.setAktivitas(aktivitasBaru.trim());
+            saveToXML();
         }
-    } catch (Exception e) {
-        logger.log(Level.SEVERE, "Error saat parsing XML. File lama akan di-backup.", e);
-        file.renameTo(new File(XML_FILE + ".corrupted_" + System.currentTimeMillis()));
     }
-}
+
+    private XStream createXStream() {
+        XStream xstream = new XStream(new StaxDriver());
+        XStream.setupDefaultSecurity(xstream);
+        xstream.addPermission(NoTypePermission.NONE);
+        xstream.addPermission(PrimitiveTypePermission.PRIMITIVES);
+        xstream.allowTypeHierarchy(String.class);
+        xstream.allowTypesByWildcard(new String[] { "purify.**", "java.util.**" });
+        xstream.alias("list", java.util.List.class);
+        xstream.alias("RiwayatBlokir", RiwayatBlokir.class);
+        return xstream;
+    }
+
+    public void saveToXML() {
+        XStream xstream = createXStream();
+        try (FileOutputStream fos = new FileOutputStream(XML_FILE)) {
+            xstream.toXML(new ArrayList<>(this.dataList), fos);
+        } catch (IOException e) {
+            Logger.getLogger(RiwayatBlokirList.class.getName()).log(Level.SEVERE, "Gagal menyimpan data riwayat.", e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void loadFromXML() {
+        File file = new File(XML_FILE);
+        if (!file.exists()) return;
+
+        XStream xstream = createXStream();
+        try (FileInputStream fis = new FileInputStream(file)) {
+            ArrayList<RiwayatBlokir> loadedList = (ArrayList<RiwayatBlokir>) xstream.fromXML(fis);
+            if (loadedList != null) {
+                dataList.setAll(loadedList);
+            }
+        } catch (Exception e) {
+            Logger.getLogger(RiwayatBlokirList.class.getName()).log(Level.SEVERE, "Gagal memuat data riwayat.", e);
+        }
+    }
 }
