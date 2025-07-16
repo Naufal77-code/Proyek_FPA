@@ -10,7 +10,7 @@ public class GUI_DigitalDetox extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("FXMLBlokirHP.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("FXMLMainMenu.fxml"));
 
         Scene scene = new Scene(root);
 

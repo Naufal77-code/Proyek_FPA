@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="580.0" prefWidth="720.0" spacing="25.0" stylesheets="@purify-theme.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="purify.FXMLMainMenuController">
+   <children>
+      <Button fx:id="blokirHP" mnemonicParsing="false" onAction="#handleBlokirHP" prefHeight="26.5" prefWidth="185.0" text="Detox Layar" />
+      <Button fx:id="blokirAplikasi" mnemonicParsing="false" onAction="#HandleBlokirAplikasi" prefHeight="26.5" prefWidth="185.0" text="Detox Aplikasi" />
+      <Button fx:id="lihatStatistik" mnemonicParsing="false" onAction="#handleLihatStatistik" prefHeight="26.5" prefWidth="185.0" text="Lihat Statistik" />
+      <Button fx:id="konsultasiPsikolog" mnemonicParsing="false" prefHeight="26.5" prefWidth="185.0" text="Konsultasi Psikolog" />
+      <Button fx:id="komunitas" mnemonicParsing="false" prefHeight="26.5" prefWidth="185.0" text="Komunitas" />
+   </children>
+</VBox>

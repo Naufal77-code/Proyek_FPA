@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" spacing="10.0" stylesheets="@purify-theme.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="purify.FXMLStatistikController">
+<VBox alignment="TOP_CENTER" prefHeight="700.0" prefWidth="900.0" spacing="10.0" stylesheets="@purify-theme.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="purify.FXMLStatistikController">
    <padding>
       <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
    </padding>
@@ -25,6 +25,13 @@
             <ComboBox fx:id="periodeComboBox" prefWidth="150.0" />
          </children>
       </HBox>
+      <HBox fx:id="dayNavigationBox" alignment="CENTER" managed="false" spacing="10.0" visible="false">
+         <children>
+            <Button fx:id="btnPreviousDay" mnemonicParsing="false" text="&lt; Kemarin" />
+            <Label fx:id="dayLabel" style="-fx-font-weight: bold;" />
+            <Button fx:id="btnNextDay" mnemonicParsing="false" text="Besok &gt;" />
+         </children>
+      </HBox>
       <HBox fx:id="weekNavigationBox" alignment="CENTER" managed="false" spacing="10.0" visible="false">
          <children>
             <Button fx:id="btnPreviousWeek" mnemonicParsing="false" text="&lt; Minggu Lalu" />
@@ -32,9 +39,16 @@
             <Button fx:id="btnNextWeek" mnemonicParsing="false" text="Minggu Depan &gt;" />
          </children>
       </HBox>
+      <HBox fx:id="yearNavigationBox" alignment="CENTER" managed="false" spacing="10.0" visible="false">
+         <children>
+            <Button fx:id="btnPreviousYear" mnemonicParsing="false" text="&lt; Tahun Lalu" />
+            <Label fx:id="yearLabel" style="-fx-font-weight: bold;" />
+            <Button fx:id="btnNextYear" mnemonicParsing="false" text="Tahun Depan &gt;" />
+         </children>
+      </HBox>
       <BarChart fx:id="durasiChart" animated="false" prefHeight="250.0">
          <xAxis>
-            <CategoryAxis fx:id="dayAxis" label="Hari" />
+            <CategoryAxis fx:id="dayAxis" label="Periode" />
          </xAxis>
          <yAxis>
             <NumberAxis fx:id="durationAxis" label="Total Durasi (menit)" side="LEFT" />
@@ -56,7 +70,7 @@
             <Label text="Aktivitas Baru:" />
             <TextField fx:id="aktivitasBaruField" prefWidth="300.0" />
             <Button fx:id="btnEdit" mnemonicParsing="false" text="Edit Aktivitas" />
-            <Button fx:id="btnDelete" mnemonicParsing="false" styleClass="delete-button" text="Delete Riwayat" />
+            <Button fx:id="btnDelete" mnemonicParsing="false" styleClass="delete-button" text="Hapus Riwayat" />
          </children>
       </HBox>
       <Button fx:id="btnKembali" mnemonicParsing="false" onAction="#handleKembali" styleClass="secondary-button" text="Kembali" />

@@ -129,9 +129,15 @@ public class FXMLBlokirHPController implements Initializable {
 
     @FXML
     private void handleMainMenu(ActionEvent event) {
-        // Implementasi untuk kembali ke main menu jika ada
-        Stage currentStage = (Stage) btnMainMenu.getScene().getWindow();
-        currentStage.close();
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("FXMLMainMenu.fxml"));
+            Stage currentStage = (Stage) btnMainMenu.getScene().getWindow();
+            currentStage.setScene(new Scene(root));
+            currentStage.setTitle("Purify - Digital Detox");
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Error", "Gagal membuka halaman utama!");
+        }
     }
 
     private void clearInputFields() {
