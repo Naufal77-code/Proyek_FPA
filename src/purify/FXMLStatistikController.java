@@ -39,7 +39,7 @@ import javafx.stage.Stage;
 
 public class FXMLStatistikController implements Initializable {
 
-    // FXML Components
+    // Variabel untuk komponen UI yang diinjeksi dari file FXML
     @FXML private BarChart<String, Number> durasiChart;
     @FXML private TableView<RiwayatBlokir> riwayatTable;
     @FXML private ComboBox<String> periodeComboBox;
@@ -54,7 +54,7 @@ public class FXMLStatistikController implements Initializable {
     @FXML private Button btnDelete;
     @FXML private Button btnKembali;
     
-    // Navigation Components
+    // Variabel untuk komponen navigasi periode
     @FXML private HBox dayNavigationBox;
     @FXML private Button btnPreviousDay;
     @FXML private Button btnNextDay;
@@ -70,15 +70,21 @@ public class FXMLStatistikController implements Initializable {
     @FXML private CategoryAxis dayAxis;
     @FXML private NumberAxis durationAxis;
 
+    // Variabel untuk menyimpan list data riwayat
     private RiwayatBlokirList riwayatList;
+    // Variabel untuk menyimpan tanggal acuan saat ini untuk navigasi
     private LocalDate currentDisplayDate;
 
-    // Formatters
+    // Variabel untuk mengubah format tanggal dan waktu menjadi string
     private final DateTimeFormatter fullDateFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy", new Locale("id", "ID"));
     private final DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("dd/MM");
     private final DateTimeFormatter simpleHourFormatter = DateTimeFormatter.ofPattern("HH:00");
     private final DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
+    /**
+     * Metode ini dijalankan secara otomatis saat FXML selesai dimuat.
+     * Berfungsi untuk melakukan setup awal komponen UI.
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         currentDisplayDate = LocalDate.now(); 
@@ -88,18 +94,28 @@ public class FXMLStatistikController implements Initializable {
         setupTableSelectionListener();
     }    
     
+    /**
+     * Menerima data riwayat dari scene sebelumnya dan memulai pembaruan UI.
+     * @param riwayatList Objek yang berisi semua data riwayat.
+     */
     public void setRiwayatList(RiwayatBlokirList riwayatList) {
         this.riwayatList = riwayatList;
         riwayatTable.setItems(riwayatList.getData());
         updateChart();
     }
     
+    /**
+     * Mengisi ComboBox dengan pilihan periode (Harian, Mingguan, Bulanan).
+     */
     private void setupPeriodComboBox() {
         periodeComboBox.setItems(FXCollections.observableArrayList("Harian (Per Jam)", "Mingguan", "Bulanan"));
         periodeComboBox.getSelectionModel().select("Harian (Per Jam)");
         periodeComboBox.setOnAction(e -> updateChart());
     }
 
+    /**
+     * Menghubungkan setiap kolom di TableView dengan properti dari objek RiwayatBlokir.
+     */
     private void setupTableColumns() {
         colNomor.setCellValueFactory(new PropertyValueFactory<>("nomor"));
         colTanggal.setCellValueFactory(new PropertyValueFactory<>("tanggalMulai"));
@@ -108,6 +124,9 @@ public class FXMLStatistikController implements Initializable {
         colAktivitas.setCellValueFactory(new PropertyValueFactory<>("aktivitas"));
     }
 
+    /**
+     * Mendaftarkan event handler untuk setiap aksi tombol.
+     */
     private void setupButtonActions() {
         btnEdit.setOnAction(this::handleEdit);
         btnDelete.setOnAction(this::handleDelete);
@@ -120,6 +139,9 @@ public class FXMLStatistikController implements Initializable {
         btnNextYear.setOnAction(e -> navigateYear(1));
     }
     
+    /**
+     * Menambahkan listener yang akan mengisi field input saat sebuah baris di tabel dipilih.
+     */
     private void setupTableSelectionListener() {
         riwayatTable.getSelectionModel().selectedItemProperty().addListener(
             (obs, oldSelection, newSelection) -> {
@@ -130,21 +152,36 @@ public class FXMLStatistikController implements Initializable {
             });
     }
 
+    /**
+     * Mengubah tanggal acuan maju/mundur sebanyak satu hari.
+     * @param direction -1 untuk mundur, 1 untuk maju.
+     */
     private void navigateDay(int direction) {
         currentDisplayDate = currentDisplayDate.plusDays(direction);
         updateChart();
     }
 
+    /**
+     * Mengubah tanggal acuan maju/mundur sebanyak satu minggu.
+     * @param direction -1 untuk mundur, 1 untuk maju.
+     */
     private void navigateWeek(int direction) {
         currentDisplayDate = currentDisplayDate.plusWeeks(direction);
         updateChart();
     }
 
+    /**
+     * Mengubah tanggal acuan maju/mundur sebanyak satu tahun.
+     * @param direction -1 untuk mundur, 1 untuk maju.
+     */
     private void navigateYear(int direction) {
         currentDisplayDate = currentDisplayDate.plusYears(direction);
         updateChart();
     }
     
+    /**
+     * Metode utama untuk memperbarui chart berdasarkan periode yang dipilih.
+     */
     private void updateChart() {
         if (riwayatList == null) return;
         durasiChart.getData().clear();
@@ -171,6 +208,10 @@ public class FXMLStatistikController implements Initializable {
         durasiChart.getData().add(series);
     }
     
+    /**
+     * Membuat data untuk chart harian, menampilkan 24 jam untuk tanggal yang dipilih.
+     * @param series Objek series chart untuk diisi data.
+     */
     private void updateHourlyChart(XYChart.Series<String, Number> series) {
         dayAxis.setLabel("Jam");
         dayLabel.setText(currentDisplayDate.format(fullDateFormatter));
@@ -194,6 +235,10 @@ public class FXMLStatistikController implements Initializable {
         }
     }
 
+    /**
+     * Membuat data untuk chart mingguan, menampilkan 7 hari (Senin-Minggu).
+     * @param series Objek series chart untuk diisi data.
+     */
     private void updateWeeklyChart(XYChart.Series<String, Number> series) {
         dayAxis.setLabel("Hari dalam Seminggu");
         
@@ -219,6 +264,10 @@ public class FXMLStatistikController implements Initializable {
         }
     }
 
+    /**
+     * Membuat data untuk chart bulanan, menampilkan 12 bulan untuk tahun yang dipilih.
+     * @param series Objek series chart untuk diisi data.
+     */
     private void updateMonthlyChart(XYChart.Series<String, Number> series) {
         dayAxis.setLabel("Bulan");
         int year = currentDisplayDate.getYear();
@@ -243,34 +292,10 @@ public class FXMLStatistikController implements Initializable {
         }
     }
     
-    private static class YearWeek implements Comparable<YearWeek> {
-        private final int year;
-        private final int week;
-        
-        public YearWeek(int year, int week) { this.year = year; this.week = week; }
-        public static YearWeek from(LocalDate date) { return new YearWeek(date.getYear(), date.get(WeekFields.ISO.weekOfYear())); }
-        public int year() { return year; }
-        public int week() { return week; }
-
-        @Override
-        public int compareTo(YearWeek other) {
-            return Comparator.comparingInt(YearWeek::year)
-                             .thenComparingInt(YearWeek::week)
-                             .compare(this, other);
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            YearWeek yearWeek = (YearWeek) o;
-            return year == yearWeek.year && week == yearWeek.week;
-        }
-
-        @Override
-        public int hashCode() { return Objects.hash(year, week); }
-    }
     
+    /**
+     * Dijalankan saat tombol 'Edit' ditekan.
+     */
     @FXML
     private void handleEdit(ActionEvent event) {
         try {
@@ -291,6 +316,9 @@ public class FXMLStatistikController implements Initializable {
         }
     }
     
+    /**
+     * Dijalankan saat tombol 'Delete' ditekan.
+     */
     @FXML
     private void handleDelete(ActionEvent event) {
         try {
@@ -313,18 +341,27 @@ public class FXMLStatistikController implements Initializable {
         }
     }
 
+    /**
+     * Dijalankan saat tombol 'Kembali' ditekan untuk menutup window.
+     */
     @FXML
     private void handleKembali(ActionEvent event) {
         Stage stage = (Stage) btnKembali.getScene().getWindow();
         stage.close();
     }
     
+    /**
+     * Metode helper untuk membersihkan field input setelah aksi.
+     */
     private void clearFields() {
         nomorField.clear();
         aktivitasBaruField.clear();
         riwayatTable.getSelectionModel().clearSelection();
     }
 
+    /**
+     * Metode helper untuk menampilkan dialog Alert.
+     */
     private void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
