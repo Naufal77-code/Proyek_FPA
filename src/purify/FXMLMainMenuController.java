@@ -98,10 +98,10 @@ public class FXMLMainMenuController implements Initializable {
         currentStage.hide();
     } catch (Exception e) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Failed to open Statistik screen");
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
+        alert.setTitle("Error");
+        alert.setHeaderText("Failed to open Statistik screen");
+        alert.setContentText(e.getMessage());
+        alert.showAndWait();
     } 
 }
 
