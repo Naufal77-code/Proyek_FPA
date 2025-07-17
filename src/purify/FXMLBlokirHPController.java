@@ -110,22 +110,29 @@ public class FXMLBlokirHPController implements Initializable {
         }
     }
 
-    @FXML
-    private void handleStatistik(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLStatistik.fxml"));
-            Parent root = loader.load();
-            FXMLStatistikController controller = loader.getController();
-            controller.setRiwayatList(riwayatList);
-            Stage stage = new Stage();
-            stage.setTitle("Statistik Digital Detox");
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            showAlert("Error", "Gagal membuka halaman statistik!");
-        }
+    // Di FXMLBlokirHPController.java
+@FXML
+private void handleStatistik(ActionEvent event) {
+    try {
+        Stage currentStage = (Stage) btnStatistik.getScene().getWindow();
+        
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLStatistik.fxml"));
+        Parent root = loader.load();
+        FXMLStatistikController controller = loader.getController();
+        controller.setRiwayatList(riwayatList, "blokirHP", currentStage); // Tambahkan parameter stage asal
+        
+        Stage statistikStage = new Stage();
+        statistikStage.setTitle("Statistik Digital Detox");
+        statistikStage.setScene(new Scene(root));
+        statistikStage.show();
+        
+        // Sembunyikan (bukan tutup) stage blokir HP
+        currentStage.hide();
+    } catch (IOException e) {
+        e.printStackTrace();
+        showAlert("Error", "Gagal membuka halaman statistik!");
     }
+}
 
     @FXML
     private void handleMainMenu(ActionEvent event) {

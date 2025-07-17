@@ -1,5 +1,6 @@
 package purify;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -9,18 +10,18 @@ import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.time.temporal.TemporalAdjusters;
-import java.time.temporal.WeekFields;
-import java.util.Comparator;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
@@ -53,6 +54,8 @@ public class FXMLStatistikController implements Initializable {
     @FXML private Button btnEdit;
     @FXML private Button btnDelete;
     @FXML private Button btnKembali;
+    @FXML private String previousScreen;
+    @FXML private Stage previousStage;
     
     // Variabel untuk komponen navigasi periode
     @FXML private HBox dayNavigationBox;
@@ -98,8 +101,10 @@ public class FXMLStatistikController implements Initializable {
      * Menerima data riwayat dari scene sebelumnya dan memulai pembaruan UI.
      * @param riwayatList Objek yang berisi semua data riwayat.
      */
-    public void setRiwayatList(RiwayatBlokirList riwayatList) {
+    public void setRiwayatList(RiwayatBlokirList riwayatList, String previousScreen, Stage previousStage) {
         this.riwayatList = riwayatList;
+        this.previousScreen = previousScreen;
+        this.previousStage = previousStage;
         riwayatTable.setItems(riwayatList.getData());
         updateChart();
     }
@@ -344,10 +349,30 @@ public class FXMLStatistikController implements Initializable {
     /**
      * Dijalankan saat tombol 'Kembali' ditekan untuk menutup window.
      */
-    @FXML
-    private void handleKembali(ActionEvent event) {
-        Stage stage = (Stage) btnKembali.getScene().getWindow();
-        stage.close();
+    
+
+@FXML
+private void handleKembali(ActionEvent event) {
+        Stage currentStage = (Stage) btnKembali.getScene().getWindow();
+        
+        if ("mainMenu".equals(previousScreen)) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLMainMenu.fxml"));
+                Parent root = loader.load();
+                Stage stage = new Stage();
+                stage.setScene(new Scene(root));
+                stage.setTitle("Purify - Main Menu");
+                stage.show();
+                currentStage.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+                showAlert(Alert.AlertType.ERROR, "Error", "Gagal kembali ke main menu");
+            }
+        } else if ("blokirHP".equals(previousScreen)) {
+            // Kembali ke stage blokir HP yang asli
+            previousStage.show();
+            currentStage.close();
+        }
     }
     
     /**
