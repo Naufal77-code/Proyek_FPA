@@ -18,79 +18,81 @@ import java.util.stream.Collectors;
 
 public class FXMLStatistikAppsController implements Initializable {
 
-    @FXML
-    private BarChart<String, Number> statistikChart;
+    @FXML private BarChart<String, Number> statistikChart;
+    @FXML private CategoryAxis xAxis;
+    @FXML private NumberAxis yAxis;
+    @FXML private TableView<RiwayatBlokirApps> riwayatTable;
+    @FXML private TableColumn<RiwayatBlokirApps, Integer> colNo;
+    @FXML private TableColumn<RiwayatBlokirApps, String> colTanggal;
+    @FXML private TableColumn<RiwayatBlokirApps, Integer> colDurasi;
+    @FXML private TableColumn<RiwayatBlokirApps, String> colStatus;
+    @FXML private TableColumn<RiwayatBlokirApps, String> colAktivitas;
+    @FXML private TableColumn<RiwayatBlokirApps, String> colApps;
+    @FXML private Button btnHapus;
+    @FXML private Button btnRefresh;
+    @FXML private Button btnKembali;
 
-    @FXML
-    private CategoryAxis xAxis;
-
-    @FXML
-    private NumberAxis yAxis;
-
-    @FXML
-    private TableView<RiwayatBlokirApps> riwayatTable;
-
-    @FXML
-    private TableColumn<RiwayatBlokirApps, Integer> colNo;
-
-    @FXML
-    private TableColumn<RiwayatBlokirApps, String> colTanggal;
-
-    @FXML
-    private TableColumn<RiwayatBlokirApps, Integer> colDurasi;
-
-    @FXML
-    private TableColumn<RiwayatBlokirApps, String> colStatus;
-
-    @FXML
-    private TableColumn<RiwayatBlokirApps, String> colAktivitas;
-
-    @FXML
-    private TableColumn<RiwayatBlokirApps, String> colApps;
-
-    @FXML
-    private Button btnRefresh;
-
-    @FXML
-    private Button btnKembali;
-
+    private Stage previousStage;
     private RiwayatBlokirAppsList riwayatList;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        xAxis.setLabel("Aplikasi");
-        yAxis.setLabel("Total Durasi Blokir (menit)");
+        setupTableColumns();
+        setupButtonActions();
 
+        if (riwayatList == null) {
+            riwayatList = RiwayatBlokirAppsList.getInstance();
+            riwayatList.loadFromXML();
+        }
+
+        refreshData();
+    }
+
+    private void setupTableColumns() {
         colNo.setCellValueFactory(new PropertyValueFactory<>("nomor"));
         colTanggal.setCellValueFactory(new PropertyValueFactory<>("tanggalMulai"));
         colDurasi.setCellValueFactory(new PropertyValueFactory<>("durasi"));
         colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         colAktivitas.setCellValueFactory(new PropertyValueFactory<>("aktivitas"));
         colApps.setCellValueFactory(new PropertyValueFactory<>("appsBlokir"));
+    }
 
+    private void setupButtonActions() {
+        btnHapus.setOnAction(this::handleHapusRiwayat);
         btnRefresh.setOnAction(this::handleRefresh);
         btnKembali.setOnAction(this::handleKembali);
-
     }
 
     public void setRiwayatList(RiwayatBlokirAppsList riwayatList) {
         this.riwayatList = riwayatList;
-        riwayatTable.setItems(riwayatList.getData());
+        if (this.riwayatList != null) {
+            this.riwayatList.loadFromXML();
+        }
+        refreshData();
+    }
+
+    public void setPreviousStage(Stage previousStage) {
+        this.previousStage = previousStage;
+    }
+
+    private void refreshData() {
+        if (riwayatList == null) return;
+
+        ObservableList<RiwayatBlokirApps> data = riwayatList.getData();
+        riwayatTable.setItems(data);
+
         updateStatistics();
     }
 
     @FXML
     private void handleRefresh(ActionEvent event) {
-        if (riwayatList == null) {
-            showAlert("Kesalahan", "Data riwayat belum tersedia.");
-            return;
+        boolean loaded = riwayatList.loadFromXML();
+        if (loaded) {
+            showAlert("Informasi", "Data berhasil diperbarui!");
+        } else {
+            showAlert("Kesalahan", "Gagal memuat data dari file.");
         }
-
-        riwayatList.loadFromXML();
-        riwayatTable.setItems(riwayatList.getData());
-        riwayatTable.refresh();
-        updateStatistics();
-        showAlert("Informasi", "Data berhasil diperbarui!");
+        refreshData();
     }
 
     @FXML
@@ -105,54 +107,59 @@ public class FXMLStatistikAppsController implements Initializable {
         Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
         confirmation.setTitle("Konfirmasi Hapus");
         confirmation.setHeaderText(null);
-        confirmation.setContentText("Apakah Anda yakin ingin menghapus riwayat yang dipilih?");
+        confirmation.setContentText("Apakah Anda yakin ingin menghapus riwayat ini?");
 
         Optional<ButtonType> result = confirmation.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             riwayatList.getData().remove(selected);
-            riwayatList.saveToXML(); // Pastikan data diperbarui di XML
-            riwayatTable.refresh();
-            updateStatistics();
-            showAlert("Informasi", "Riwayat yang dipilih berhasil dihapus.");
+            riwayatList.saveToXML();
+            refreshData();
+            showAlert("Informasi", "Riwayat berhasil dihapus.");
         }
     }
 
     @FXML
     private void handleKembali(ActionEvent event) {
-        Stage stage = (Stage) btnKembali.getScene().getWindow();
-        stage.close();
+        if (previousStage != null) {
+            previousStage.show();
+            Stage currentStage = (Stage) btnKembali.getScene().getWindow();
+            currentStage.close();
+        }
     }
 
     private void updateStatistics() {
-        if (riwayatList == null)
-            return;
+        statistikChart.getData().clear();
 
-        ObservableList<RiwayatBlokirApps> data = riwayatList.getData();
+        if (riwayatList == null || riwayatList.getData().isEmpty()) {
+            return;
+        }
+
         Map<String, Integer> appDurations = new HashMap<>();
 
-        for (RiwayatBlokirApps riwayat : data) {
-            String[] apps = (riwayat.getAppsBlokir() != null && !riwayat.getAppsBlokir().trim().isEmpty())
-                    ? riwayat.getAppsBlokir().split(", ")
-                    : new String[] { "Tidak ada aplikasi" };
-            for (String app : apps) {
-                appDurations.put(app, appDurations.getOrDefault(app, 0) + riwayat.getDurasi());
+        for (RiwayatBlokirApps riwayat : riwayatList.getData()) {
+            if (riwayat.getAppsBlokir() != null) {
+                String[] apps = riwayat.getAppsBlokir().split(", ");
+                for (String app : apps) {
+                    appDurations.merge(app, riwayat.getDurasi(), Integer::sum);
+                }
             }
         }
 
-        List<Map.Entry<String, Integer>> sortedApps = appDurations.entrySet().stream()
+        if (appDurations.isEmpty()) return;
+
+        List<Map.Entry<String, Integer>> sortedApps = appDurations.entrySet()
+                .stream()
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
                 .collect(Collectors.toList());
 
-        statistikChart.getData().clear();
         XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Total Durasi Blokir");
+        series.setName("Total Durasi Blokir (menit)");
 
         for (Map.Entry<String, Integer> entry : sortedApps) {
             series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
         }
 
         statistikChart.getData().add(series);
-        riwayatTable.refresh();
     }
 
     private void showAlert(String title, String message) {

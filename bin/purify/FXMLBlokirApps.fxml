@@ -67,11 +67,6 @@
             <Font size="14.0" />
          </font>
       </Button>
-      <Button fx:id="btnStatistikApp" layoutX="210.0" layoutY="380.0" mnemonicParsing="false" onAction="#handleStatistikApp" prefHeight="35.0" prefWidth="150.0" text="Statistik App">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
-      <Button fx:id="btnMainMenu" layoutX="400.0" layoutY="385.0" mnemonicParsing="false" onAction="#handleMainMenu" prefHeight="26.0" prefWidth="130.0" text="Kembali" />
+      <Button fx:id="btnMainMenu" layoutX="220.0" layoutY="380.0" mnemonicParsing="false" onAction="#handleMainMenu" prefHeight="35.0" prefWidth="130.0" text="Kembali" />
    </children>
 </AnchorPane>

@@ -73,7 +73,7 @@
             <Button fx:id="btnDelete" mnemonicParsing="false" styleClass="delete-button" text="Hapus Riwayat" />
          </children>
       </HBox>
-      <Button mnemonicParsing="false" text=" Statistik Blokir Aplikasi" />
+      <Button fx:id="btnStatistikApps" mnemonicParsing="false" onAction="#handleStatistikApps" text=" Statistik Blokir Aplikasi" />
       <Button fx:id="btnKembali" mnemonicParsing="false" onAction="#handleKembali" styleClass="secondary-button" text="Kembali" />
    </children>
 </VBox>
