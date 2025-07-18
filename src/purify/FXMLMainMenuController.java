@@ -59,7 +59,7 @@ public class FXMLMainMenuController implements Initializable {
     @FXML
     private void HandleBlokirAplikasi(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/purify/FXMLBlokirAplikasi.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/purify/FXMLBlokirApps.fxml"));
             Parent root = loader.load();
 
             Stage stage = new Stage();

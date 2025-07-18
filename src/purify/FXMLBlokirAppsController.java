@@ -1,0 +1,232 @@
+package purify;
+
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
+
+public class FXMLBlokirAppsController implements Initializable {
+
+    @FXML
+    private TextField durasiField;
+
+    @FXML
+    private TextField kodeDaruratField;
+
+    @FXML
+    private TextField aktivitasField;
+
+    @FXML
+    private CheckBox cbInstagram;
+
+    @FXML
+    private CheckBox cbTikTok;
+
+    @FXML
+    private CheckBox cbFacebook;
+
+    @FXML
+    private CheckBox cbTwitter;
+
+    @FXML
+    private CheckBox cbWhatsApp;
+
+    @FXML
+    private CheckBox cbTelegram;
+
+    @FXML
+    private CheckBox cbYouTube;
+
+    @FXML
+    private CheckBox cbNetflix;
+
+    @FXML
+    private CheckBox cbSpotify;
+
+    @FXML
+    private CheckBox cbSnapchat;
+
+    @FXML
+    private CheckBox cbDiscord;
+
+    @FXML
+    private CheckBox cbTwitch;
+
+    @FXML
+    private Button btnBlokir;
+
+    @FXML
+    private Button btnMainMenu;
+
+    @FXML
+    private Button btnStatistikApp;
+
+    private static RiwayatBlokirAppsList riwayatList = new RiwayatBlokirAppsList();
+
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        // No table initialization needed anymore
+    }
+
+    @FXML
+    private void handleBlokir(ActionEvent event) {
+        String durasiText = durasiField.getText().trim();
+        String kodeDarurat = kodeDaruratField.getText().trim();
+        String aktivitas = aktivitasField.getText().trim();
+
+        if (durasiText.isEmpty()) {
+            showAlert("Error", "Durasi tidak boleh kosong!");
+            return;
+        }
+
+        try {
+            int durasi = Integer.parseInt(durasiText);
+            if (durasi <= 0) {
+                showAlert("Error", "Durasi harus lebih dari 0!");
+                return;
+            }
+
+            if (aktivitas.isEmpty()) {
+                aktivitas = "Aktivitas tidak ada";
+            }
+
+            if (kodeDarurat.isEmpty()) {
+                showAlert("Error", "Kode darurat tidak boleh kosong!");
+                return;
+            }
+
+            List<String> selectedApps = getSelectedApps();
+            if (selectedApps.isEmpty()) {
+                showAlert("Error", "Pilih minimal satu aplikasi untuk diblokir!");
+                return;
+            }
+
+            DetoxAppsSession.getInstance().startDetox(durasi, aktivitas, kodeDarurat, selectedApps);
+            openBlockingScreen();
+
+        } catch (NumberFormatException e) {
+            showAlert("Error", "Durasi harus berupa angka!");
+        }
+    }
+
+    private List<String> getSelectedApps() {
+        List<String> selectedApps = new ArrayList<>();
+        
+        if (cbInstagram.isSelected()) selectedApps.add("Instagram");
+        if (cbTikTok.isSelected()) selectedApps.add("TikTok");
+        if (cbFacebook.isSelected()) selectedApps.add("Facebook");
+        if (cbTwitter.isSelected()) selectedApps.add("Twitter/X");
+        if (cbWhatsApp.isSelected()) selectedApps.add("WhatsApp");
+        if (cbTelegram.isSelected()) selectedApps.add("Telegram");
+        if (cbYouTube.isSelected()) selectedApps.add("YouTube");
+        if (cbNetflix.isSelected()) selectedApps.add("Netflix");
+        if (cbSpotify.isSelected()) selectedApps.add("Spotify");
+        if (cbSnapchat.isSelected()) selectedApps.add("Snapchat");
+        if (cbDiscord.isSelected()) selectedApps.add("Discord");
+        if (cbTwitch.isSelected()) selectedApps.add("Twitch");
+        
+        return selectedApps;
+    }
+
+    @FXML
+    private void handleStatistikApp(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLStatistikApps.fxml"));
+            Parent root = loader.load();
+
+            FXMLStatistikAppsController controller = loader.getController();
+            controller.setRiwayatList(riwayatList);
+
+            Stage stage = new Stage();
+            stage.setTitle("Statistik Detox Apps");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Error", "Gagal membuka halaman statistik!");
+        }
+    }
+
+    private void openBlockingScreen() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Purify/FXMLBlokirAppsStatus.fxml")); 
+            Parent root = loader.load();
+
+            FXMLBlokirAppsStatusController controller = loader.getController();
+            controller.setMainController(this);
+
+            Stage currentStage = (Stage) btnBlokir.getScene().getWindow();
+            currentStage.setScene(new Scene(root));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Error", "Gagal membuka halaman blokir!");
+        }
+    }
+
+    public void addToRiwayat(String status) {
+        DetoxAppsSession session = DetoxAppsSession.getInstance();
+        int nomor = riwayatList.getData().size() + 1;
+        
+        riwayatList.setData(
+            nomor,
+            session.getFormattedWaktuMulai(),
+            session.getDurasi(),
+            status,
+            session.getAktivitas(),
+            session.getSelectedAppsString()
+        );
+
+        durasiField.clear();
+        kodeDaruratField.clear();
+        aktivitasField.clear();
+        clearCheckboxes();
+    }
+
+    private void clearCheckboxes() {
+        cbInstagram.setSelected(false);
+        cbTikTok.setSelected(false);
+        cbFacebook.setSelected(false);
+        cbTwitter.setSelected(false);
+        cbWhatsApp.setSelected(false);
+        cbTelegram.setSelected(false);
+        cbYouTube.setSelected(false);
+        cbNetflix.setSelected(false);
+        cbSpotify.setSelected(false);
+        cbSnapchat.setSelected(false);
+        cbDiscord.setSelected(false);
+        cbTwitch.setSelected(false);
+    }
+
+     @FXML
+    private void handleMainMenu(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("FXMLMainMenu.fxml"));
+            Stage currentStage = (Stage) btnMainMenu.getScene().getWindow();
+            currentStage.setScene(new Scene(root));
+            currentStage.setTitle("Purify - Digital Detox");
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Error", "Gagal membuka halaman utama!");
+        }
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+}

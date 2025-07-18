@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="purify.FXMLBlokirAppsController">
+   <children>
+      <Label layoutX="300.0" layoutY="25.0" text="Mulai Sesi Detox Aplikasi">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="50.0" layoutY="80.0" text="Durasi (Menit):">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <TextField fx:id="durasiField" layoutX="170.0" layoutY="75.0" promptText="Masukkan durasi" />
+
+      <Label layoutX="50.0" layoutY="120.0" text="Kode Darurat:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <TextField fx:id="kodeDaruratField" layoutX="170.0" layoutY="115.0" promptText="Minimal 4 karakter" />
+
+      <Label layoutX="50.0" layoutY="160.0" text="Aktivitas (Opsional):">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <TextField fx:id="aktivitasField" layoutX="170.0" layoutY="155.0" promptText="Contoh: Belajar, Membaca" />
+
+      <Label layoutX="50.0" layoutY="200.0" text="Pilih Aplikasi untuk Detox:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <VBox layoutX="50.0" layoutY="225.0" spacing="5.0">
+         <children>
+            <CheckBox fx:id="cbInstagram" mnemonicParsing="false" text="Instagram" />
+            <CheckBox fx:id="cbTikTok" mnemonicParsing="false" text="TikTok" />
+            <CheckBox fx:id="cbFacebook" mnemonicParsing="false" text="Facebook" />
+            <CheckBox fx:id="cbTwitter" mnemonicParsing="false" text="Twitter/X" />
+            <CheckBox fx:id="cbWhatsApp" mnemonicParsing="false" text="WhatsApp" />
+            <CheckBox fx:id="cbTelegram" mnemonicParsing="false" text="Telegram" />
+         </children>
+      </VBox>
+      <VBox layoutX="200.0" layoutY="225.0" spacing="5.0">
+         <children>
+            <CheckBox fx:id="cbYouTube" mnemonicParsing="false" text="YouTube" />
+            <CheckBox fx:id="cbNetflix" mnemonicParsing="false" text="Netflix" />
+            <CheckBox fx:id="cbSpotify" mnemonicParsing="false" text="Spotify" />
+            <CheckBox fx:id="cbSnapchat" mnemonicParsing="false" text="Snapchat" />
+            <CheckBox fx:id="cbDiscord" mnemonicParsing="false" text="Discord" />
+            <CheckBox fx:id="cbTwitch" mnemonicParsing="false" text="Twitch" />
+         </children>
+      </VBox>
+
+      <Button fx:id="btnBlokir" layoutX="50.0" layoutY="380.0" mnemonicParsing="false" onAction="#handleBlokir" prefHeight="35.0" prefWidth="150.0" text="Mulai Blokir Aplikasi">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnStatistikApp" layoutX="210.0" layoutY="380.0" mnemonicParsing="false" onAction="#handleStatistikApp" prefHeight="35.0" prefWidth="150.0" text="Statistik App">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnMainMenu" layoutX="400.0" layoutY="385.0" mnemonicParsing="false" onAction="#handleMainMenu" prefHeight="26.0" prefWidth="130.0" text="Kembali" />
+   </children>
+</AnchorPane>
