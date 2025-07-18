@@ -74,7 +74,8 @@ public class FXMLStatistikController implements Initializable {
     @FXML private NumberAxis durationAxis;
 
     // Variabel untuk menyimpan list data riwayat
-    private RiwayatBlokirList riwayatList;
+    // Removed 'final' keyword
+    private RiwayatBlokirList riwayatList = RiwayatBlokirList.getInstance();
     // Variabel untuk menyimpan tanggal acuan saat ini untuk navigasi
     private LocalDate currentDisplayDate;
 
@@ -102,7 +103,7 @@ public class FXMLStatistikController implements Initializable {
      * @param riwayatList Objek yang berisi semua data riwayat.
      */
     public void setRiwayatList(RiwayatBlokirList riwayatList, String previousScreen, Stage previousStage) {
-        this.riwayatList = riwayatList;
+        this.riwayatList = riwayatList; // This assignment is now allowed
         this.previousScreen = previousScreen;
         this.previousStage = previousStage;
         riwayatTable.setItems(riwayatList.getData());
@@ -350,9 +351,8 @@ public class FXMLStatistikController implements Initializable {
      * Dijalankan saat tombol 'Kembali' ditekan untuk menutup window.
      */
     
-
-@FXML
-private void handleKembali(ActionEvent event) {
+    @FXML
+    private void handleKembali(ActionEvent event) {
         Stage currentStage = (Stage) btnKembali.getScene().getWindow();
         
         if ("mainMenu".equals(previousScreen)) {
@@ -369,7 +369,7 @@ private void handleKembali(ActionEvent event) {
                 showAlert(Alert.AlertType.ERROR, "Error", "Gagal kembali ke main menu");
             }
         } else if ("blokirHP".equals(previousScreen)) {
-            // Kembali ke stage blokir HP yang asli
+            // No need to reload or set items here. The previousStage should handle its own data updates.
             previousStage.show();
             currentStage.close();
         }

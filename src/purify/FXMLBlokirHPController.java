@@ -29,7 +29,7 @@ public class FXMLBlokirHPController implements Initializable {
     @FXML
     private Button btnMainMenu;
 
-    private static final RiwayatBlokirList riwayatList = new RiwayatBlokirList();
+    private final RiwayatBlokirList riwayatList = RiwayatBlokirList.getInstance();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -83,16 +83,17 @@ public class FXMLBlokirHPController implements Initializable {
     }
 
     public void addToRiwayat(String status) {
-        DetoxSession session = DetoxSession.getInstance();
-        int nextNumber = riwayatList.getData().size() + 1;
-        riwayatList.setData(
-                nextNumber,
-                session.getFormattedWaktuMulai(),
-                session.getDurasiInMinutes(),
-                status,
-                session.getAktivitas());
-        clearInputFields();
-    }
+    DetoxSession session = DetoxSession.getInstance();
+    int nextNumber = riwayatList.getData().size() + 1;
+    riwayatList.setData(
+            nextNumber,
+            session.getFormattedWaktuMulai(),
+            session.getDurasiInMinutes(),
+            status,
+            session.getAktivitas());
+    clearInputFields();
+    riwayatList.saveToXML(); // Pastikan data tersimpan
+}
 
     private void openBlockingScreen() {
         try {

@@ -16,7 +16,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 
 public class FXMLMainMenuController implements Initializable {
-    private static final RiwayatBlokirList riwayatList = new RiwayatBlokirList();
+   private final RiwayatBlokirList riwayatList = RiwayatBlokirList.getInstance();
 
     @FXML
     private Button blokirHP;
