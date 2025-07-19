@@ -118,3 +118,135 @@
 .axis-label {
     -fx-text-fill: #424242;
 }
+
+/* --- Community Timeline Styles --- */
+
+/* Kartu Post Utama */
+.post-card {
+    -fx-padding: 15px;
+    -fx-background-color: white;
+    -fx-border-color: #DDDFE2;
+    -fx-border-width: 1px;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
+}
+
+/* Membuat ListView transparan agar background root terlihat */
+.list-view {
+    -fx-background-color: transparent;
+}
+.list-view .list-cell {
+    -fx-background-color: transparent;
+    -fx-padding: 5px 10px; /* Jarak antar kartu post */
+}
+
+
+/* Gambar Avatar */
+.avatar-image {
+    -fx-border-radius: 50%; /* Membuat gambar menjadi lingkaran */
+    -fx-background-radius: 50%;
+}
+
+/* Teks Nama Penulis */
+.post-author {
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-text-fill: #1B5E20; /* Menggunakan warna dari tema Anda */
+}
+
+/* Teks Waktu Post */
+.post-timestamp {
+    -fx-font-size: 12px;
+    -fx-text-fill: #616161;
+}
+
+/* Teks Konten Post */
+.post-content {
+    -fx-font-size: 15px;
+    -fx-text-fill: #212121;
+    -fx-padding: 10px 0;
+}
+
+/* Teks Info Likes */
+.post-engagement {
+    -fx-font-size: 13px;
+    -fx-text-fill: #424242;
+}
+
+/* Area Tombol Aksi */
+.post-actions {
+    -fx-padding: 5px 0;
+}
+
+/* Tombol Aksi (Like, Comment) */
+.action-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #388E3C; /* Hijau dari tema Anda */
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+    -fx-padding: 8px 12px;
+    -fx-background-radius: 8px;
+}
+
+.action-button:hover {
+    -fx-background-color: #E8F5E9; /* Latar hijau sangat muda dari tema Anda */
+}
+
+/* Teks Komentar */
+.comment-label {
+    -fx-background-color: #F1F8E9;
+    -fx-padding: 8px;
+    -fx-background-radius: 10px;
+    -fx-font-size: 13px;
+}
+
+/* --- Popup Dialog Styles --- */
+
+/* Latar belakang utama popup */
+.popup-dialog {
+    -fx-background-color: #FFFFFF;
+    -fx-padding: 0; /* Padding kita atur per bagian */
+    -fx-border-color: #BDBDBD;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 15, 0, 0, 3);
+}
+
+/* Header popup */
+.popup-header {
+    -fx-padding: 10px 15px;
+    -fx-background-color: #FAFAFA;
+    -fx-border-color: transparent transparent #E0E0E0 transparent; /* Garis bawah */
+    -fx-border-width: 1px;
+}
+
+.popup-header .label {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1B5E20; /* Warna dari tema Anda */
+}
+
+/* Area untuk menulis text */
+.popup-textarea {
+    -fx-font-size: 16px;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-focus-color: transparent; /* Hilangkan highlight biru saat fokus */
+    -fx-faint-focus-color: transparent;
+}
+
+/* Tombol Aksi Utama (Kirim) */
+.primary-action-button {
+    -fx-background-color: #388E3C; /* Warna hijau dari tema Anda */
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 8px 25px;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+.primary-action-button:hover {
+    -fx-background-color: #2E7D32; /* Lebih gelap saat disentuh */
+}
