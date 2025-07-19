@@ -30,33 +30,33 @@ public class DetoxAppsSession {
         return instance;
     }
 
-    public void startDetox(int durasiMenit, String aktivitas, String kodeDarurat, List<String> selectedApps) {
+    public void startDetox(int durasiDetik, String aktivitas, String kodeDarurat, List<String> selectedApps) {
     // Validasi durasi
-    if (durasiMenit <= 0) {
-        throw new IllegalArgumentException("Durasi harus lebih dari 0 menit");
+    if (durasiDetik <= 0) {
+        throw new IllegalArgumentException("Durasi harus lebih dari 0 detik");
     }
 
-    // Validasi kode darurat (kembali ke versi minimal)
     if (kodeDarurat == null || kodeDarurat.trim().isEmpty()) {
         throw new IllegalArgumentException("Kode darurat tidak boleh kosong");
     }
 
-    // Validasi daftar aplikasi
     if (selectedApps == null || selectedApps.isEmpty()) {
         throw new IllegalArgumentException("Pilih minimal satu aplikasi untuk diblokir");
     }
 
-    // Set nilai default jika aktivitas kosong
+    this.durasi = durasiDetik; // Sekarang menyimpan dalam detik
     this.aktivitas = (aktivitas == null || aktivitas.trim().isEmpty()) 
         ? "Aktivitas tidak ada" 
         : aktivitas.trim();
-
-    // Inisialisasi nilai
-    this.durasi = durasiMenit;
     this.kodeDarurat = kodeDarurat.trim();
     this.waktuMulai = LocalDateTime.now();
     this.isActive = true;
     this.selectedApps = new ArrayList<>(selectedApps);
+}
+
+// Tambahkan method untuk mendapatkan durasi dalam menit (untuk kompatibilitas)
+public int getDurasiInMinutes() {
+    return (int) Math.ceil(durasi / 60.0);
 }
 
     public void endDetox() {
@@ -143,5 +143,3 @@ public class DetoxAppsSession {
                 '}';
     }
 }
-
-

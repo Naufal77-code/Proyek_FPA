@@ -49,13 +49,21 @@ public void initialize(URL url, ResourceBundle rb) {
 }
 
     private void setupTableColumns() {
-        colNo.setCellValueFactory(new PropertyValueFactory<>("nomor"));
-        colTanggal.setCellValueFactory(new PropertyValueFactory<>("tanggalMulai"));
-        colDurasi.setCellValueFactory(new PropertyValueFactory<>("durasi"));
-        colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
-        colAktivitas.setCellValueFactory(new PropertyValueFactory<>("aktivitas"));
-        colApps.setCellValueFactory(new PropertyValueFactory<>("appsBlokir"));
-    }
+    colNo.setCellValueFactory(new PropertyValueFactory<>("nomor"));
+    colTanggal.setCellValueFactory(new PropertyValueFactory<>("tanggalMulai"));
+    
+    // Custom untuk konversi detik -> menit
+    colDurasi.setCellValueFactory(cellData -> {
+        int durasiDetik = cellData.getValue().getDurasi();
+        int durasiMenit = (int) Math.ceil(durasiDetik / 60.0); // Konversi detik ke menit
+        return new javafx.beans.property.SimpleIntegerProperty(durasiMenit).asObject();
+    });
+
+    colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
+    colAktivitas.setCellValueFactory(new PropertyValueFactory<>("aktivitas"));
+    colApps.setCellValueFactory(new PropertyValueFactory<>("appsBlokir"));
+}
+
 
     private void setupButtonActions() {
         btnHapus.setOnAction(this::handleHapusRiwayat);
@@ -154,6 +162,7 @@ public void initialize(URL url, ResourceBundle rb) {
         series.setName("Total Durasi Blokir (menit)");
 
         for (Map.Entry<String, Integer> entry : sortedApps) {
+             int durasiMenit = (int) Math.ceil(entry.getValue() / 60.0);
             series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
         }
 

@@ -31,10 +31,10 @@
         <columns>
           <TableColumn fx:id="colNo" prefWidth="40.0" text="No." />
           <TableColumn fx:id="colTanggal" prefWidth="120.0" text="Tanggal Mulai" />
-          <TableColumn fx:id="colDurasi" prefWidth="60.0" text="Durasi" />
-          <TableColumn fx:id="colStatus" prefWidth="80.0" text="Status" />
-          <TableColumn fx:id="colAktivitas" prefWidth="150.0" text="Aktivitas" />
-          <TableColumn fx:id="colApps" prefWidth="200.0" text="Aplikasi Diblokir" />
+          <TableColumn fx:id="colDurasi" prefWidth="106.4000244140625" text="Durasi(menit)" />
+          <TableColumn fx:id="colStatus" prefWidth="111.199951171875" text="Status" />
+          <TableColumn fx:id="colAktivitas" prefWidth="140.80001831054688" text="Aktivitas" />
+          <TableColumn fx:id="colApps" prefWidth="333.60003662109375" text="Aplikasi Diblokir" />
         </columns>
       </TableView>
 
