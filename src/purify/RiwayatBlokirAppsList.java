@@ -6,6 +6,7 @@ import com.thoughtworks.xstream.security.NoTypePermission;
 import com.thoughtworks.xstream.security.PrimitiveTypePermission;
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -21,8 +22,6 @@ public class RiwayatBlokirAppsList {
     private static RiwayatBlokirAppsList instance;
     private ObservableList<RiwayatBlokirApps> dataList = FXCollections.observableArrayList();
 
-    public RiwayatBlokirAppsList() {}
-
     public static RiwayatBlokirAppsList getInstance() {
         if (instance == null) {
             instance = new RiwayatBlokirAppsList();
@@ -34,23 +33,20 @@ public class RiwayatBlokirAppsList {
         return dataList;
     }
 
-    public void addData(RiwayatBlokirApps riwayat) {
-        dataList.add(riwayat);
-    }
+    public synchronized void addData(String tanggalMulai, int durasi, String status, String aktivitas, String appsBlokir) {
+    RiwayatBlokirApps newRiwayat = new RiwayatBlokirApps(
+        dataList.size() + 1,
+        tanggalMulai == null ? "" : tanggalMulai,
+        durasi,
+        status == null ? "" : status,
+        aktivitas == null || aktivitas.trim().isEmpty() ? "Aktivitas tidak ada" : aktivitas.trim(),
+        appsBlokir == null || appsBlokir.trim().isEmpty() ? "Tidak ada aplikasi" : appsBlokir.trim()
+    );
 
-    public synchronized void setData(int nomor, String tanggalMulai, int durasi, String status, String aktivitas, String appsBlokir) {
-        RiwayatBlokirApps newRiwayat = new RiwayatBlokirApps(
-                nomor,
-                (tanggalMulai == null) ? "" : tanggalMulai,
-                durasi,
-                (status == null) ? "" : status,
-                (aktivitas == null || aktivitas.trim().isEmpty()) ? "Aktivitas tidak ada" : aktivitas.trim(),
-                (appsBlokir == null || appsBlokir.trim().isEmpty()) ? "Tidak ada aplikasi" : appsBlokir.trim()
-        );
+    dataList.add(newRiwayat);
+    saveToXML();
+}
 
-        dataList.add(newRiwayat);
-        saveToXML();
-    }
 
     public synchronized void remove(int nomor) {
         if (nomor > 0 && nomor <= dataList.size()) {
@@ -95,7 +91,7 @@ public class RiwayatBlokirAppsList {
         XStream xstream = new XStream(new StaxDriver());
         xstream.addPermission(NoTypePermission.NONE);
         xstream.addPermission(PrimitiveTypePermission.PRIMITIVES);
-        xstream.allowTypesByWildcard(new String[]{"purify.**", "java.util.*"});
+        xstream.allowTypesByWildcard(new String[] { "purify.**", "java.util.*" });
         xstream.alias("RiwayatBlokirApps", RiwayatBlokirApps.class);
         xstream.alias("list", java.util.List.class);
         return xstream;
@@ -104,24 +100,28 @@ public class RiwayatBlokirAppsList {
     public synchronized boolean saveToXML() {
         updateNomor();
         XStream xstream = createXStream();
-        File tempFile = new File(TEMP_FILE);
-        File realFile = new File(XML_FILE);
 
-        try (FileOutputStream fos = new FileOutputStream(tempFile)) {
-            ArrayList<RiwayatBlokirApps> plainList = new ArrayList<>(this.dataList);
-            xstream.toXML(plainList, fos);
+        try {
+            // Buat direktori jika belum ada
+            Files.createDirectories(Paths.get("."));
+
+            File tempFile = new File(TEMP_FILE);
+            File realFile = new File(XML_FILE);
+
+            try (FileOutputStream fos = new FileOutputStream(tempFile)) {
+                ArrayList<RiwayatBlokirApps> plainList = new ArrayList<>(this.dataList);
+                xstream.toXML(plainList, fos);
+                fos.flush();
+            }
 
             Files.move(tempFile.toPath(), realFile.toPath(),
                     StandardCopyOption.REPLACE_EXISTING,
                     StandardCopyOption.ATOMIC_MOVE);
 
-            logger.log(Level.INFO, "Data riwayat apps berhasil disimpan ke {0}", XML_FILE);
+            logger.log(Level.INFO, "Data riwayat apps berhasil disimpan ke {0}", realFile.getAbsolutePath());
             return true;
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Gagal menyimpan data riwayat apps ke XML", e);
-            if (tempFile.exists()) {
-                tempFile.delete();
-            }
             return false;
         }
     }

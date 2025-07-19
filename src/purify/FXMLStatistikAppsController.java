@@ -11,7 +11,6 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-
 import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -33,20 +32,21 @@ public class FXMLStatistikAppsController implements Initializable {
     @FXML private Button btnKembali;
 
     private Stage previousStage;
-    private RiwayatBlokirAppsList riwayatList;
+    private static RiwayatBlokirAppsList riwayatList = RiwayatBlokirAppsList.getInstance();
+@Override
+public void initialize(URL url, ResourceBundle rb) {
+    setupTableColumns();
+    setupButtonActions();
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        setupTableColumns();
-        setupButtonActions();
-
-        if (riwayatList == null) {
-            riwayatList = RiwayatBlokirAppsList.getInstance();
-            riwayatList.loadFromXML();
-        }
-
-        refreshData();
+    // Pastikan riwayatList diinisialisasi
+    if (riwayatList == null) {
+        riwayatList = RiwayatBlokirAppsList.getInstance();
     }
+    
+    // Langsung muat data dari XML dan refresh tampilan
+    riwayatList.loadFromXML();
+    refreshData();
+}
 
     private void setupTableColumns() {
         colNo.setCellValueFactory(new PropertyValueFactory<>("nomor"));
@@ -64,12 +64,10 @@ public class FXMLStatistikAppsController implements Initializable {
     }
 
     public void setRiwayatList(RiwayatBlokirAppsList riwayatList) {
-        this.riwayatList = riwayatList;
-        if (this.riwayatList != null) {
-            this.riwayatList.loadFromXML();
-        }
-        refreshData();
-    }
+    this.riwayatList = riwayatList;
+    refreshData(); // Langsung refresh data saat di-set
+}
+
 
     public void setPreviousStage(Stage previousStage) {
         this.previousStage = previousStage;

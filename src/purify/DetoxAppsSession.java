@@ -30,25 +30,34 @@ public class DetoxAppsSession {
         return instance;
     }
 
-    public void startDetox(int durasi, String aktivitas, String kodeDarurat, List<String> selectedApps) {
-        // Validate inputs
-        if (durasi <= 0) {
-            throw new IllegalArgumentException("Durasi harus lebih dari 0");
-        }
-        if (kodeDarurat == null || kodeDarurat.trim().isEmpty()) {
-            throw new IllegalArgumentException("Kode darurat tidak boleh kosong");
-        }
-        if (selectedApps == null || selectedApps.isEmpty()) {
-            throw new IllegalArgumentException("Pilih minimal satu aplikasi");
-        }
-        
-        this.durasi = durasi;
-        this.aktivitas = (aktivitas == null || aktivitas.trim().isEmpty()) ? "Aktivitas tidak ada" : aktivitas.trim();
-        this.kodeDarurat = kodeDarurat.trim();
-        this.waktuMulai = LocalDateTime.now();
-        this.isActive = true;
-        this.selectedApps = new ArrayList<>(selectedApps);
+    public void startDetox(int durasiMenit, String aktivitas, String kodeDarurat, List<String> selectedApps) {
+    // Validasi durasi
+    if (durasiMenit <= 0) {
+        throw new IllegalArgumentException("Durasi harus lebih dari 0 menit");
     }
+
+    // Validasi kode darurat (kembali ke versi minimal)
+    if (kodeDarurat == null || kodeDarurat.trim().isEmpty()) {
+        throw new IllegalArgumentException("Kode darurat tidak boleh kosong");
+    }
+
+    // Validasi daftar aplikasi
+    if (selectedApps == null || selectedApps.isEmpty()) {
+        throw new IllegalArgumentException("Pilih minimal satu aplikasi untuk diblokir");
+    }
+
+    // Set nilai default jika aktivitas kosong
+    this.aktivitas = (aktivitas == null || aktivitas.trim().isEmpty()) 
+        ? "Aktivitas tidak ada" 
+        : aktivitas.trim();
+
+    // Inisialisasi nilai
+    this.durasi = durasiMenit;
+    this.kodeDarurat = kodeDarurat.trim();
+    this.waktuMulai = LocalDateTime.now();
+    this.isActive = true;
+    this.selectedApps = new ArrayList<>(selectedApps);
+}
 
     public void endDetox() {
         this.isActive = false;

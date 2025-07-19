@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="purify.FXMLBlokirAppsStatusController">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" stylesheets="@purify-theme.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="purify.FXMLBlokirAppsStatusController">
    <children>
       <Label layoutX="150.0" layoutY="50.0" text="Sesi Detox Aplikasi Berlangsung">
          <font>
@@ -29,7 +29,7 @@
          </font>
       </Label>
       <TextField fx:id="kodeDaruratField" layoutX="400.0" layoutY="265.0" prefWidth="100.0" promptText="Kode" />
-      <Button fx:id="btnBatalkan" layoutX="225.0" layoutY="320.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="150.0" text="Batalkan Sesi" onAction="#handleBatalkan">
+      <Button fx:id="btnBatalkan" layoutX="225.0" layoutY="320.0" mnemonicParsing="false" onAction="#handleBatalkan" prefHeight="35.0" prefWidth="150.0" text="Batalkan Sesi">
          <font>
             <Font size="14.0" />
          </font>

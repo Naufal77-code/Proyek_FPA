@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="707.0" prefWidth="899.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="purify.FXMLStatistikAppsController">
+<AnchorPane id="AnchorPane" prefHeight="707.0" prefWidth="899.0" stylesheets="@purify-theme.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="purify.FXMLStatistikAppsController">
    <children>
       <Label layoutX="280.0" layoutY="14.0" text="Statistik Detox Aplikasi">
          <font>
