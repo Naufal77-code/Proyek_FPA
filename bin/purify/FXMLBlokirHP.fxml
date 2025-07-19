@@ -41,7 +41,6 @@
          <children>
             <Button fx:id="btnMainMenu" mnemonicParsing="false" onAction="#handleMainMenu" styleClass="secondary-button" text="Kembali" />
             <Button fx:id="btnBlokir" mnemonicParsing="false" onAction="#handleBlokir" text="Mulai Blokir" />
-            <Button fx:id="btnStatistik" mnemonicParsing="false" onAction="#handleStatistik" text="Lihat Statistik" />
          </children>
       </HBox>
    </children>

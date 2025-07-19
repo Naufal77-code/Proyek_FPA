@@ -15,12 +15,20 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class RiwayatBlokirList {
+     private static RiwayatBlokirList instance;
     private static final String XML_FILE = "riwayat_blokir.xml";
     private final ObservableList<RiwayatBlokir> dataList;
 
     public RiwayatBlokirList() {
         dataList = FXCollections.observableArrayList();
         loadFromXML();
+    }
+
+     public static RiwayatBlokirList getInstance() {
+        if (instance == null) {
+            instance = new RiwayatBlokirList();
+        }
+        return instance;
     }
 
     public ObservableList<RiwayatBlokir> getData() {

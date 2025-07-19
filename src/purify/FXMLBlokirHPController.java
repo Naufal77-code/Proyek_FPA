@@ -28,10 +28,8 @@ public class FXMLBlokirHPController implements Initializable {
     private Button btnBlokir;
     @FXML
     private Button btnMainMenu;
-    @FXML
-    private Button btnStatistik;
 
-    private static final RiwayatBlokirList riwayatList = new RiwayatBlokirList();
+    private final RiwayatBlokirList riwayatList = RiwayatBlokirList.getInstance();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -85,16 +83,17 @@ public class FXMLBlokirHPController implements Initializable {
     }
 
     public void addToRiwayat(String status) {
-        DetoxSession session = DetoxSession.getInstance();
-        int nextNumber = riwayatList.getData().size() + 1;
-        riwayatList.setData(
-                nextNumber,
-                session.getFormattedWaktuMulai(),
-                session.getDurasiInMinutes(),
-                status,
-                session.getAktivitas());
-        clearInputFields();
-    }
+    DetoxSession session = DetoxSession.getInstance();
+    int nextNumber = riwayatList.getData().size() + 1;
+    riwayatList.setData(
+            nextNumber,
+            session.getFormattedWaktuMulai(),
+            session.getDurasiInMinutes(),
+            status,
+            session.getAktivitas());
+    clearInputFields();
+    riwayatList.saveToXML(); // Pastikan data tersimpan
+}
 
     private void openBlockingScreen() {
         try {
@@ -107,23 +106,6 @@ public class FXMLBlokirHPController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
             showAlert("Error", "Gagal membuka halaman blokir! Pastikan file FXMLBlokirStatus.fxml sudah benar.");
-        }
-    }
-
-    @FXML
-    private void handleStatistik(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLStatistik.fxml"));
-            Parent root = loader.load();
-            FXMLStatistikController controller = loader.getController();
-            controller.setRiwayatList(riwayatList);
-            Stage stage = new Stage();
-            stage.setTitle("Statistik Digital Detox");
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            showAlert("Error", "Gagal membuka halaman statistik!");
         }
     }
 

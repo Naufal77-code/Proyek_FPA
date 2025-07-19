@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" prefHeight="700.0" prefWidth="900.0" spacing="10.0" stylesheets="@purify-theme.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="purify.FXMLStatistikController">
+<VBox alignment="TOP_CENTER" prefHeight="700.0" prefWidth="854.0" spacing="10.0" stylesheets="@purify-theme.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="purify.FXMLStatistikController">
    <padding>
       <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
    </padding>
@@ -74,6 +74,7 @@
             <Button fx:id="btnDelete" mnemonicParsing="false" styleClass="delete-button" text="Hapus Riwayat" />
          </children>
       </HBox>
+      <Button fx:id="btnStatistikApps" mnemonicParsing="false" onAction="#handleStatistikApps" text=" Statistik Blokir Aplikasi" />
       <Button fx:id="btnKembali" mnemonicParsing="false" onAction="#handleKembali" styleClass="secondary-button" text="Kembali" />
    </children>
 </VBox>

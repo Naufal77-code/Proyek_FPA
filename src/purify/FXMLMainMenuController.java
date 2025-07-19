@@ -16,7 +16,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 
 public class FXMLMainMenuController implements Initializable {
-    private static final RiwayatBlokirList riwayatList = new RiwayatBlokirList();
+   private final RiwayatBlokirList riwayatList = RiwayatBlokirList.getInstance();
 
     @FXML
     private Button blokirHP;
@@ -59,7 +59,7 @@ public class FXMLMainMenuController implements Initializable {
     @FXML
     private void HandleBlokirAplikasi(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/purify/FXMLBlokirAplikasi.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/purify/FXMLBlokirApps.fxml"));
             Parent root = loader.load();
 
             Stage stage = new Stage();
@@ -81,29 +81,29 @@ public class FXMLMainMenuController implements Initializable {
 
     @FXML
     private void handleLihatStatistik(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/purify/FXMLStatistik.fxml"));
-            Parent root = loader.load();
+    try {
+        Stage currentStage = (Stage) lihatStatistik.getScene().getWindow();
+        
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/purify/FXMLStatistik.fxml"));
+        Parent root = loader.load();
 
-            FXMLStatistikController controller = loader.getController();
-            controller.setRiwayatList(riwayatList);
-            
-            Stage stage = new Stage();
-            stage.setTitle("Lihat Statistik");
-            stage.setScene(new Scene(root));
-            stage.show();
+        FXMLStatistikController controller = loader.getController();
+        controller.setRiwayatList(riwayatList, "mainMenu", currentStage);
+        
+        Stage stage = new Stage();
+        stage.setTitle("Lihat Statistik");
+        stage.setScene(new Scene(root));
+        stage.show();
 
-            // Close the current window
-            Stage currentStage = (Stage) lihatStatistik.getScene().getWindow();
-            currentStage.close();
-        } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Failed to open Statistik screen");
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
-        } 
-    }
+        currentStage.hide();
+    } catch (Exception e) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Failed to open Statistik screen");
+        alert.setContentText(e.getMessage());
+        alert.showAndWait();
+    } 
+}
 
     @FXML
     private void handleKomunitas(ActionEvent event) {

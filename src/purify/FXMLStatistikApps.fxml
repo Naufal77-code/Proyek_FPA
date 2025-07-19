@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="707.0" prefWidth="899.0" stylesheets="@purify-theme.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="purify.FXMLStatistikAppsController">
+   <children>
+      <Label layoutX="280.0" layoutY="14.0" text="Statistik Detox Aplikasi">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      
+      <BarChart fx:id="statistikChart" layoutX="27.0" layoutY="49.0" prefHeight="278.0" prefWidth="858.0">
+         <xAxis>
+            <CategoryAxis label="Aplikasi" fx:id="xAxis" />
+         </xAxis>
+         <yAxis>
+            <NumberAxis fx:id="yAxis" label="Total Durasi Blokir (menit)" />
+         </yAxis>
+      </BarChart>
+      
+      <TableView fx:id="riwayatTable" layoutX="20.0" layoutY="320.0" prefHeight="250.0" prefWidth="858.0">
+        <columns>
+          <TableColumn fx:id="colNo" prefWidth="40.0" text="No." />
+          <TableColumn fx:id="colTanggal" prefWidth="120.0" text="Tanggal Mulai" />
+          <TableColumn fx:id="colDurasi" prefWidth="60.0" text="Durasi" />
+          <TableColumn fx:id="colStatus" prefWidth="80.0" text="Status" />
+          <TableColumn fx:id="colAktivitas" prefWidth="150.0" text="Aktivitas" />
+          <TableColumn fx:id="colApps" prefWidth="200.0" text="Aplikasi Diblokir" />
+        </columns>
+      </TableView>
+
+      <Button fx:id="btnHapus" layoutX="190.0" layoutY="622.0" mnemonicParsing="false" onAction="#handleHapusRiwayat" prefHeight="35.0" prefWidth="150.0" text="Hapus Riwayat">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+
+      <Button fx:id="btnRefresh" layoutX="419.0" layoutY="622.0" mnemonicParsing="false" onAction="#handleRefresh" prefHeight="35.0" prefWidth="150.0" text="Refresh Data">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+
+      <Button fx:id="btnKembali" layoutX="630.0" layoutY="622.0" mnemonicParsing="false" onAction="#handleKembali" prefHeight="35.0" prefWidth="150.0" text="Kembali">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>
