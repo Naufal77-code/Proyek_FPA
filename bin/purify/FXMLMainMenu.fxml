@@ -7,14 +7,8 @@
    <children>
       <Button fx:id="blokirHP" mnemonicParsing="false" onAction="#handleBlokirHP" prefHeight="26.5" prefWidth="185.0" text="Detox Layar" />
       <Button fx:id="blokirAplikasi" mnemonicParsing="false" onAction="#HandleBlokirAplikasi" prefHeight="26.5" prefWidth="185.0" text="Detox Aplikasi" />
-<<<<<<< HEAD
-      <Button fx:id="lihatStatistik" mnemonicParsing="false" onAction="#handleLihatStatistik" prefHeight="26.5" prefWidth="185.0" text="Lihat Statistik" />
-      <Button fx:id="konsultasiPsikolog" mnemonicParsing="false" prefHeight="26.5" prefWidth="185.0" text="Konsultasi Psikolog" />
-      <Button fx:id="komunitas" mnemonicParsing="false" onAction="#handleKomunitas" prefHeight="26.5" prefWidth="185.0" text="Komunitas" />
-=======
       <Button fx:id="lihatStatistik" mnemonicParsing="false" onAction="#handleLihatStatistik" prefHeight="26.5" prefWidth="185.0" text="Statistik" />
-      <Button fx:id="komunitas" mnemonicParsing="false" prefHeight="26.5" prefWidth="185.0" text="Komunitas" />
+      <Button fx:id="komunitas" mnemonicParsing="false" onAction="#handleKomunitas" prefHeight="26.5" prefWidth="185.0" text="Komunitas" />
       <Button fx:id="konsultasiPsikolog" mnemonicParsing="false" prefHeight="26.5" prefWidth="185.0" text="Konsultasi Psikolog" />
->>>>>>> mythic
    </children>
 </VBox>
