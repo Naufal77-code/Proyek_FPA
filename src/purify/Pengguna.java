@@ -1,19 +1,26 @@
 package purify;
 
 public class Pengguna {
-    private String nama;
+    // PERUBAHAN 4: Field "nama" diubah menjadi "username"
+    private String username;
     private String password;
 
-    // Default constructor untuk XStream
     public Pengguna() {}
 
-    public Pengguna(String nama, String password) {
-        this.nama = nama;
-        // Di aplikasi nyata, sandi harus di-hash. Untuk kesederhanaan, kita simpan sebagai plain text.
+    public Pengguna(String username, String password) {
+        this.username = username;
         this.password = password;
     }
 
-    // Getters
-    public String getNama() { return nama; }
+    // PERUBAHAN 5: Getter dan Setter disesuaikan
+    public String getUsername() { return username; }
     public String getPassword() { return password; }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

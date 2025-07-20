@@ -128,6 +128,12 @@ public class FXMLBlokirHPController implements Initializable {
         aktivitasField.clear();
     }
 
+    // Di dalam kelas FXMLBlokirHPController
+    public void setPreset(String durasi, String satuan) {
+        durasiField.setText(durasi);
+        satuanWaktuComboBox.setValue(satuan);
+    }
+
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);

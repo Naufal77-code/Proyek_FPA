@@ -60,7 +60,6 @@
     -fx-background-color: #616161;
 }
 
-
 /* --- Input Field Styles --- */
 .text-field, .combo-box {
     -fx-background-color: #FFFFFF;
@@ -74,6 +73,26 @@
 .text-field:focused, .combo-box:focused {
     -fx-border-color: #388E3C; /* Border hijau saat aktif */
 }
+
+/* --- PERBAIKAN UNTUK COMBOBOX DROPDOWN --- */
+.combo-box-popup .list-view {
+    -fx-background-color: #FFFFFF; /* Memberi latar belakang putih solid */
+    -fx-border-color: #BDBDBD;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
+}
+
+.combo-box-popup .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #212121; /* Warna teks item */
+    -fx-padding: 8px 12px;
+}
+
+.combo-box-popup .list-cell:hover {
+    -fx-background-color: #E8F5E9; /* Warna hijau muda saat mouse di atas item */
+    -fx-text-fill: #1B5E20;
+}
+/* --- AKHIR PERBAIKAN --- */
+
 
 /* --- Table & Chart Styles --- */
 .table-view {

@@ -1,6 +1,7 @@
 package purify;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,188 +9,117 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class FXMLBlokirAppsController implements Initializable {
 
-    @FXML
-    private TextField durasiField;
+    @FXML private TextField durasiField;
+    @FXML private ComboBox<String> satuanWaktuComboBox;
+    @FXML private TextField kodeDaruratField;
+    @FXML private TextField aktivitasField;
+    @FXML private Button btnBlokir;
+    @FXML private Button btnMainMenu;
 
-    @FXML
-    private ComboBox<String> satuanWaktuComboBox;
-
-    @FXML
-    private TextField kodeDaruratField;
-
-    @FXML
-    private TextField aktivitasField;
-
-    @FXML
-    private CheckBox cbInstagram;
-
-    @FXML
-    private CheckBox cbTikTok;
-
-    @FXML
-    private CheckBox cbFacebook;
-
-    @FXML
-    private CheckBox cbTwitter;
-
-    @FXML
-    private CheckBox cbWhatsApp;
-
-    @FXML
-    private CheckBox cbTelegram;
-
-    @FXML
-    private CheckBox cbYouTube;
-
-    @FXML
-    private CheckBox cbNetflix;
-
-    @FXML
-    private CheckBox cbSpotify;
-
-    @FXML
-    private CheckBox cbSnapchat;
-
-    @FXML
-    private CheckBox cbDiscord;
-
-    @FXML
-    private CheckBox cbTwitch;
-
-    @FXML
-    private Button btnBlokir;
-
-    @FXML
-    private Button btnMainMenu;
+    // Komponen UI Baru
+    @FXML private ListView<String> lvAplikasiTersedia;
+    @FXML private ListView<String> lvAplikasiDipilih;
+    @FXML private Button btnTambahLainnya;
+    @FXML private Button btnPindahKanan;
+    @FXML private Button btnPindahSemuaKanan;
+    @FXML private Button btnPindahKiri;
+    @FXML private Button btnPindahSemuaKiri;
 
     private static final RiwayatBlokirAppsList riwayatList = RiwayatBlokirAppsList.getInstance();
+    
+    private ObservableList<String> aplikasiTersedia = FXCollections.observableArrayList();
+    private ObservableList<String> aplikasiDipilih = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-         satuanWaktuComboBox.setItems(FXCollections.observableArrayList("Detik", "Menit", "Jam"));
+        // Inisialisasi ComboBox
+        satuanWaktuComboBox.setItems(FXCollections.observableArrayList("Detik", "Menit", "Jam"));
         satuanWaktuComboBox.setValue("Menit");
-    }
 
-   @FXML
-private void handleBlokir(ActionEvent event) {
-    try {
-        // Validasi durasi
-        String durasiText = durasiField.getText().trim();
-        if (durasiText.isEmpty()) {
-            showAlert("Error", "Durasi tidak boleh kosong!");
-            return;
-        }
-        
-        int durasiValue = Integer.parseInt(durasiText);
-        if (durasiValue <= 0) {
-            showAlert("Error", "Durasi harus lebih dari 0!");
-            return;
-        }
-        
-        String satuan = satuanWaktuComboBox.getValue();
-        int durasiDetik = convertToSeconds(durasiValue, satuan); // Konversi ke detik
-
-        // Validasi lainnya
-        String kodeDarurat = kodeDaruratField.getText().trim();
-        if (kodeDarurat.isEmpty()) {
-            showAlert("Error", "Kode darurat tidak boleh kosong!");
-            return;
-        }
-
-        List<String> selectedApps = getSelectedApps();
-        if (selectedApps.isEmpty()) {
-            showAlert("Error", "Pilih minimal satu aplikasi untuk diblokir!");
-            return;
-        }
-
-        String aktivitas = aktivitasField.getText().trim();
-        if (aktivitas.isEmpty()) {
-            aktivitas = "Aktivitas tidak ada";
-        }
-
-        // Simpan durasi dalam detik
-        DetoxAppsSession.getInstance().startDetox(
-            durasiDetik,  // Sekarang menggunakan detik
-            aktivitas,
-            kodeDarurat,
-            selectedApps
+        // Inisialisasi daftar aplikasi
+        List<String> daftarAplikasiDefault = Arrays.asList(
+            "Instagram", "TikTok", "Facebook", "Twitter/X", "WhatsApp", 
+            "Telegram", "YouTube", "Netflix", "Spotify", "Snapchat", 
+            "Discord", "Twitch"
         );
-        openBlockingScreen();
+        aplikasiTersedia.setAll(daftarAplikasiDefault);
 
-    } catch (NumberFormatException e) {
-        showAlert("Error", "Durasi harus berupa angka!");
-    } catch (Exception e) {
-        showAlert("Error", e.getMessage());
+        // Atur ListView
+        lvAplikasiTersedia.setItems(aplikasiTersedia);
+        lvAplikasiDipilih.setItems(aplikasiDipilih);
+        
+        // Izinkan multiple selection
+        lvAplikasiTersedia.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        lvAplikasiDipilih.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
-}
 
-private int convertToSeconds(int value, String unit) {
-    switch (unit) {
-        case "Detik":
-            return value;
-        case "Menit":
-            return value * 60;
-        case "Jam":
-            return value * 3600;
-        default:
-            return value;
-    }
-}
-    private List<String> getSelectedApps() {
-        List<String> selectedApps = new ArrayList<>();
+    @FXML
+    private void handleBlokir(ActionEvent event) {
+        try {
+            String durasiText = durasiField.getText().trim();
+            if (durasiText.isEmpty()) {
+                showAlert(Alert.AlertType.ERROR, "Error", "Durasi tidak boleh kosong!");
+                return;
+            }
+            int durasiValue = Integer.parseInt(durasiText);
+            if (durasiValue <= 0) {
+                showAlert(Alert.AlertType.ERROR, "Error", "Durasi harus lebih dari 0!");
+                return;
+            }
+            String satuan = satuanWaktuComboBox.getValue();
+            int durasiDetik = convertToSeconds(durasiValue, satuan);
 
-        if (cbInstagram.isSelected())
-            selectedApps.add("Instagram");
-        if (cbTikTok.isSelected())
-            selectedApps.add("TikTok");
-        if (cbFacebook.isSelected())
-            selectedApps.add("Facebook");
-        if (cbTwitter.isSelected())
-            selectedApps.add("Twitter/X");
-        if (cbWhatsApp.isSelected())
-            selectedApps.add("WhatsApp");
-        if (cbTelegram.isSelected())
-            selectedApps.add("Telegram");
-        if (cbYouTube.isSelected())
-            selectedApps.add("YouTube");
-        if (cbNetflix.isSelected())
-            selectedApps.add("Netflix");
-        if (cbSpotify.isSelected())
-            selectedApps.add("Spotify");
-        if (cbSnapchat.isSelected())
-            selectedApps.add("Snapchat");
-        if (cbDiscord.isSelected())
-            selectedApps.add("Discord");
-        if (cbTwitch.isSelected())
-            selectedApps.add("Twitch");
+            String kodeDarurat = kodeDaruratField.getText().trim();
+            if (kodeDarurat.isEmpty()) {
+                showAlert(Alert.AlertType.ERROR, "Error", "Kode darurat tidak boleh kosong!");
+                return;
+            }
 
-        return selectedApps;
+            if (aplikasiDipilih.isEmpty()) {
+                showAlert(Alert.AlertType.ERROR, "Error", "Pilih minimal satu aplikasi untuk diblokir!");
+                return;
+            }
+            List<String> selectedApps = new ArrayList<>(aplikasiDipilih);
+
+            String aktivitas = aktivitasField.getText().trim();
+            if (aktivitas.isEmpty()) {
+                aktivitas = "Aktivitas tidak ada";
+            }
+
+            DetoxAppsSession.getInstance().startDetox(durasiDetik, aktivitas, kodeDarurat, selectedApps);
+            openBlockingScreen();
+
+        } catch (NumberFormatException e) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Durasi harus berupa angka!");
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Error", e.getMessage());
+        }
     }
 
     private void openBlockingScreen() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Purify/FXMLBlokirAppsStatus.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/purify/FXMLBlokirAppsStatus.fxml"));
             Parent root = loader.load();
-
             FXMLBlokirAppsStatusController controller = loader.getController();
             controller.setMainController(this);
-
             Stage currentStage = (Stage) btnBlokir.getScene().getWindow();
             currentStage.setScene(new Scene(root));
-
         } catch (IOException e) {
             e.printStackTrace();
-            showAlert("Error", "Gagal membuka halaman blokir!");
+            showAlert(Alert.AlertType.ERROR, "Error", "Gagal membuka halaman blokir!");
         }
     }
 
@@ -201,26 +131,84 @@ private int convertToSeconds(int value, String unit) {
                 status,
                 session.getAktivitas(),
                 session.getSelectedAppsString());
+        clearFields();
+    }
 
+    private void clearFields() {
         durasiField.clear();
         kodeDaruratField.clear();
         aktivitasField.clear();
-        clearCheckboxes();
+        aplikasiDipilih.clear(); // Hapus semua aplikasi yang dipilih
     }
 
-    private void clearCheckboxes() {
-        cbInstagram.setSelected(false);
-        cbTikTok.setSelected(false);
-        cbFacebook.setSelected(false);
-        cbTwitter.setSelected(false);
-        cbWhatsApp.setSelected(false);
-        cbTelegram.setSelected(false);
-        cbYouTube.setSelected(false);
-        cbNetflix.setSelected(false);
-        cbSpotify.setSelected(false);
-        cbSnapchat.setSelected(false);
-        cbDiscord.setSelected(false);
-        cbTwitch.setSelected(false);
+    // --- Logika Baru untuk Memindahkan Aplikasi ---
+    @FXML
+    private void handlePindahKanan() {
+        ObservableList<String> selected = lvAplikasiTersedia.getSelectionModel().getSelectedItems();
+        if (selected != null) {
+            aplikasiDipilih.addAll(selected);
+            aplikasiTersedia.removeAll(selected);
+        }
+    }
+
+    @FXML
+    private void handlePindahKiri() {
+        ObservableList<String> selected = lvAplikasiDipilih.getSelectionModel().getSelectedItems();
+        if (selected != null) {
+            aplikasiTersedia.addAll(selected);
+            aplikasiDipilih.removeAll(selected);
+        }
+    }
+
+    @FXML
+    private void handlePindahSemuaKanan() {
+        aplikasiDipilih.addAll(aplikasiTersedia);
+        aplikasiTersedia.clear();
+    }
+
+    @FXML
+    private void handlePindahSemuaKiri() {
+        aplikasiTersedia.addAll(aplikasiDipilih);
+        aplikasiDipilih.clear();
+    }
+
+    @FXML
+    private void handleTambahAplikasiLain(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLTambahAplikasiLain.fxml"));
+            Parent root = loader.load();
+            
+            Stage popupStage = new Stage();
+            popupStage.setTitle("Tambah Aplikasi Lain");
+            popupStage.initModality(Modality.APPLICATION_MODAL);
+            popupStage.initOwner(((Button)event.getSource()).getScene().getWindow());
+            
+            FXMLTambahAplikasiLainController controller = loader.getController();
+            controller.setStage(popupStage);
+
+            popupStage.setScene(new Scene(root));
+            popupStage.showAndWait();
+
+            // Ambil nama aplikasi setelah popup ditutup
+            String namaAplikasiBaru = controller.getNamaAplikasi();
+            if (namaAplikasiBaru != null && !namaAplikasiBaru.isEmpty() && !aplikasiTersedia.contains(namaAplikasiBaru) && !aplikasiDipilih.contains(namaAplikasiBaru)) {
+                aplikasiTersedia.add(namaAplikasiBaru);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Error", "Gagal membuka jendela tambah aplikasi.");
+        }
+    }
+
+    // --- Metode Bantuan ---
+    private int convertToSeconds(int value, String unit) {
+        switch (unit) {
+            case "Detik": return value;
+            case "Jam": return value * 3600;
+            case "Menit":
+            default: return value * 60;
+        }
     }
 
     @FXML
@@ -232,12 +220,22 @@ private int convertToSeconds(int value, String unit) {
             currentStage.setTitle("Purify - Digital Detox");
         } catch (IOException e) {
             e.printStackTrace();
-            showAlert("Error", "Gagal membuka halaman utama!");
+            showAlert(Alert.AlertType.ERROR, "Error", "Gagal membuka halaman utama!");
         }
     }
 
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    // Di dalam kelas FXMLBlokirAppsController
+    public void setPreset(String durasi, String satuan, List<String> appsToBlock) {
+        durasiField.setText(durasi);
+        satuanWaktuComboBox.setValue(satuan);
+
+    // Pindahkan aplikasi sesuai preset
+     aplikasiDipilih.addAll(appsToBlock);
+     aplikasiTersedia.removeAll(appsToBlock);
+    }
+
+    private void showAlert(Alert.AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
