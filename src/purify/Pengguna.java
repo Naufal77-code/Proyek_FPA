@@ -1,23 +1,23 @@
 package purify;
 
 public class Pengguna {
-    // PERUBAHAN 4: Field "nama" diubah menjadi "username"
-    private String username;
+    // --- PERUBAHAN 4: Field "username" dikembalikan menjadi "nama" ---
+    private String nama;
     private String password;
 
     public Pengguna() {}
 
-    public Pengguna(String username, String password) {
-        this.username = username;
+    public Pengguna(String nama, String password) {
+        this.nama = nama;
         this.password = password;
     }
 
-    // PERUBAHAN 5: Getter dan Setter disesuaikan
-    public String getUsername() { return username; }
+    // --- PERUBAHAN 5: Getter dan Setter disesuaikan kembali ---
+    public String getNama() { return nama; }
     public String getPassword() { return password; }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setNama(String nama) {
+        this.nama = nama;
     }
 
     public void setPassword(String password) {
