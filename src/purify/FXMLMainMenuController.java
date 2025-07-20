@@ -105,6 +105,59 @@ public class FXMLMainMenuController implements Initializable {
     } 
 }
 
+    @FXML
+    private void handleKomunitas(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/purify/FXMLKomunitas.fxml"));
+            Parent root = loader.load();
+
+            //FXMLKomunitasController controller = loader.getController();
+            //controller.loadPosts(); // Load posts when opening komunitas
+
+            Stage stage = new Stage();
+            stage.setTitle("Komunitas");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+            // Close the current window
+            Stage currentStage = (Stage) komunitas.getScene().getWindow();
+            currentStage.close();
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Failed to open Komunitas screen");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
+    }
+
+    
+    @FXML
+    private void handleKonsultasiPsikolog(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/purify/FXMLKonsultasiPsikolog.fxml"));
+            Parent root = loader.load();
+
+            //FXMLKomunitasController controller = loader.getController();
+            //controller.loadPosts(); // Load posts when opening komunitas
+
+            Stage stage = new Stage();
+            stage.setTitle("Konsultasi Psikolog");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+            // Close the current window
+            Stage currentStage = (Stage) komunitas.getScene().getWindow();
+            currentStage.close();
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Failed to open Konsultasi Psikolog screen");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 

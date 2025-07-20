@@ -72,9 +72,6 @@ public class FXMLBlokirAppsController implements Initializable {
     @FXML
     private Button btnMainMenu;
 
-    @FXML
-    private Button btnStatistikApp;
-
     private static final RiwayatBlokirAppsList riwayatList = RiwayatBlokirAppsList.getInstance();
 
     @Override
@@ -178,26 +175,6 @@ private int convertToSeconds(int value, String unit) {
 
         return selectedApps;
     }
-
-    @FXML
-private void handleStatistikApp(ActionEvent event) {
-    try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLStatistikApps.fxml"));
-        Parent root = loader.load();
-
-        FXMLStatistikAppsController controller = loader.getController();
-        controller.setRiwayatList(RiwayatBlokirAppsList.getInstance());  // Pastikan instance terbaru
-        
-        Stage stage = new Stage();
-        stage.setTitle("Statistik Detox Apps");
-        stage.setScene(new Scene(root));
-        stage.show();
-
-    } catch (IOException e) {
-        e.printStackTrace();
-        showAlert("Error", "Gagal membuka halaman statistik!");
-    }
-}
 
     private void openBlockingScreen() {
         try {

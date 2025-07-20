@@ -9,6 +9,6 @@
       <Button fx:id="blokirAplikasi" mnemonicParsing="false" onAction="#HandleBlokirAplikasi" prefHeight="26.5" prefWidth="185.0" text="Detox Aplikasi" />
       <Button fx:id="lihatStatistik" mnemonicParsing="false" onAction="#handleLihatStatistik" prefHeight="26.5" prefWidth="185.0" text="Statistik" />
       <Button fx:id="komunitas" mnemonicParsing="false" prefHeight="26.5" prefWidth="185.0" text="Komunitas" />
-      <Button fx:id="konsultasiPsikolog" mnemonicParsing="false" prefHeight="26.5" prefWidth="185.0" text="Konsultasi Psikolog" />
+      <Button fx:id="konsultasiPsikolog" mnemonicParsing="false" onAction="#handleKonsultasiPsikolog" prefHeight="26.5" prefWidth="185.0" text="Konsultasi Psikolog" />
    </children>
 </VBox>

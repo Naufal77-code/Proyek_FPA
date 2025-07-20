@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="500.0" stylesheets="@purify-theme.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="purify.FXMLJadwalKonsultasiController">
+   <children>
+      <Label layoutX="100.0" layoutY="20.0" text="Jadwalkan Konsultasi Tatap Muka">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="psikologNamaLabel" layoutX="50.0" layoutY="60.0" text="Dengan [Nama Psikolog]">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="50.0" layoutY="120.0" text="Tanggal:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <DatePicker fx:id="datePicker" layoutX="150.0" layoutY="115.0" promptText="Pilih Tanggal" />
+      <Label layoutX="50.0" layoutY="170.0" text="Waktu (HH:MM):">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <TextField fx:id="timeField" layoutX="150.0" layoutY="165.0" promptText="Contoh: 14:00" />
+      <Label layoutX="50.0" layoutY="220.0" text="Lokasi / Link:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <TextField fx:id="locationField" layoutX="150.0" layoutY="215.0" prefWidth="300.0" promptText="Alamat fisik atau link video call" />
+      <Button fx:id="btnSimpanJadwal" layoutX="100.0" layoutY="300.0" mnemonicParsing="false" onAction="#handleSimpanJadwal" prefHeight="35.0" prefWidth="120.0" text="Simpan Jadwal">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnBatal" layoutX="280.0" layoutY="300.0" mnemonicParsing="false" onAction="#handleBatal" prefHeight="35.0" prefWidth="120.0" text="Batal">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

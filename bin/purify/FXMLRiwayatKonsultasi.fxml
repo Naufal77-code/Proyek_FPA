@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="700.0" prefWidth="800.0" stylesheets="@purify-theme.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="purify.FXMLRiwayatKonsultasiController">
+   <children>
+      <Label layoutX="240.0" layoutY="20.0" text="Riwayat Konsultasi Psikolog">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+
+      <Label layoutX="50.0" layoutY="80.0" text="Riwayat Chat:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <TableView fx:id="chatHistoryTable" layoutX="50.0" layoutY="110.0" prefHeight="220.0" prefWidth="700.0">
+        <columns>
+          <TableColumn fx:id="colChatPsikologNama" prefWidth="150.0" text="Psikolog" />
+          <TableColumn fx:id="colChatWaktuMulai" prefWidth="150.0" text="Waktu Mulai" />
+          <TableColumn fx:id="colChatRingkasan" prefWidth="400.0" text="Ringkasan Chat" />
+        </columns>
+      </TableView>
+
+      <Label layoutX="50.0" layoutY="350.0" text="Riwayat Jadwal Tatap Muka:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <TableView fx:id="appointmentTable" layoutX="50.0" layoutY="380.0" prefHeight="220.0" prefWidth="700.0">
+         <columns>
+            <TableColumn fx:id="colJadwalPsikologNama" prefWidth="150.0" text="Psikolog" />
+            <TableColumn fx:id="colJadwalTanggal" prefWidth="100.0" text="Tanggal" />
+            <TableColumn fx:id="colJadwalWaktu" prefWidth="80.0" text="Waktu" />
+            <TableColumn fx:id="colJadwalLokasi" prefWidth="250.0" text="Lokasi/Link" />
+            <TableColumn fx:id="colJadwalStatus" prefWidth="120.0" text="Status" />
+         </columns>
+      </TableView>
+
+      <Button fx:id="btnKembali" layoutX="325.0" layoutY="630.0" mnemonicParsing="false" onAction="#handleKembali" prefHeight="40.0" prefWidth="150.0" text="Kembali">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>
