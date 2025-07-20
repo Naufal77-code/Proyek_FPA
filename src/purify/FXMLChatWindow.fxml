@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="600.0" stylesheets="@purify-theme.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="purify.FXMLChatWindowController">
+   <children>
+      <Label fx:id="psikologNamaLabel" layoutX="50.0" layoutY="20.0" text="Chat dengan [Nama Psikolog]">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
+      <TextArea fx:id="chatArea" editable="false" layoutX="50.0" layoutY="60.0" prefHeight="300.0" prefWidth="500.0" promptText="Percakapan chat akan muncul di sini." wrapText="true" />
+      <TextField fx:id="chatInputField" layoutX="50.0" layoutY="380.0" prefHeight="30.0" prefWidth="440.0" promptText="Ketik pesan Anda di sini..." />
+      <Button fx:id="btnKirim" layoutX="500.0" layoutY="380.0" mnemonicParsing="false" onAction="#handleKirimPesan" prefHeight="30.0" prefWidth="50.0" text="Kirim" />
+      
+      <Button fx:id="btnJadwalkanTatapMukaDariChat" layoutX="50.0" layoutY="430.0" mnemonicParsing="false" onAction="#handleJadwalkanTatapMuka" prefHeight="35.0" prefWidth="200.0" text="Jadwalkan Tatap Muka">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnSelesaiChat" layoutX="350.0" layoutY="430.0" mnemonicParsing="false" onAction="#handleSelesaiChat" prefHeight="35.0" prefWidth="200.0" text="Selesai Chat">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

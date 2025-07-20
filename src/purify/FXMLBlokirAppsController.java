@@ -72,9 +72,6 @@ public class FXMLBlokirAppsController implements Initializable {
     @FXML
     private Button btnMainMenu;
 
-    @FXML
-    private Button btnStatistikApp;
-
     private static final RiwayatBlokirAppsList riwayatList = RiwayatBlokirAppsList.getInstance();
 
     @Override
@@ -83,7 +80,7 @@ public class FXMLBlokirAppsController implements Initializable {
         satuanWaktuComboBox.setValue("Menit");
     }
 
-    @FXML
+   @FXML
 private void handleBlokir(ActionEvent event) {
     try {
         // Validasi durasi
@@ -100,16 +97,15 @@ private void handleBlokir(ActionEvent event) {
         }
         
         String satuan = satuanWaktuComboBox.getValue();
-        int durasiMenit = convertToMinutes(durasiValue, satuan);
+        int durasiDetik = convertToSeconds(durasiValue, satuan); // Konversi ke detik
 
-        // Validasi kode darurat (hanya cek tidak kosong)
+        // Validasi lainnya
         String kodeDarurat = kodeDaruratField.getText().trim();
         if (kodeDarurat.isEmpty()) {
             showAlert("Error", "Kode darurat tidak boleh kosong!");
             return;
         }
 
-        // Validasi aplikasi
         List<String> selectedApps = getSelectedApps();
         if (selectedApps.isEmpty()) {
             showAlert("Error", "Pilih minimal satu aplikasi untuk diblokir!");
@@ -121,8 +117,9 @@ private void handleBlokir(ActionEvent event) {
             aktivitas = "Aktivitas tidak ada";
         }
 
+        // Simpan durasi dalam detik
         DetoxAppsSession.getInstance().startDetox(
-            durasiMenit,
+            durasiDetik,  // Sekarang menggunakan detik
             aktivitas,
             kodeDarurat,
             selectedApps
@@ -136,18 +133,18 @@ private void handleBlokir(ActionEvent event) {
     }
 }
 
-    private int convertToMinutes(int value, String unit) {
-        switch (unit) {
-            case "Detik":
-                return (int) Math.ceil(value / 60.0); // Konversi ke menit (dibulatkan ke atas)
-            case "Jam":
-                return value * 60;
-            case "Menit":
-            default:
-                return value;
-        }
+private int convertToSeconds(int value, String unit) {
+    switch (unit) {
+        case "Detik":
+            return value;
+        case "Menit":
+            return value * 60;
+        case "Jam":
+            return value * 3600;
+        default:
+            return value;
     }
-
+}
     private List<String> getSelectedApps() {
         List<String> selectedApps = new ArrayList<>();
 
@@ -178,26 +175,6 @@ private void handleBlokir(ActionEvent event) {
 
         return selectedApps;
     }
-
-    @FXML
-private void handleStatistikApp(ActionEvent event) {
-    try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLStatistikApps.fxml"));
-        Parent root = loader.load();
-
-        FXMLStatistikAppsController controller = loader.getController();
-        controller.setRiwayatList(RiwayatBlokirAppsList.getInstance());  // Pastikan instance terbaru
-        
-        Stage stage = new Stage();
-        stage.setTitle("Statistik Detox Apps");
-        stage.setScene(new Scene(root));
-        stage.show();
-
-    } catch (IOException e) {
-        e.printStackTrace();
-        showAlert("Error", "Gagal membuka halaman statistik!");
-    }
-}
 
     private void openBlockingScreen() {
         try {

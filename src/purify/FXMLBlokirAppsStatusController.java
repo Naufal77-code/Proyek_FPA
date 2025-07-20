@@ -40,7 +40,7 @@ public class FXMLBlokirAppsStatusController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         DetoxAppsSession session = DetoxAppsSession.getInstance();
-        remainingSeconds = session.getDurasi() * 60; // Convert minutes to seconds
+        remainingSeconds = session.getDurasi(); // Convert minutes to seconds
 
         // Tampilkan apps yang diblokir
         appsLabel.setText("Apps yang diblokir: " + session.getSelectedAppsString());

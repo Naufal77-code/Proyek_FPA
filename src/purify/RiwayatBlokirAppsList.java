@@ -4,6 +4,7 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
 import com.thoughtworks.xstream.security.NoTypePermission;
 import com.thoughtworks.xstream.security.PrimitiveTypePermission;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -16,8 +17,10 @@ import javafx.collections.ObservableList;
 
 public class RiwayatBlokirAppsList {
     private static final Logger logger = Logger.getLogger(RiwayatBlokirAppsList.class.getName());
-    private static final String XML_FILE = "riwayat_blokir_apps.xml";
-    private static final String TEMP_FILE = "riwayat_blokir_apps.tmp";
+
+    private static final String APP_FOLDER = System.getProperty("user.home") + File.separator + "Purify";
+    private static final String XML_FILE = APP_FOLDER + File.separator + "riwayat_blokir_apps.xml";
+    private static final String TEMP_FILE = APP_FOLDER + File.separator + "riwayat_blokir_apps.tmp";
 
     private static RiwayatBlokirAppsList instance;
     private ObservableList<RiwayatBlokirApps> dataList = FXCollections.observableArrayList();
@@ -34,44 +37,23 @@ public class RiwayatBlokirAppsList {
     }
 
     public synchronized void addData(String tanggalMulai, int durasi, String status, String aktivitas, String appsBlokir) {
-    RiwayatBlokirApps newRiwayat = new RiwayatBlokirApps(
-        dataList.size() + 1,
-        tanggalMulai == null ? "" : tanggalMulai,
-        durasi,
-        status == null ? "" : status,
-        aktivitas == null || aktivitas.trim().isEmpty() ? "Aktivitas tidak ada" : aktivitas.trim(),
-        appsBlokir == null || appsBlokir.trim().isEmpty() ? "Tidak ada aplikasi" : appsBlokir.trim()
-    );
+        RiwayatBlokirApps newRiwayat = new RiwayatBlokirApps(
+            dataList.size() + 1,
+            tanggalMulai == null ? "" : tanggalMulai,
+            durasi,
+            status == null ? "" : status,
+            aktivitas == null || aktivitas.trim().isEmpty() ? "Aktivitas tidak ada" : aktivitas.trim(),
+            appsBlokir == null || appsBlokir.trim().isEmpty() ? "Tidak ada aplikasi" : appsBlokir.trim()
+        );
 
-    dataList.add(newRiwayat);
-    saveToXML();
-}
-
+        dataList.add(newRiwayat);
+        saveToXML();
+    }
 
     public synchronized void remove(int nomor) {
         if (nomor > 0 && nomor <= dataList.size()) {
             dataList.remove(nomor - 1);
             updateNomor();
-            saveToXML();
-        }
-    }
-
-    public synchronized void editAktivitas(int nomor, String aktivitasBaru) {
-        if (nomor > 0 && nomor <= dataList.size()) {
-            RiwayatBlokirApps riwayat = dataList.get(nomor - 1);
-            riwayat.setAktivitas((aktivitasBaru == null || aktivitasBaru.trim().isEmpty())
-                    ? "Aktivitas tidak ada"
-                    : aktivitasBaru.trim());
-            saveToXML();
-        }
-    }
-
-    public synchronized void editAppsBlokir(int nomor, String appsBaru) {
-        if (nomor > 0 && nomor <= dataList.size()) {
-            RiwayatBlokirApps riwayat = dataList.get(nomor - 1);
-            riwayat.setAppsBlokir((appsBaru == null || appsBaru.trim().isEmpty())
-                    ? "Tidak ada aplikasi"
-                    : appsBaru.trim());
             saveToXML();
         }
     }
@@ -102,8 +84,7 @@ public class RiwayatBlokirAppsList {
         XStream xstream = createXStream();
 
         try {
-            // Buat direktori jika belum ada
-            Files.createDirectories(Paths.get("."));
+            Files.createDirectories(Paths.get(APP_FOLDER));  // pastikan folder ada
 
             File tempFile = new File(TEMP_FILE);
             File realFile = new File(XML_FILE);
@@ -115,11 +96,12 @@ public class RiwayatBlokirAppsList {
             }
 
             Files.move(tempFile.toPath(), realFile.toPath(),
-                    StandardCopyOption.REPLACE_EXISTING,
-                    StandardCopyOption.ATOMIC_MOVE);
+                StandardCopyOption.REPLACE_EXISTING,
+                StandardCopyOption.ATOMIC_MOVE);
 
             logger.log(Level.INFO, "Data riwayat apps berhasil disimpan ke {0}", realFile.getAbsolutePath());
             return true;
+
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Gagal menyimpan data riwayat apps ke XML", e);
             return false;
@@ -129,8 +111,9 @@ public class RiwayatBlokirAppsList {
     @SuppressWarnings("unchecked")
     public synchronized boolean loadFromXML() {
         File file = new File(XML_FILE);
+
         if (!file.exists()) {
-            logger.log(Level.INFO, "File {0} tidak ditemukan.", XML_FILE);
+            logger.log(Level.INFO, "File XML tidak ditemukan di {0}", XML_FILE);
             return false;
         }
 
@@ -138,25 +121,21 @@ public class RiwayatBlokirAppsList {
 
         try (FileInputStream fis = new FileInputStream(file)) {
             ArrayList<RiwayatBlokirApps> loadedList = (ArrayList<RiwayatBlokirApps>) xstream.fromXML(fis);
+
             if (loadedList != null) {
                 dataList.setAll(loadedList);
                 logger.log(Level.INFO, "Data riwayat apps berhasil dimuat dari {0}", XML_FILE);
                 return true;
+            } else {
+                logger.log(Level.WARNING, "File XML kosong atau tidak valid");
+                return false;
             }
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, "Error saat parsing XML.", e);
 
-            try {
-                if (file.delete()) {
-                    logger.log(Level.INFO, "File korup dihapus dan akan dibuat baru");
-                    dataList.clear();
-                    saveToXML();
-                }
-            } catch (SecurityException ex) {
-                logger.log(Level.SEVERE, "Tidak bisa menghapus file korup", ex);
-            }
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Gagal memuat data dari XML. File TIDAK dihapus otomatis.", e);
+            // Jangan hapus file! Lebih baik user perbaiki manual.
+            return false;
         }
-        return false;
     }
 
     public synchronized boolean reloadData() {

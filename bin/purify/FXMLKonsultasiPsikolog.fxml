@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" stylesheets="@purify-theme.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="purify.FXMLKonsultasiPsikologController">
+   <children>
+      <Label layoutX="220.0" layoutY="25.0" text="Konsultasi dengan Psikolog">
+         <font>
+            <Font name="System Bold" size="28.0" />
+         </font>
+      </Label>
+      <Label layoutX="50.0" layoutY="80.0" text="Pilih Psikolog untuk Konsultasi:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <TableView fx:id="psikologTable" layoutX="50.0" layoutY="120.0" prefHeight="350.0" prefWidth="700.0">
+        <columns>
+          <TableColumn fx:id="colNama" prefWidth="250.0" text="Nama Psikolog" />
+          <TableColumn fx:id="colSpesialisasi" prefWidth="250.0" text="Spesialisasi" />
+            <TableColumn fx:id="colStatus" prefWidth="200.0" text="Status" />
+        </columns>
+      </TableView>
+      <Button fx:id="btnMulaiChat" layoutX="50.0" layoutY="500.0" mnemonicParsing="false" onAction="#handleMulaiChat" prefHeight="40.0" prefWidth="180.0" text="Mulai Chat (Gimmick)">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnJadwalkan" layoutX="240.0" layoutY="500.0" mnemonicParsing="false" onAction="#handleJadwalkanKonsultasi" prefHeight="40.0" prefWidth="180.0" text="Jadwalkan Tatap Muka">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnLihatRiwayatKonsultasi" layoutX="430.0" layoutY="500.0" mnemonicParsing="false" onAction="#handleLihatRiwayatKonsultasi" prefHeight="40.0" prefWidth="180.0" text="Lihat Riwayat Konsultasi">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnKembali" layoutX="620.0" layoutY="500.0" mnemonicParsing="false" onAction="#handleKembali" prefHeight="40.0" prefWidth="130.0" text="Kembali">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>
