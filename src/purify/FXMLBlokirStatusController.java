@@ -16,12 +16,9 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class FXMLBlokirStatusController implements Initializable {
-    @FXML
-    private Label timerLabel;
-    @FXML
-    private TextField kodeDaruratField;
-    @FXML
-    private Button btnBatalkan;
+    @FXML private Label timerLabel;
+    @FXML private TextField kodeDaruratField;
+    @FXML private Button btnBatalkan;
 
     private Timeline timeline;
     private long remainingSeconds;
@@ -42,7 +39,8 @@ public class FXMLBlokirStatusController implements Initializable {
                 updateTimerDisplay();
             } else {
                 timeline.stop();
-                completeDetox("BERHASIL");
+                // [MODIFIKASI] Kirim durasi penuh jika berhasil
+                completeDetox("BERHASIL", DetoxSession.getInstance().getDurasiInSeconds());
             }
         }));
         timeline.setCycleCount(Timeline.INDEFINITE);
@@ -71,16 +69,20 @@ public class FXMLBlokirStatusController implements Initializable {
         }
         if (inputKode.equals(session.getKodeDarurat())) {
             timeline.stop();
-            completeDetox("GAGAL");
+            // [MODIFIKASI] Hitung dan kirim durasi yang sebenarnya berjalan
+            long actualDuration = session.getActualElapsedSeconds();
+            completeDetox("GAGAL", actualDuration);
         } else {
             showAlert("Error", "Kode darurat salah!");
         }
     }
 
-    private void completeDetox(String status) {
+    // [MODIFIKASI] Metode ini sekarang menerima parameter durasi
+    private void completeDetox(String status, long durationInSeconds) {
         DetoxSession.getInstance().endDetox();
         if (mainController != null) {
-            mainController.addToRiwayat(status);
+            // Kirim durasi yang benar ke controller utama
+            mainController.addToRiwayat(status, durationInSeconds);
         }
         returnToBlokirHP();
     }
@@ -90,7 +92,7 @@ public class FXMLBlokirStatusController implements Initializable {
             timeline.stop();
         }
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLBlokirHP.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/purify/FXMLBlokirHP.fxml"));
             Parent root = loader.load();
             Stage currentStage = (Stage) timerLabel.getScene().getWindow();
             currentStage.setScene(new Scene(root));

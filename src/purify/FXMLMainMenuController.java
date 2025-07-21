@@ -24,7 +24,6 @@ import java.util.Random;
 import java.util.ResourceBundle;
 
 public class FXMLMainMenuController implements Initializable {
-    // Variabel FXML
     @FXML private Button blokirHP, blokirAplikasi, lihatStatistik, konsultasiPsikolog, komunitas, btnMulaiTantangan;
     @FXML private Label tantanganLabel;
     @FXML private MenuItem editProfilMenuItem, bantuanMenuItem, keluarMenuItem;
@@ -42,7 +41,6 @@ public class FXMLMainMenuController implements Initializable {
         generateRandomChallenge();
     }
 
-    // --- Logika Menu Pengaturan ---
     @FXML
     private void handleEditProfil(ActionEvent event) {
         openModalWindow("FXMLEditProfilPilihan.fxml", "Pilih Opsi Edit");
@@ -56,23 +54,28 @@ public class FXMLMainMenuController implements Initializable {
     @FXML
     private void handleKeluar(ActionEvent event) {
         try {
-            // Dapatkan stage dari MenuItem
+            // Hapus sesi "Remember Me" saat logout
+            SessionManager.clearSession();
+
             Stage mainStage = (Stage) ((MenuItem)event.getSource()).getParentPopup().getOwnerWindow();
             mainStage.close();
 
-            // Buka kembali jendela login
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLLogin.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/purify/FXMLLogin.fxml"));
             Parent root = loader.load();
             Stage loginStage = new Stage();
             loginStage.setTitle("Purify - Login");
             loginStage.setScene(new Scene(root));
+            
+            // --- [PERBAIKAN] Tambahkan baris ini ---
+            // Pastikan jendela login yang baru juga tidak bisa di-maximize
+            loginStage.setResizable(false);
+            
             loginStage.show();
         } catch (IOException e) {
             showAlert(Alert.AlertType.ERROR, "Error", "Gagal untuk keluar.");
         }
     }
 
-    // --- Logika Tombol dan Tantangan (Tidak Berubah) ---
     private boolean hasDetoxedToday() {
         RiwayatBlokirList riwayatHP = RiwayatBlokirList.getInstance();
         RiwayatBlokirAppsList riwayatAplikasi = RiwayatBlokirAppsList.getInstance();
@@ -113,19 +116,19 @@ public class FXMLMainMenuController implements Initializable {
     
     @FXML
     private void handleBlokirHP(ActionEvent event) {
-        openNewWindow(event, "FXMLBlokirHP.fxml", "Blokir HP");
+        openNewWindow(event, "/purify/FXMLBlokirHP.fxml", "Blokir HP");
     }
 
     @FXML
     private void HandleBlokirAplikasi(ActionEvent event) {
-        openNewWindow(event, "FXMLBlokirApps.fxml", "Blokir Aplikasi");
+        openNewWindow(event, "/purify/FXMLBlokirApps.fxml", "Blokir Aplikasi");
     }
 
     @FXML
     private void handleLihatStatistik(ActionEvent event) {
         try {
             Stage currentStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLStatistik.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/purify/FXMLStatistik.fxml"));
             Parent root = loader.load();
             FXMLStatistikController controller = loader.getController();
             controller.setRiwayatList(riwayatList, "mainMenu", currentStage);
@@ -143,7 +146,7 @@ public class FXMLMainMenuController implements Initializable {
     @FXML
     private void handleKomunitas(ActionEvent event) {
         if (hasDetoxedToday()) {
-            openNewWindow(event, "FXMLKomunitas.fxml", "Komunitas");
+            openNewWindow(event, "/purify/FXMLKomunitas.fxml", "Komunitas");
         } else {
             openModalWindow("FXMLVerifikasiDetox.fxml", "Verifikasi Detoks");
         }
@@ -151,10 +154,9 @@ public class FXMLMainMenuController implements Initializable {
 
     @FXML
     private void handleKonsultasiPsikolog(ActionEvent event) {
-        openNewWindow(event, "FXMLKonsultasiPsikolog.fxml", "Konsultasi Psikolog");
+        openNewWindow(event, "/purify/FXMLKonsultasiPsikolog.fxml", "Konsultasi Psikolog");
     }
 
-    // --- Metode Bantuan (Helper Methods) ---
     private void openNewWindow(ActionEvent event, String fxmlFile, String title) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
@@ -188,7 +190,7 @@ public class FXMLMainMenuController implements Initializable {
 
     private void openBlokirHPWithPreset(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLBlokirHP.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/purify/FXMLBlokirHP.fxml"));
             Parent root = loader.load();
             FXMLBlokirHPController controller = loader.getController();
             controller.setPreset(String.valueOf(getChallengeDuration()), "Menit");
@@ -205,7 +207,7 @@ public class FXMLMainMenuController implements Initializable {
 
     private void openBlokirAplikasiWithPreset(ActionEvent event, String presetType) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLBlokirApps.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/purify/FXMLBlokirApps.fxml"));
             Parent root = loader.load();
             List<String> appsToBlock = presetType.equals("sosmed")
                 ? Arrays.asList("Instagram", "TikTok", "Facebook", "Twitter/X", "WhatsApp", "Telegram", "Snapchat", "Discord", "Twitch")

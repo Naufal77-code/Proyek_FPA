@@ -109,4 +109,10 @@ public class ManajemenPengguna {
         saveToXML();
         return true;
     }
+
+    public String getPasswordForUser(String nama) {
+    Optional<Pengguna> userOpt = findPenggunaByNama(nama);
+    return userOpt.map(Pengguna::getPassword).orElse(null);
+}
+
 }

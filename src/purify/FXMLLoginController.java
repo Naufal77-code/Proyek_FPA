@@ -6,11 +6,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox; // Import CheckBox
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 
 public class FXMLLoginController {
@@ -18,6 +18,7 @@ public class FXMLLoginController {
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
     @FXML private Button btnLogin;
+    @FXML private CheckBox rememberMeCheck; // Deklarasi CheckBox
 
     @FXML
     private void handleLogin() throws IOException {
@@ -25,8 +26,15 @@ public class FXMLLoginController {
         String password = passwordField.getText();
 
         if (ManajemenPengguna.getInstance().login(username, password)) {
+            // [MODIFIKASI] Cek apakah "Remember Me" dicentang
+            if (rememberMeCheck.isSelected()) {
+                SessionManager.saveSession(username);
+            } else {
+                SessionManager.clearSession();
+            }
+
             // Jika login berhasil, buka Main Menu
-            Parent root = FXMLLoader.load(getClass().getResource("FXMLMainMenu.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/purify/FXMLMainMenu.fxml"));
             Stage stage = (Stage) btnLogin.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Purify - Digital Detox");
@@ -37,8 +45,7 @@ public class FXMLLoginController {
 
     @FXML
     private void handleLinkDaftar() throws IOException {
-        // Buka popup registrasi
-        Parent root = FXMLLoader.load(getClass().getResource("FXMLRegister.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/purify/FXMLRegister.fxml"));
         Stage popupStage = new Stage();
         popupStage.setTitle("Daftar Akun Baru");
         popupStage.initModality(Modality.APPLICATION_MODAL);

@@ -11,13 +11,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class FXMLBlokirAppsController implements Initializable {
@@ -28,8 +26,6 @@ public class FXMLBlokirAppsController implements Initializable {
     @FXML private TextField aktivitasField;
     @FXML private Button btnBlokir;
     @FXML private Button btnMainMenu;
-
-    // Komponen UI Baru
     @FXML private ListView<String> lvAplikasiTersedia;
     @FXML private ListView<String> lvAplikasiDipilih;
     @FXML private Button btnTambahLainnya;
@@ -39,29 +35,21 @@ public class FXMLBlokirAppsController implements Initializable {
     @FXML private Button btnPindahSemuaKiri;
 
     private static final RiwayatBlokirAppsList riwayatList = RiwayatBlokirAppsList.getInstance();
-    
     private ObservableList<String> aplikasiTersedia = FXCollections.observableArrayList();
     private ObservableList<String> aplikasiDipilih = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // Inisialisasi ComboBox
         satuanWaktuComboBox.setItems(FXCollections.observableArrayList("Detik", "Menit", "Jam"));
         satuanWaktuComboBox.setValue("Menit");
-
-        // Inisialisasi daftar aplikasi
         List<String> daftarAplikasiDefault = Arrays.asList(
             "Instagram", "TikTok", "Facebook", "Twitter/X", "WhatsApp", 
             "Telegram", "YouTube", "Netflix", "Spotify", "Snapchat", 
             "Discord", "Twitch"
         );
         aplikasiTersedia.setAll(daftarAplikasiDefault);
-
-        // Atur ListView
         lvAplikasiTersedia.setItems(aplikasiTersedia);
         lvAplikasiDipilih.setItems(aplikasiDipilih);
-        
-        // Izinkan multiple selection
         lvAplikasiTersedia.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         lvAplikasiDipilih.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
@@ -123,11 +111,11 @@ public class FXMLBlokirAppsController implements Initializable {
         }
     }
 
-    public void addToRiwayat(String status) {
+    public void addToRiwayat(String status, int actualDurationInSeconds) {
         DetoxAppsSession session = DetoxAppsSession.getInstance();
         riwayatList.addData(
                 session.getFormattedWaktuMulai(),
-                session.getDurasi(),
+                actualDurationInSeconds,
                 status,
                 session.getAktivitas(),
                 session.getSelectedAppsString());
@@ -138,10 +126,9 @@ public class FXMLBlokirAppsController implements Initializable {
         durasiField.clear();
         kodeDaruratField.clear();
         aktivitasField.clear();
-        aplikasiDipilih.clear(); // Hapus semua aplikasi yang dipilih
+        aplikasiDipilih.clear();
     }
 
-    // --- Logika Baru untuk Memindahkan Aplikasi ---
     @FXML
     private void handlePindahKanan() {
         ObservableList<String> selected = lvAplikasiTersedia.getSelectionModel().getSelectedItems();
@@ -175,7 +162,7 @@ public class FXMLBlokirAppsController implements Initializable {
     @FXML
     private void handleTambahAplikasiLain(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLTambahAplikasiLain.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/purify/FXMLTambahAplikasiLain.fxml"));
             Parent root = loader.load();
             
             Stage popupStage = new Stage();
@@ -189,7 +176,6 @@ public class FXMLBlokirAppsController implements Initializable {
             popupStage.setScene(new Scene(root));
             popupStage.showAndWait();
 
-            // Ambil nama aplikasi setelah popup ditutup
             String namaAplikasiBaru = controller.getNamaAplikasi();
             if (namaAplikasiBaru != null && !namaAplikasiBaru.isEmpty() && !aplikasiTersedia.contains(namaAplikasiBaru) && !aplikasiDipilih.contains(namaAplikasiBaru)) {
                 aplikasiTersedia.add(namaAplikasiBaru);
@@ -201,7 +187,6 @@ public class FXMLBlokirAppsController implements Initializable {
         }
     }
 
-    // --- Metode Bantuan ---
     private int convertToSeconds(int value, String unit) {
         switch (unit) {
             case "Detik": return value;
@@ -214,7 +199,7 @@ public class FXMLBlokirAppsController implements Initializable {
     @FXML
     private void handleMainMenu(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("FXMLMainMenu.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/purify/FXMLMainMenu.fxml"));
             Stage currentStage = (Stage) btnMainMenu.getScene().getWindow();
             currentStage.setScene(new Scene(root));
             currentStage.setTitle("Purify - Digital Detox");
@@ -224,14 +209,11 @@ public class FXMLBlokirAppsController implements Initializable {
         }
     }
 
-    // Di dalam kelas FXMLBlokirAppsController
     public void setPreset(String durasi, String satuan, List<String> appsToBlock) {
         durasiField.setText(durasi);
         satuanWaktuComboBox.setValue(satuan);
-
-    // Pindahkan aplikasi sesuai preset
-     aplikasiDipilih.addAll(appsToBlock);
-     aplikasiTersedia.removeAll(appsToBlock);
+        aplikasiDipilih.addAll(appsToBlock);
+        aplikasiTersedia.removeAll(appsToBlock);
     }
 
     private void showAlert(Alert.AlertType type, String title, String message) {
