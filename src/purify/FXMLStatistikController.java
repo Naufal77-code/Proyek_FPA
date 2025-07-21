@@ -5,7 +5,6 @@ import java.net.URL;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
@@ -289,7 +288,7 @@ public class FXMLStatistikController implements Initializable {
         
         if ("mainMenu".equals(previousScreen)) {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLMainMenu.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/purify/FXMLMainMenu.fxml"));
                 Parent root = loader.load();
                 Stage stage = new Stage();
                 stage.setScene(new Scene(root));
@@ -308,7 +307,8 @@ public class FXMLStatistikController implements Initializable {
     @FXML
     private void handleStatistikApps(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLStatistikApps.fxml"));
+            // --- [PERBAIKAN] Menggunakan path absolut ---
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/purify/FXMLStatistikApps.fxml"));
             Parent root = loader.load();
             
             FXMLStatistikAppsController controller = loader.getController();
@@ -322,6 +322,7 @@ public class FXMLStatistikController implements Initializable {
             ((Stage) btnStatistikApps.getScene().getWindow()).hide();
         } catch (IOException e) {
             showAlert("Error", "Gagal membuka statistik aplikasi");
+            e.printStackTrace(); // Menampilkan error di konsol untuk debugging
         }
     }
 

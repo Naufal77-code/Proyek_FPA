@@ -9,25 +9,18 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class FXMLBlokirHPController implements Initializable {
 
-    @FXML
-    private TextField durasiField;
-    @FXML
-    private ComboBox<String> satuanWaktuComboBox;
-    @FXML
-    private TextField kodeDaruratField;
-    @FXML
-    private TextField aktivitasField;
-    @FXML
-    private Button btnBlokir;
-    @FXML
-    private Button btnMainMenu;
+    @FXML private TextField durasiField;
+    @FXML private ComboBox<String> satuanWaktuComboBox;
+    @FXML private TextField kodeDaruratField;
+    @FXML private TextField aktivitasField;
+    @FXML private Button btnBlokir;
+    @FXML private Button btnMainMenu;
 
     private final RiwayatBlokirList riwayatList = RiwayatBlokirList.getInstance();
 
@@ -60,13 +53,10 @@ public class FXMLBlokirHPController implements Initializable {
 
     private long convertToSeconds(long value, String unit) {
         switch (unit) {
-            case "Detik":
-                return value;
-            case "Jam":
-                return value * 3600;
+            case "Detik": return value;
+            case "Jam": return value * 3600;
             case "Menit":
-            default:
-                return value * 60;
+            default: return value * 60;
         }
     }
 
@@ -82,22 +72,24 @@ public class FXMLBlokirHPController implements Initializable {
         }
     }
 
-    public void addToRiwayat(String status) {
-    DetoxSession session = DetoxSession.getInstance();
-    int nextNumber = riwayatList.getData().size() + 1;
-    riwayatList.setData(
-            nextNumber,
-            session.getFormattedWaktuMulai(),
-            session.getDurasiInMinutes(),
-            status,
-            session.getAktivitas());
-    clearInputFields();
-    riwayatList.saveToXML(); // Pastikan data tersimpan
-}
+    public void addToRiwayat(String status, long actualDurationInSeconds) {
+        DetoxSession session = DetoxSession.getInstance();
+        int nextNumber = riwayatList.getData().size() + 1;
+        int durasiMenit = (int) Math.round(actualDurationInSeconds / 60.0);
+        
+        riwayatList.setData(
+                nextNumber,
+                session.getFormattedWaktuMulai(),
+                durasiMenit,
+                status,
+                session.getAktivitas());
+        clearInputFields();
+        riwayatList.saveToXML();
+    }
 
     private void openBlockingScreen() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLBlokirStatus.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/purify/FXMLBlokirStatus.fxml"));
             Parent root = loader.load();
             FXMLBlokirStatusController controller = loader.getController();
             controller.setMainController(this);
@@ -112,7 +104,7 @@ public class FXMLBlokirHPController implements Initializable {
     @FXML
     private void handleMainMenu(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("FXMLMainMenu.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/purify/FXMLMainMenu.fxml"));
             Stage currentStage = (Stage) btnMainMenu.getScene().getWindow();
             currentStage.setScene(new Scene(root));
             currentStage.setTitle("Purify - Digital Detox");
@@ -126,6 +118,11 @@ public class FXMLBlokirHPController implements Initializable {
         durasiField.clear();
         kodeDaruratField.clear();
         aktivitasField.clear();
+    }
+
+    public void setPreset(String durasi, String satuan) {
+        durasiField.setText(durasi);
+        satuanWaktuComboBox.setValue(satuan);
     }
 
     private void showAlert(String title, String message) {

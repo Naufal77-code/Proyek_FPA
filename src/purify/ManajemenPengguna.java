@@ -13,6 +13,7 @@ public class ManajemenPengguna {
     private static final String XML_FILE = "pengguna.xml";
     private final List<Pengguna> daftarPengguna;
     private static ManajemenPengguna instance;
+    private Pengguna currentUser; // Variabel ini krusial untuk mengetahui siapa yang login
 
     private ManajemenPengguna() {
         daftarPengguna = new ArrayList<>();
@@ -26,25 +27,45 @@ public class ManajemenPengguna {
         return instance;
     }
 
-    public boolean register(String nama, String password) {
-        if (findPenggunaByNama(nama).isPresent()) {
-            return false; // Pengguna sudah ada
-        }
-        daftarPengguna.add(new Pengguna(nama, password));
-        saveToXML();
-        return true;
+    // Metode ini yang akan kita gunakan untuk mendapatkan info user
+    public Pengguna getCurrentUser() {
+        return currentUser;
     }
 
     public boolean login(String nama, String password) {
-        return findPenggunaByNama(nama)
-                .map(pengguna -> pengguna.getPassword().equals(password))
-                .orElse(false);
+        Optional<Pengguna> userOpt = findPenggunaByNama(nama);
+        if (userOpt.isPresent() && userOpt.get().getPassword().equals(password)) {
+            this.currentUser = userOpt.get(); // Set user saat login berhasil
+            return true;
+        }
+        return false;
     }
 
     private Optional<Pengguna> findPenggunaByNama(String nama) {
         return daftarPengguna.stream()
                 .filter(pengguna -> pengguna.getNama().equalsIgnoreCase(nama))
                 .findFirst();
+    }
+    
+    public boolean ubahUsername(String usernameBaru) {
+        if (findPenggunaByNama(usernameBaru).isPresent()) {
+            return false;
+        }
+        if (currentUser != null) {
+            currentUser.setNama(usernameBaru);
+            saveToXML();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean ubahSandi(String sandiLama, String sandiBaru) {
+        if (currentUser != null && currentUser.getPassword().equals(sandiLama)) {
+            currentUser.setPassword(sandiBaru);
+            saveToXML();
+            return true;
+        }
+        return false;
     }
 
     private XStream createXStream() {
@@ -60,7 +81,7 @@ public class ManajemenPengguna {
 
     private void saveToXML() {
         try (FileOutputStream fos = new FileOutputStream(XML_FILE)) {
-            createXStream().toXML(daftarPengguna, fos);
+            createXStream().toXML(new ArrayList<>(daftarPengguna), fos);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -72,10 +93,26 @@ public class ManajemenPengguna {
         try (FileInputStream fis = new FileInputStream(file)) {
             List<Pengguna> loadedList = (List<Pengguna>) createXStream().fromXML(fis);
             if (loadedList != null) {
+                daftarPengguna.clear();
                 daftarPengguna.addAll(loadedList);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+    
+    public boolean register(String nama, String password) {
+        if (findPenggunaByNama(nama).isPresent()) {
+            return false;
+        }
+        daftarPengguna.add(new Pengguna(nama, password));
+        saveToXML();
+        return true;
+    }
+
+    public String getPasswordForUser(String nama) {
+    Optional<Pengguna> userOpt = findPenggunaByNama(nama);
+    return userOpt.map(Pengguna::getPassword).orElse(null);
+}
+
 }

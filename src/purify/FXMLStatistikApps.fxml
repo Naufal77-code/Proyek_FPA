@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
@@ -8,52 +9,63 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="707.0" prefWidth="899.0" stylesheets="@purify-theme.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="purify.FXMLStatistikAppsController">
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" styleClass="root" stylesheets="@/purify/purify-theme.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="purify.FXMLStatistikAppsController">
    <children>
-      <Label layoutX="280.0" layoutY="14.0" text="Statistik Detox Aplikasi">
-         <font>
-            <Font name="System Bold" size="24.0" />
-         </font>
-      </Label>
-      
-      <BarChart fx:id="statistikChart" layoutX="27.0" layoutY="49.0" prefHeight="278.0" prefWidth="858.0">
-         <xAxis>
-            <CategoryAxis label="Aplikasi" fx:id="xAxis" />
-         </xAxis>
-         <yAxis>
-            <NumberAxis fx:id="yAxis" label="Total Durasi Blokir (menit)" />
-         </yAxis>
-      </BarChart>
-      
-      <TableView fx:id="riwayatTable" layoutX="20.0" layoutY="320.0" prefHeight="250.0" prefWidth="858.0">
-        <columns>
-          <TableColumn fx:id="colNo" prefWidth="40.0" text="No." />
-          <TableColumn fx:id="colTanggal" prefWidth="120.0" text="Tanggal Mulai" />
-          <TableColumn fx:id="colDurasi" prefWidth="106.4000244140625" text="Durasi(menit)" />
-          <TableColumn fx:id="colStatus" prefWidth="111.199951171875" text="Status" />
-          <TableColumn fx:id="colAktivitas" prefWidth="140.80001831054688" text="Aktivitas" />
-          <TableColumn fx:id="colApps" prefWidth="333.60003662109375" text="Aplikasi Diblokir" />
-        </columns>
-      </TableView>
-
-      <Button fx:id="btnHapus" layoutX="190.0" layoutY="622.0" mnemonicParsing="false" onAction="#handleHapusRiwayat" prefHeight="35.0" prefWidth="150.0" text="Hapus Riwayat">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
-
-      <Button fx:id="btnRefresh" layoutX="419.0" layoutY="622.0" mnemonicParsing="false" onAction="#handleRefresh" prefHeight="35.0" prefWidth="150.0" text="Refresh Data">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
-
-      <Button fx:id="btnKembali" layoutX="630.0" layoutY="622.0" mnemonicParsing="false" onAction="#handleKembali" prefHeight="35.0" prefWidth="150.0" text="Kembali">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
+      <BorderPane prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <top>
+            <Label styleClass="header-label" text="Statistik Detox Aplikasi" BorderPane.alignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+               <BorderPane.margin>
+                  <Insets top="20.0" />
+               </BorderPane.margin>
+            </Label>
+         </top>
+         <center>
+            <BarChart fx:id="statistikChart" title="Total Durasi Blokir Aplikasi" BorderPane.alignment="CENTER">
+              <xAxis>
+                <CategoryAxis fx:id="xAxis" label="Aplikasi" side="BOTTOM" />
+              </xAxis>
+              <yAxis>
+                <NumberAxis fx:id="yAxis" label="Total Durasi Blokir (menit)" side="LEFT" />
+              </yAxis>
+               <BorderPane.margin>
+                  <Insets bottom="10.0" left="20.0" right="20.0" top="20.0" />
+               </BorderPane.margin>
+            </BarChart>
+         </center>
+         <bottom>
+            <VBox prefHeight="300.0" spacing="15.0" BorderPane.alignment="CENTER">
+               <children>
+                  <TableView fx:id="riwayatTable" prefHeight="250.0" prefWidth="200.0">
+                    <columns>
+                      <TableColumn fx:id="colNo" prefWidth="40.0" text="No." />
+                      <TableColumn fx:id="colTanggal" prefWidth="150.0" text="Tanggal Mulai" />
+                      <TableColumn fx:id="colDurasi" prefWidth="100.0" text="Durasi (menit)" />
+                      <TableColumn fx:id="colStatus" prefWidth="100.0" text="Status" />
+                      <TableColumn fx:id="colAktivitas" prefWidth="180.0" text="Aktivitas" />
+                      <TableColumn fx:id="colApps" prefWidth="200.0" text="Aplikasi Diblokir" />
+                    </columns>
+                  </TableView>
+                  <HBox alignment="CENTER" spacing="20.0">
+                     <children>
+                        <Button fx:id="btnHapus" mnemonicParsing="false" styleClass="delete-button" text="Hapus Riwayat" />
+                        <Button fx:id="btnRefresh" mnemonicParsing="false" text="Refresh Data" />
+                        <Button fx:id="btnKembali" mnemonicParsing="false" styleClass="secondary-button" text="Kembali" />
+                     </children>
+                  </HBox>
+               </children>
+               <BorderPane.margin>
+                  <Insets bottom="20.0" left="20.0" right="20.0" />
+               </BorderPane.margin>
+            </VBox>
+         </bottom>
+      </BorderPane>
    </children>
 </AnchorPane>

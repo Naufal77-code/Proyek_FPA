@@ -12,16 +12,19 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class KomunitasDataList {
     private static final String XML_FILE = "komunitas.xml";
-    private final ObservableList<Post> postList;
+    // [MODIFIKASI] Nama variabel diubah untuk merepresentasikan semua unggahan
+    private final ObservableList<Post> allPosts; 
     private static KomunitasDataList instance;
 
     private KomunitasDataList() {
-        postList = FXCollections.observableArrayList();
+        allPosts = FXCollections.observableArrayList();
         loadFromXML();
     }
 
@@ -32,21 +35,29 @@ public class KomunitasDataList {
         return instance;
     }
 
-    public ObservableList<Post> getPostList() {
-        return this.postList;
+    // [MODIFIKASI] Metode ini diganti dengan metode baru yang lebih spesifik
+    public ObservableList<Post> getPostsForUser(String username) {
+        if (username == null || username.trim().isEmpty()) {
+            return FXCollections.observableArrayList(); // Return list kosong jika tidak ada user
+        }
+        // Filter daftar semua unggahan untuk mendapatkan yang sesuai dengan username
+        List<Post> userPosts = allPosts.stream()
+                .filter(post -> username.equalsIgnoreCase(post.getPenulis()))
+                .collect(Collectors.toList());
+        return FXCollections.observableArrayList(userPosts);
     }
 
     public void tambahPost(String isi, String penulis) {
-        int nextId = postList.size() + 1;
+        int nextId = allPosts.size() + 1;
         Post newPost = new Post(nextId, isi, penulis);
-        postList.add(0, newPost); // Tambahkan di awal agar muncul paling atas
+        allPosts.add(0, newPost); // Tambahkan ke daftar utama
         updateIds();
         saveToXML();
     }
 
     private void updateIds() {
-        for (int i = 0; i < postList.size(); i++) {
-            postList.get(i).setIdPost(i + 1);
+        for (int i = 0; i < allPosts.size(); i++) {
+            allPosts.get(i).setIdPost(i + 1);
         }
     }
 
@@ -66,7 +77,8 @@ public class KomunitasDataList {
     public void saveToXML() {
         XStream xstream = createXStream();
         try (FileOutputStream fos = new FileOutputStream(XML_FILE)) {
-            xstream.toXML(new ArrayList<>(this.postList), fos);
+            // Simpan daftar utama yang berisi semua unggahan
+            xstream.toXML(new ArrayList<>(this.allPosts), fos);
         } catch (IOException e) {
             Logger.getLogger(KomunitasDataList.class.getName()).log(Level.SEVERE, "Gagal menyimpan data komunitas.", e);
         }
@@ -81,7 +93,8 @@ public class KomunitasDataList {
         try (FileInputStream fis = new FileInputStream(file)) {
             ArrayList<Post> loadedList = (ArrayList<Post>) xstream.fromXML(fis);
             if (loadedList != null) {
-                postList.setAll(loadedList);
+                // Muat semua unggahan ke daftar utama
+                allPosts.setAll(loadedList);
             }
         } catch (Exception e) {
             Logger.getLogger(KomunitasDataList.class.getName()).log(Level.SEVERE, "Gagal memuat data komunitas.", e);

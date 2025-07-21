@@ -1,5 +1,6 @@
 package purify;
 
+import javafx.collections.FXCollections;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -11,6 +12,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -21,17 +24,13 @@ import java.util.ResourceBundle;
 
 public class FXMLBlokirAppsStatusController implements Initializable {
 
-    @FXML
-    private Label timerLabel;
+    @FXML private Label timerLabel;
+    @FXML private TextField kodeDaruratField;
+    @FXML private Button btnBatalkan;
 
-    @FXML
-    private Label appsLabel;
-
-    @FXML
-    private TextField kodeDaruratField;
-
-    @FXML
-    private Button btnBatalkan;
+    // [MODIFIKASI] Deklarasi untuk komponen baru
+    @FXML private TableView<String> appsTableView;
+    @FXML private TableColumn<String, String> colAppName;
 
     private Timeline timeline;
     private int remainingSeconds;
@@ -40,10 +39,13 @@ public class FXMLBlokirAppsStatusController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         DetoxAppsSession session = DetoxAppsSession.getInstance();
-        remainingSeconds = session.getDurasi(); // Convert minutes to seconds
+        remainingSeconds = session.getDurasi();
 
-        // Tampilkan apps yang diblokir
-        appsLabel.setText("Apps yang diblokir: " + session.getSelectedAppsString());
+        // --- [MODIFIKASI] Setup untuk tabel aplikasi ---
+        // Mengatur bagaimana setiap sel di kolom akan mendapatkan nilainya (dalam hal ini, string nama aplikasi itu sendiri)
+        colAppName.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue()));
+        // Mengisi tabel dengan daftar aplikasi yang diblokir dari sesi
+        appsTableView.setItems(FXCollections.observableArrayList(session.getSelectedApps()));
 
         setupTimer();
         startTimer();
@@ -60,7 +62,7 @@ public class FXMLBlokirAppsStatusController implements Initializable {
                 remainingSeconds--;
             } else {
                 timeline.stop();
-                completeDetox("BERHASIL");
+                completeDetox("BERHASIL", DetoxAppsSession.getInstance().getDurasi());
             }
         }));
         timeline.setCycleCount(Timeline.INDEFINITE);
@@ -72,20 +74,11 @@ public class FXMLBlokirAppsStatusController implements Initializable {
     }
 
     private void updateTimerDisplay() {
-        int hours = remainingSeconds / 3600; 
-        int minutes = (remainingSeconds % 3600) / 60; 
-        int seconds = remainingSeconds % 60; 
-        
-        String timeText;
-        if (hours > 0) {
-            timeText = String.format("%02d:%02d:%02d", hours, minutes, seconds); 
-        } else {
-            timeText = String.format("%02d:%02d", minutes, seconds); 
-        }
-        
-        if (timerLabel != null) {
-            timerLabel.setText(timeText);
-        }
+        int hours = remainingSeconds / 3600;
+        int minutes = (remainingSeconds % 3600) / 60;
+        int seconds = remainingSeconds % 60;
+        String timeText = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+        timerLabel.setText(timeText);
     }
 
     @FXML
@@ -100,39 +93,37 @@ public class FXMLBlokirAppsStatusController implements Initializable {
 
         if (inputKode.equals(session.getKodeDarurat())) {
             timeline.stop();
-            completeDetox("GAGAL");
+            int actualDuration = (int) session.getActualElapsedSeconds();
+            completeDetox("GAGAL", actualDuration);
         } else {
             showAlert("Error", "Kode darurat salah!");
         }
     }
 
-    private void completeDetox(String status) {
+    private void completeDetox(String status, int durationInSeconds) {
         DetoxAppsSession.getInstance().endDetox();
-        
         if (mainController != null) {
-            mainController.addToRiwayat(status);
+            mainController.addToRiwayat(status, durationInSeconds);
         }
-
         returnToMainMenu();
     }
 
     private void returnToMainMenu() {
         try {
-            FXMLLoader loader =new FXMLLoader(getClass().getResource("/Purify/FXMLBlokirApps.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/purify/FXMLBlokirApps.fxml"));
             Parent root = loader.load();
-
             Stage currentStage = (Stage) timerLabel.getScene().getWindow();
             currentStage.setScene(new Scene(root));
-}catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             showAlert("Error", "Gagal kembali ke menu utama!");
+        }
     }
-}
- public void setMainController(FXMLBlokirAppsController controller) {
+
+    public void setMainController(FXMLBlokirAppsController controller) {
         this.mainController = controller;
     }
 
-    // Metode utilitas untuk menampilkan alert
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);

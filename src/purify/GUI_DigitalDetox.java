@@ -8,16 +8,29 @@ import javafx.stage.Stage;
 
 public class GUI_DigitalDetox extends Application {
 
-    // Di dalam GUI_DigitalDetox.java
     @Override
     public void start(Stage stage) throws Exception {
-        // Ganti FXMLMainMenu.fxml menjadi FXMLLogin.fxml
-        Parent root = FXMLLoader.load(getClass().getResource("FXMLLogin.fxml"));
+        Parent root;
+        String title;
+
+        Pengguna validUser = SessionManager.getValidSession();
+
+        if (validUser != null) {
+            root = FXMLLoader.load(getClass().getResource("/purify/FXMLMainMenu.fxml"));
+            title = "Purify - Digital Detox";
+        } else {
+            root = FXMLLoader.load(getClass().getResource("/purify/FXMLLogin.fxml"));
+            title = "Purify - Login";
+        }
 
         Scene scene = new Scene(root);
 
-        stage.setTitle("Purify - Login"); // Ganti judul awal
+        stage.setTitle(title);
         stage.setScene(scene);
+
+       
+        stage.setResizable(false);
+
         stage.show();
     }
 

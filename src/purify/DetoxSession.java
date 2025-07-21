@@ -2,6 +2,7 @@ package purify;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.Duration; // Import Duration
 
 public class DetoxSession {
     private static DetoxSession instance;
@@ -51,6 +52,14 @@ public class DetoxSession {
     public int getDurasiInMinutes() {
         return (int) Math.round(durasiInSeconds / 60.0);
     }
+    
+    // --- [TAMBAHAN] Metode untuk menghitung durasi berjalan ---
+    public long getActualElapsedSeconds() {
+        if (!isActive || waktuMulai == null) {
+            return 0;
+        }
+        return Duration.between(waktuMulai, LocalDateTime.now()).getSeconds();
+    }
 
     public String getAktivitas() {
         return aktivitas;
@@ -77,6 +86,6 @@ public class DetoxSession {
         if (now.isAfter(endTime)) {
             return 0;
         }
-        return java.time.Duration.between(now, endTime).getSeconds();
+        return Duration.between(now, endTime).getSeconds();
     }
 }
