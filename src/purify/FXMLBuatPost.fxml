@@ -8,12 +8,12 @@
 
 <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="popup-dialog" stylesheets="@purify-theme.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="purify.FXMLBuatPostController">
    <children>
-      <HBox prefHeight="145.0" prefWidth="600.0">
+      <HBox prefHeight="85.0" prefWidth="598.0">
          <children>
-            <ImageView fx:id="avatarImageView" fitHeight="117.0" fitWidth="144.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="avatarImageView" fitHeight="80.0" fitWidth="98.0" pickOnBounds="true" preserveRatio="true" />
          </children>
       </HBox>
-      <TextArea fx:id="isiPostArea" prefHeight="240.0" prefWidth="598.0" styleClass="popup-textarea" />
+      <TextArea fx:id="isiPostArea" prefHeight="252.0" prefWidth="598.0" styleClass="popup-textarea" />
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
             <Button fx:id="btnKirim" mnemonicParsing="false" onAction="#handleKirim" styleClass="primary-action-button" text="Kirim" />

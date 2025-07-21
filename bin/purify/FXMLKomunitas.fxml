@@ -10,7 +10,7 @@
       <ListView fx:id="postListView" prefHeight="477.0" prefWidth="720.0" />
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="380.0">
          <children>
-            <Button fx:id="btnKembali" mnemonicParsing="false" onAction="#handleKembali" styleClass="secondary-button" text="Kembali" />
+            <Button fx:id="btnKembali" mnemonicParsing="false" onAction="#handleKembali" prefHeight="33.0" prefWidth="86.0" styleClass="secondary-button" text="Kembali" />
             <Button fx:id="btnBuatPost" mnemonicParsing="false" onAction="#handleBuatPost" styleClass="primary-action-button" text="Buat Postingan" textAlignment="CENTER" />
          </children>
       </HBox>
