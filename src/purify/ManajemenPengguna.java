@@ -10,11 +10,10 @@ import java.util.List;
 import java.util.Optional;
 
 public class ManajemenPengguna {
-    // --- PERUBAHAN 1: Nama file dikembalikan ke "pengguna.xml" ---
     private static final String XML_FILE = "pengguna.xml";
     private final List<Pengguna> daftarPengguna;
     private static ManajemenPengguna instance;
-    private Pengguna currentUser;
+    private Pengguna currentUser; // Variabel ini krusial untuk mengetahui siapa yang login
 
     private ManajemenPengguna() {
         daftarPengguna = new ArrayList<>();
@@ -28,6 +27,7 @@ public class ManajemenPengguna {
         return instance;
     }
 
+    // Metode ini yang akan kita gunakan untuk mendapatkan info user
     public Pengguna getCurrentUser() {
         return currentUser;
     }
@@ -35,7 +35,7 @@ public class ManajemenPengguna {
     public boolean login(String nama, String password) {
         Optional<Pengguna> userOpt = findPenggunaByNama(nama);
         if (userOpt.isPresent() && userOpt.get().getPassword().equals(password)) {
-            this.currentUser = userOpt.get();
+            this.currentUser = userOpt.get(); // Set user saat login berhasil
             return true;
         }
         return false;
@@ -43,12 +43,10 @@ public class ManajemenPengguna {
 
     private Optional<Pengguna> findPenggunaByNama(String nama) {
         return daftarPengguna.stream()
-                // --- PERUBAHAN 3: Memanggil getNama() ---
                 .filter(pengguna -> pengguna.getNama().equalsIgnoreCase(nama))
                 .findFirst();
     }
     
-    // --- Metode untuk Mengubah Data ---
     public boolean ubahUsername(String usernameBaru) {
         if (findPenggunaByNama(usernameBaru).isPresent()) {
             return false;
@@ -70,7 +68,6 @@ public class ManajemenPengguna {
         return false;
     }
 
-    // --- Logika Baca/Tulis XML ---
     private XStream createXStream() {
         XStream xstream = new XStream(new StaxDriver());
         XStream.setupDefaultSecurity(xstream);
@@ -78,7 +75,6 @@ public class ManajemenPengguna {
         xstream.addPermission(PrimitiveTypePermission.PRIMITIVES);
         xstream.allowTypesByWildcard(new String[]{"purify.**", "java.util.**"});
         xstream.alias("list", List.class);
-        // --- PERUBAHAN 2: Alias dikembalikan ke "pengguna" ---
         xstream.alias("pengguna", Pengguna.class);
         return xstream;
     }

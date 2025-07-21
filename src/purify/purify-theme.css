@@ -269,3 +269,73 @@
 .primary-action-button:hover {
     -fx-background-color: #2E7D32; /* Lebih gelap saat disentuh */
 }
+
+.popup-dialog {
+    -fx-background-color: #FFFFFF;
+    -fx-padding: 0;
+    -fx-border-color: #BDBDBD;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 15, 0, 0, 3);
+}
+
+/* Header popup */
+.popup-header {
+    -fx-padding: 10px 15px;
+    -fx-background-color: #FAFAFA;
+    -fx-border-color: transparent transparent #E0E0E0 transparent; /* Garis bawah */
+    -fx-border-width: 1px;
+}
+
+.popup-header .label {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1B5E20;
+}
+
+/* Area untuk menulis teks */
+.popup-textarea {
+    -fx-font-size: 16px;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+/* Tombol Aksi Utama (Kirim/Post) */
+.primary-action-button {
+    -fx-background-color: #388E3C;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 8px 25px;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+.primary-action-button:hover {
+    -fx-background-color: #2E7D32;
+}
+
+.secondary-button {
+    -fx-background-color: #757575;
+}
+
+.secondary-button:hover {
+    -fx-background-color: #616161;
+}
+
+/* --- [TAMBAHAN] Style untuk Tombol Hapus Komentar --- */
+.delete-comment-button {
+    -fx-background-color: #F1F8E9; /* Warna sama dengan background komentar */
+    -fx-text-fill: #9E9E9E; /* Abu-abu */
+    -fx-font-weight: bold;
+    -fx-font-size: 10px;
+    -fx-padding: 2px 6px;
+    -fx-background-radius: 50%; /* Membuatnya bulat */
+    -fx-cursor: hand;
+}
+
+.delete-comment-button:hover {
+    -fx-background-color: #E0E0E0; /* Sedikit lebih gelap saat disentuh */
+    -fx-text-fill: #c0392b; /* Merah */
+}
