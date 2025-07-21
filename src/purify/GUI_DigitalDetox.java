@@ -28,7 +28,6 @@ public class GUI_DigitalDetox extends Application {
         stage.setTitle(title);
         stage.setScene(scene);
 
-       
         stage.setResizable(false);
 
         stage.show();
@@ -36,5 +35,21 @@ public class GUI_DigitalDetox extends Application {
 
     public static void main(String[] args) {
         launch(args);
+        /*
+         * Nama Anggota Kelompok
+         * Naufal Ahmad Fauzi
+         * Muhammad Farhan Yusuf Azizi
+         * Candra Hanafi
+         * Muhammad Lutfi
+         * Mohammad Nabil
+         */
+        /*
+         * Link Poster
+         * https://imgur.com/a/eNFGKcD
+         */
+        /*
+         * Link Demonstrasi Aplikasi
+         * https://youtu.be/_O_ZlIxrkdw?si=QZ-fpQsxRBIQ0g8R
+         */
     }
 }
