@@ -14,27 +14,18 @@ import java.util.ResourceBundle;
 
 public class FXMLBuatPostController implements Initializable {
 
-    // 1. Deklarasikan ImageView dari FXML
-    @FXML
-    private ImageView avatarImageView;
-    
-    @FXML
-    private TextArea isiPostArea;
-    
-    @FXML
-    private Button btnKirim;
+    @FXML private ImageView avatarImageView;
+    @FXML private TextArea isiPostArea;
+    @FXML private Button btnKirim;
     
     private FXMLKomunitasController komunitasController;
 
-    // 2. Implementasikan metode initialize
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Di sinilah kita memuat gambar
         try {
             Image avatar = new Image(getClass().getResourceAsStream("/icons/avatar_placeholder.png"));
             avatarImageView.setImage(avatar);
         } catch (Exception e) {
-            // Jika ada error, ini akan memberitahu Anda di konsol
             System.err.println("Gagal memuat gambar avatar di popup: " + e.getMessage());
             e.printStackTrace();
         }
@@ -52,18 +43,24 @@ public class FXMLBuatPostController implements Initializable {
             return;
         }
 
-        // Untuk sementara, kita hardcode nama penulis.
-        // Nantinya bisa diambil dari sesi login pengguna.
-        String penulis = "PenggunaDetox"; 
+        // --- [MODIFIKASI] Mengambil nama penulis dari user yang sedang login ---
+        Pengguna currentUser = ManajemenPengguna.getInstance().getCurrentUser();
+        String penulis;
+
+        if (currentUser != null) {
+            penulis = currentUser.getNama();
+        } else {
+            // Fallback jika tidak ada user yang login (seharusnya tidak terjadi)
+            penulis = "Anonim"; 
+        }
+        // --- Akhir Modifikasi ---
         
         KomunitasDataList.getInstance().tambahPost(isi, penulis);
         
-        // Refresh timeline di halaman utama komunitas
         if (komunitasController != null) {
             komunitasController.refreshPosts();
         }
         
-        // Tutup window
         Stage stage = (Stage) btnKirim.getScene().getWindow();
         stage.close();
     }

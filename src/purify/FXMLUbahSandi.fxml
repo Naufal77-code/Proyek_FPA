@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefWidth="350.0" spacing="15.0" style="-fx-background-color: #E8F5E9;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="purify.FXMLUbahSandiController">
+   <children>
+      <Label styleClass="sub-header" text="Ubah Sandi" />
+      <PasswordField fx:id="sandiLamaField" promptText="Masukkan sandi lama" />
+      <PasswordField fx:id="sandiBaruField" promptText="Masukkan sandi baru" />
+      <PasswordField fx:id="konfirmasiSandiField" promptText="Konfirmasi sandi baru" />
+      <HBox alignment="CENTER_RIGHT" spacing="10.0">
+         <children>
+            <Button fx:id="btnBatal" mnemonicParsing="false" onAction="#handleBatal" styleClass="secondary-button" stylesheets="@purify-theme.css" text="Batal" />
+            <Button fx:id="btnSimpan" mnemonicParsing="false" onAction="#handleSimpan" stylesheets="@purify-theme.css" text="Simpan" />
+         </children>
+      </HBox>
+   </children>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+</VBox>

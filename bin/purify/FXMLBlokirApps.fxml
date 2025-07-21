@@ -1,74 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="800.0" stylesheets="@purify-theme.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="purify.FXMLBlokirAppsController">
+<AnchorPane id="AnchorPane" prefHeight="550.0" prefWidth="700.0" style="-fx-background-color: #E8F5E9;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="purify.FXMLBlokirAppsController">
    <children>
-      <Label layoutX="300.0" layoutY="25.0" text="Mulai Sesi Detox Aplikasi">
-         <font>
-            <Font name="System Bold" size="24.0" />
-         </font>
-      </Label>
-      <Label layoutX="50.0" layoutY="80.0" text="Durasi:">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <TextField fx:id="durasiField" layoutX="170.0" layoutY="75.0" promptText="Masukkan durasi" />
-      <ComboBox fx:id="satuanWaktuComboBox" layoutX="320.0" layoutY="75.0" prefWidth="100.0" />
-
-      <Label layoutX="50.0" layoutY="120.0" text="Kode Darurat:">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <TextField fx:id="kodeDaruratField" layoutX="170.0" layoutY="115.0" promptText="Masukan kode darurat" />
-
-      <Label layoutX="50.0" layoutY="160.0" text="Aktivitas (Opsional):">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <TextField fx:id="aktivitasField" layoutX="170.0" layoutY="155.0" promptText="Contoh: Belajar, Membaca" />
-
-      <Label layoutX="50.0" layoutY="200.0" text="Pilih Aplikasi untuk Detox:">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <VBox layoutX="50.0" layoutY="225.0" spacing="5.0">
+      <VBox layoutX="25.0" layoutY="25.0" spacing="15.0" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0">
          <children>
-            <CheckBox fx:id="cbInstagram" mnemonicParsing="false" text="Instagram" />
-            <CheckBox fx:id="cbTikTok" mnemonicParsing="false" text="TikTok" />
-            <CheckBox fx:id="cbFacebook" mnemonicParsing="false" text="Facebook" />
-            <CheckBox fx:id="cbTwitter" mnemonicParsing="false" text="Twitter/X" />
-            <CheckBox fx:id="cbWhatsApp" mnemonicParsing="false" text="WhatsApp" />
-            <CheckBox fx:id="cbTelegram" mnemonicParsing="false" text="Telegram" />
+            <Label styleClass="header-label" text="Blokir Aplikasi">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+            <HBox spacing="10.0">
+               <children>
+                  <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label text="Durasi Blokir:" />
+                        <TextField fx:id="durasiField" promptText="Contoh: 30" />
+                     </children>
+                  </VBox>
+                  <VBox spacing="5.0">
+                     <children>
+                        <Label text="Satuan Waktu:" />
+                        <ComboBox fx:id="satuanWaktuComboBox" prefWidth="150.0" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <Label text="Pilih Aplikasi untuk Diblokir:" />
+            <HBox alignment="CENTER" spacing="10.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label text="Aplikasi Tersedia:" />
+                        <ListView fx:id="lvAplikasiTersedia" prefHeight="200.0" />
+                        <Button fx:id="btnTambahLainnya" mnemonicParsing="false" onAction="#handleTambahAplikasiLain" styleClass="secondary-button" stylesheets="@purify-theme.css" text="Aplikasi Lain..." />
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER" spacing="10.0">
+                     <children>
+                        <Button fx:id="btnPindahKanan" mnemonicParsing="false" onAction="#handlePindahKanan" styleClass="transfer-button" stylesheets="@purify-theme.css" text="&gt;" />
+                        <Button fx:id="btnPindahSemuaKanan" mnemonicParsing="false" onAction="#handlePindahSemuaKanan" styleClass="transfer-button" stylesheets="@purify-theme.css" text="&gt;&gt;" />
+                        <Button fx:id="btnPindahKiri" mnemonicParsing="false" onAction="#handlePindahKiri" styleClass="transfer-button" stylesheets="@purify-theme.css" text="&lt;" />
+                        <Button fx:id="btnPindahSemuaKiri" mnemonicParsing="false" onAction="#handlePindahSemuaKiri" styleClass="transfer-button" stylesheets="@purify-theme.css" text="&lt;&lt;" />
+                     </children>
+                  </VBox>
+                  <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label text="Aplikasi Akan Diblokir:" />
+                        <ListView fx:id="lvAplikasiDipilih" prefHeight="200.0" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <VBox spacing="5.0">
+               <children>
+                  <Label text="Aktivitas Selama Detoks (Opsional):" />
+                  <TextField fx:id="aktivitasField" promptText="Contoh: Belajar, membaca buku" />
+               </children>
+            </VBox>
+            <VBox spacing="5.0">
+               <children>
+                  <Label text="Kode Darurat (untuk membatalkan):" />
+                  <TextField fx:id="kodeDaruratField" promptText="Buat kode yang mudah diingat" />
+               </children>
+            </VBox>
+            <HBox alignment="CENTER_RIGHT" spacing="10.0">
+               <children>
+                  <Button fx:id="btnMainMenu" mnemonicParsing="false" onAction="#handleMainMenu" styleClass="secondary-button" stylesheets="@purify-theme.css" text="Kembali ke Menu Utama" />
+                  <Button fx:id="btnBlokir" mnemonicParsing="false" onAction="#handleBlokir" stylesheets="@purify-theme.css" text="Mulai Blokir" />
+               </children>
+            </HBox>
          </children>
       </VBox>
-      <VBox layoutX="200.0" layoutY="225.0" spacing="5.0">
-         <children>
-            <CheckBox fx:id="cbYouTube" mnemonicParsing="false" text="YouTube" />
-            <CheckBox fx:id="cbNetflix" mnemonicParsing="false" text="Netflix" />
-            <CheckBox fx:id="cbSpotify" mnemonicParsing="false" text="Spotify" />
-            <CheckBox fx:id="cbSnapchat" mnemonicParsing="false" text="Snapchat" />
-            <CheckBox fx:id="cbDiscord" mnemonicParsing="false" text="Discord" />
-            <CheckBox fx:id="cbTwitch" mnemonicParsing="false" text="Twitch" />
-         </children>
-      </VBox>
-
-      <Button fx:id="btnBlokir" layoutX="50.0" layoutY="380.0" mnemonicParsing="false" onAction="#handleBlokir" prefHeight="35.0" prefWidth="150.0" text="Mulai Blokir Aplikasi">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
-      <Button fx:id="btnMainMenu" layoutX="220.0" layoutY="380.0" mnemonicParsing="false" onAction="#handleMainMenu" prefHeight="35.0" prefWidth="130.0" text="Kembali" />
    </children>
 </AnchorPane>

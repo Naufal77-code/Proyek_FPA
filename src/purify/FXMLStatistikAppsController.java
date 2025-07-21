@@ -33,37 +33,30 @@ public class FXMLStatistikAppsController implements Initializable {
 
     private Stage previousStage;
     private static RiwayatBlokirAppsList riwayatList = RiwayatBlokirAppsList.getInstance();
-@Override
-public void initialize(URL url, ResourceBundle rb) {
-    setupTableColumns();
-    setupButtonActions();
 
-    // Pastikan riwayatList diinisialisasi
-    if (riwayatList == null) {
-        riwayatList = RiwayatBlokirAppsList.getInstance();
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        setupTableColumns();
+        setupButtonActions();
+        if (riwayatList == null) {
+            riwayatList = RiwayatBlokirAppsList.getInstance();
+        }
+        riwayatList.loadFromXML();
+        refreshData();
     }
-    
-    // Langsung muat data dari XML dan refresh tampilan
-    riwayatList.loadFromXML();
-    refreshData();
-}
 
     private void setupTableColumns() {
-    colNo.setCellValueFactory(new PropertyValueFactory<>("nomor"));
-    colTanggal.setCellValueFactory(new PropertyValueFactory<>("tanggalMulai"));
-    
-    // Custom untuk konversi detik -> menit
-    colDurasi.setCellValueFactory(cellData -> {
-        int durasiDetik = cellData.getValue().getDurasi();
-        int durasiMenit = (int) Math.ceil(durasiDetik / 60.0); // Konversi detik ke menit
-        return new javafx.beans.property.SimpleIntegerProperty(durasiMenit).asObject();
-    });
-
-    colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
-    colAktivitas.setCellValueFactory(new PropertyValueFactory<>("aktivitas"));
-    colApps.setCellValueFactory(new PropertyValueFactory<>("appsBlokir"));
-}
-
+        colNo.setCellValueFactory(new PropertyValueFactory<>("nomor"));
+        colTanggal.setCellValueFactory(new PropertyValueFactory<>("tanggalMulai"));
+        colDurasi.setCellValueFactory(cellData -> {
+            int durasiDetik = cellData.getValue().getDurasi();
+            int durasiMenit = (int) Math.ceil(durasiDetik / 60.0);
+            return new javafx.beans.property.SimpleIntegerProperty(durasiMenit).asObject();
+        });
+        colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
+        colAktivitas.setCellValueFactory(new PropertyValueFactory<>("aktivitas"));
+        colApps.setCellValueFactory(new PropertyValueFactory<>("appsBlokir"));
+    }
 
     private void setupButtonActions() {
         btnHapus.setOnAction(this::handleHapusRiwayat);
@@ -71,22 +64,14 @@ public void initialize(URL url, ResourceBundle rb) {
         btnKembali.setOnAction(this::handleKembali);
     }
 
-    public void setRiwayatList(RiwayatBlokirAppsList riwayatList) {
-    this.riwayatList = riwayatList;
-    refreshData(); // Langsung refresh data saat di-set
-}
-
-
     public void setPreviousStage(Stage previousStage) {
         this.previousStage = previousStage;
     }
 
     private void refreshData() {
         if (riwayatList == null) return;
-
         ObservableList<RiwayatBlokirApps> data = riwayatList.getData();
         riwayatTable.setItems(data);
-
         updateStatistics();
     }
 
@@ -104,17 +89,14 @@ public void initialize(URL url, ResourceBundle rb) {
     @FXML
     private void handleHapusRiwayat(ActionEvent event) {
         RiwayatBlokirApps selected = riwayatTable.getSelectionModel().getSelectedItem();
-
         if (selected == null) {
             showAlert("Informasi", "Silakan pilih baris riwayat yang ingin dihapus.");
             return;
         }
-
         Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
         confirmation.setTitle("Konfirmasi Hapus");
         confirmation.setHeaderText(null);
         confirmation.setContentText("Apakah Anda yakin ingin menghapus riwayat ini?");
-
         Optional<ButtonType> result = confirmation.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             riwayatList.getData().remove(selected);
@@ -135,13 +117,11 @@ public void initialize(URL url, ResourceBundle rb) {
 
     private void updateStatistics() {
         statistikChart.getData().clear();
-
         if (riwayatList == null || riwayatList.getData().isEmpty()) {
             return;
         }
 
         Map<String, Integer> appDurations = new HashMap<>();
-
         for (RiwayatBlokirApps riwayat : riwayatList.getData()) {
             if (riwayat.getAppsBlokir() != null) {
                 String[] apps = riwayat.getAppsBlokir().split(", ");
@@ -150,11 +130,9 @@ public void initialize(URL url, ResourceBundle rb) {
                 }
             }
         }
-
         if (appDurations.isEmpty()) return;
 
-        List<Map.Entry<String, Integer>> sortedApps = appDurations.entrySet()
-                .stream()
+        List<Map.Entry<String, Integer>> sortedApps = appDurations.entrySet().stream()
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
                 .collect(Collectors.toList());
 
@@ -162,10 +140,9 @@ public void initialize(URL url, ResourceBundle rb) {
         series.setName("Total Durasi Blokir (menit)");
 
         for (Map.Entry<String, Integer> entry : sortedApps) {
-             int durasiMenit = (int) Math.ceil(entry.getValue() / 60.0);
-            series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
+            int durasiMenit = (int) Math.ceil(entry.getValue() / 60.0);
+            series.getData().add(new XYChart.Data<>(entry.getKey(), durasiMenit));
         }
-
         statistikChart.getData().add(series);
     }
 
