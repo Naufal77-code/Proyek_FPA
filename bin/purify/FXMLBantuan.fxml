@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="TOP_CENTER" prefHeight="245.0" prefWidth="621.0" spacing="10.0" style="-fx-background-color: #E8F5E9;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="purify.FXMLBantuanController">
+   <children>
+      <Label styleClass="header-label" text="Bantuan Purify">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" text="Purify adalah aplikasi untuk membantumu fokus dan mengurangi kecanduan gawai. Kamu bisa memblokir HP atau aplikasi tertentu dan melihat progresmu di halaman statistik." textAlignment="CENTER" wrapText="true" />
+      <Label prefHeight="62.0" prefWidth="395.0" text="Untuk pertanyaan lebih lanjut, hubungi kami di support@purifyapp.com" />
+      <Button fx:id="btnTutup" mnemonicParsing="false" onAction="#handleTutup" stylesheets="@purify-theme.css" text="Tutup" />
+   </children>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+</VBox>
