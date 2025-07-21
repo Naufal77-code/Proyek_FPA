@@ -37,11 +37,11 @@ public class GUI_DigitalDetox extends Application {
         launch(args);
         /*
          * Nama Anggota Kelompok
-         * Naufal Ahmad Fauzi
-         * Muhammad Farhan Yusuf Azizi
-         * Candra Hanafi
-         * Muhammad Lutfi
-         * Mohammad Nabil
+         * Naufal Ahmad Fauzi (24523168)
+         * Muhammad Farhan Yusuf Azizi (24523129)
+         * Candra Hanafi (24523084)
+         * Muhammad Lutfi (24523234)
+         * Mohammad Nabil (24523277)
          */
         /*
          * Link Poster
