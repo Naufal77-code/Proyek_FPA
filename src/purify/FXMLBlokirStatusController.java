@@ -15,23 +15,50 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Controller untuk tampilan status sesi detoksifikasi yang sedang berjalan.
+ * Menampilkan timer mundur dan memungkinkan pengguna membatalkan dengan kode
+ * darurat.
+ */
 public class FXMLBlokirStatusController implements Initializable {
-    @FXML private Label timerLabel;
-    @FXML private TextField kodeDaruratField;
-    @FXML private Button btnBatalkan;
 
+    // Label yang menampilkan sisa waktu dalam format jam:menit:detik
+    @FXML
+    private Label timerLabel;
+
+    // Field tempat pengguna bisa memasukkan kode darurat untuk membatalkan detoks
+    @FXML
+    private TextField kodeDaruratField;
+
+    // Tombol untuk membatalkan sesi detoks jika kode benar
+    @FXML
+    private Button btnBatalkan;
+
+    // Timeline untuk menjalankan countdown timer per detik
     private Timeline timeline;
+
+    // Waktu sisa dalam detik
     private long remainingSeconds;
+
+    // Referensi ke controller utama (FXMLBlokirHP) untuk update riwayat
     private FXMLBlokirHPController mainController;
 
+    /**
+     * Dipanggil saat FXML dimuat. Menginisialisasi timer berdasarkan sesi detoks
+     * aktif.
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         DetoxSession session = DetoxSession.getInstance();
-        remainingSeconds = session.getRemainingTimeInSeconds();
-        setupTimer();
-        startTimer();
+        remainingSeconds = session.getRemainingTimeInSeconds(); // Ambil waktu sisa dari sesi
+        setupTimer(); // Siapkan logika timer
+        startTimer(); // Mulai hitung mundur
     }
 
+    /**
+     * Membuat timeline yang akan berjalan tiap 1 detik untuk menurunkan sisa waktu.
+     * Jika waktu habis, sesi dianggap berhasil.
+     */
     private void setupTimer() {
         timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
             if (remainingSeconds > 0) {
@@ -39,18 +66,25 @@ public class FXMLBlokirStatusController implements Initializable {
                 updateTimerDisplay();
             } else {
                 timeline.stop();
-                // [MODIFIKASI] Kirim durasi penuh jika berhasil
+                // Sesi selesai secara alami → dianggap BERHASIL
                 completeDetox("BERHASIL", DetoxSession.getInstance().getDurasiInSeconds());
             }
         }));
         timeline.setCycleCount(Timeline.INDEFINITE);
     }
 
+    /**
+     * Memulai timer mundur dan langsung menampilkan waktu awal.
+     */
     private void startTimer() {
         updateTimerDisplay();
         timeline.play();
     }
 
+    /**
+     * Mengupdate tampilan label timer agar menampilkan jam:menit:detik dari waktu
+     * sisa.
+     */
     private void updateTimerDisplay() {
         long hours = remainingSeconds / 3600;
         long minutes = (remainingSeconds % 3600) / 60;
@@ -59,17 +93,23 @@ public class FXMLBlokirStatusController implements Initializable {
         timerLabel.setText(timeText);
     }
 
+    /**
+     * Event handler saat tombol 'Batalkan' ditekan.
+     * Validasi input kode darurat dan batalkan sesi jika benar.
+     */
     @FXML
     private void handleBatalkan(ActionEvent event) {
         String inputKode = kodeDaruratField.getText().trim();
         DetoxSession session = DetoxSession.getInstance();
+
         if (inputKode.isEmpty()) {
             showAlert("Error", "Masukkan kode darurat!");
             return;
         }
+
         if (inputKode.equals(session.getKodeDarurat())) {
             timeline.stop();
-            // [MODIFIKASI] Hitung dan kirim durasi yang sebenarnya berjalan
+            // Hitung durasi aktual yang sudah berjalan
             long actualDuration = session.getActualElapsedSeconds();
             completeDetox("GAGAL", actualDuration);
         } else {
@@ -77,16 +117,23 @@ public class FXMLBlokirStatusController implements Initializable {
         }
     }
 
-    // [MODIFIKASI] Metode ini sekarang menerima parameter durasi
+    /**
+     * Menyelesaikan sesi detoks dan mencatat hasilnya.
+     * 
+     * @param status            "BERHASIL" atau "GAGAL"
+     * @param durationInSeconds durasi sesi yang tercatat
+     */
     private void completeDetox(String status, long durationInSeconds) {
-        DetoxSession.getInstance().endDetox();
+        DetoxSession.getInstance().endDetox(); // Reset sesi
         if (mainController != null) {
-            // Kirim durasi yang benar ke controller utama
-            mainController.addToRiwayat(status, durationInSeconds);
+            mainController.addToRiwayat(status, durationInSeconds); // Tambah ke riwayat
         }
-        returnToBlokirHP();
+        returnToBlokirHP(); // Kembali ke halaman utama
     }
 
+    /**
+     * Navigasi kembali ke halaman FXMLBlokirHP.fxml setelah sesi selesai.
+     */
     private void returnToBlokirHP() {
         if (timeline != null) {
             timeline.stop();
@@ -101,10 +148,17 @@ public class FXMLBlokirStatusController implements Initializable {
         }
     }
 
+    /**
+     * Setter untuk menyimpan referensi ke controller utama agar bisa mengupdate
+     * data.
+     */
     public void setMainController(FXMLBlokirHPController controller) {
         this.mainController = controller;
     }
 
+    /**
+     * Menampilkan alert popup sederhana kepada pengguna.
+     */
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);

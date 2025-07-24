@@ -17,34 +17,77 @@ import java.util.stream.Collectors;
 
 public class FXMLStatistikAppsController implements Initializable {
 
-    @FXML private BarChart<String, Number> statistikChart;
-    @FXML private CategoryAxis xAxis;
-    @FXML private NumberAxis yAxis;
-    @FXML private TableView<RiwayatBlokirApps> riwayatTable;
-    @FXML private TableColumn<RiwayatBlokirApps, Integer> colNo;
-    @FXML private TableColumn<RiwayatBlokirApps, String> colTanggal;
-    @FXML private TableColumn<RiwayatBlokirApps, Integer> colDurasi;
-    @FXML private TableColumn<RiwayatBlokirApps, String> colStatus;
-    @FXML private TableColumn<RiwayatBlokirApps, String> colAktivitas;
-    @FXML private TableColumn<RiwayatBlokirApps, String> colApps;
-    @FXML private Button btnHapus;
-    @FXML private Button btnRefresh;
-    @FXML private Button btnKembali;
+    // Grafik batang untuk menampilkan statistik durasi blokir per aplikasi
+    @FXML
+    private BarChart<String, Number> statistikChart;
 
+    // Sumbu X untuk nama aplikasi
+    @FXML
+    private CategoryAxis xAxis;
+
+    // Sumbu Y untuk total durasi blokir (dalam menit)
+    @FXML
+    private NumberAxis yAxis;
+
+    // Tabel riwayat blokir aplikasi
+    @FXML
+    private TableView<RiwayatBlokirApps> riwayatTable;
+
+    // Kolom nomor urut
+    @FXML
+    private TableColumn<RiwayatBlokirApps, Integer> colNo;
+
+    // Kolom tanggal blokir
+    @FXML
+    private TableColumn<RiwayatBlokirApps, String> colTanggal;
+
+    // Kolom durasi blokir dalam menit
+    @FXML
+    private TableColumn<RiwayatBlokirApps, Integer> colDurasi;
+
+    // Kolom status sesi blokir
+    @FXML
+    private TableColumn<RiwayatBlokirApps, String> colStatus;
+
+    // Kolom aktivitas yang diblokir
+    @FXML
+    private TableColumn<RiwayatBlokirApps, String> colAktivitas;
+
+    // Kolom aplikasi yang diblokir
+    @FXML
+    private TableColumn<RiwayatBlokirApps, String> colApps;
+
+    // Tombol untuk menghapus riwayat yang dipilih
+    @FXML
+    private Button btnHapus;
+
+    // Tombol untuk memuat ulang data dari file XML
+    @FXML
+    private Button btnRefresh;
+
+    // Tombol untuk kembali ke tampilan sebelumnya
+    @FXML
+    private Button btnKembali;
+
+    // Stage tampilan sebelumnya, digunakan saat tombol kembali ditekan
     private Stage previousStage;
+
+    // Daftar riwayat blokir aplikasi, singleton
     private static RiwayatBlokirAppsList riwayatList = RiwayatBlokirAppsList.getInstance();
 
+    // Inisialisasi saat controller dimuat
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        setupTableColumns();
-        setupButtonActions();
+        setupTableColumns(); // Menyiapkan kolom tabel
+        setupButtonActions(); // Menetapkan aksi tombol
         if (riwayatList == null) {
             riwayatList = RiwayatBlokirAppsList.getInstance();
         }
-        riwayatList.loadFromXML();
-        refreshData();
+        riwayatList.loadFromXML(); // Memuat data dari file XML
+        refreshData(); // Menampilkan data
     }
 
+    // Menentukan bagaimana nilai tiap kolom diambil dari objek RiwayatBlokirApps
     private void setupTableColumns() {
         colNo.setCellValueFactory(new PropertyValueFactory<>("nomor"));
         colTanggal.setCellValueFactory(new PropertyValueFactory<>("tanggalMulai"));
@@ -58,23 +101,28 @@ public class FXMLStatistikAppsController implements Initializable {
         colApps.setCellValueFactory(new PropertyValueFactory<>("appsBlokir"));
     }
 
+    // Menetapkan aksi untuk tombol Hapus, Refresh, dan Kembali
     private void setupButtonActions() {
         btnHapus.setOnAction(this::handleHapusRiwayat);
         btnRefresh.setOnAction(this::handleRefresh);
         btnKembali.setOnAction(this::handleKembali);
     }
 
+    // Menyimpan referensi ke stage sebelumnya
     public void setPreviousStage(Stage previousStage) {
         this.previousStage = previousStage;
     }
 
+    // Memperbarui data di tabel dan grafik
     private void refreshData() {
-        if (riwayatList == null) return;
+        if (riwayatList == null)
+            return;
         ObservableList<RiwayatBlokirApps> data = riwayatList.getData();
         riwayatTable.setItems(data);
         updateStatistics();
     }
 
+    // Handler tombol Refresh: Memuat ulang data dari file XML
     @FXML
     private void handleRefresh(ActionEvent event) {
         boolean loaded = riwayatList.loadFromXML();
@@ -86,6 +134,7 @@ public class FXMLStatistikAppsController implements Initializable {
         refreshData();
     }
 
+    // Handler tombol Hapus: Menghapus riwayat yang dipilih dari tabel dan file XML
     @FXML
     private void handleHapusRiwayat(ActionEvent event) {
         RiwayatBlokirApps selected = riwayatTable.getSelectionModel().getSelectedItem();
@@ -106,6 +155,8 @@ public class FXMLStatistikAppsController implements Initializable {
         }
     }
 
+    // Handler tombol Kembali: Menampilkan stage sebelumnya dan menutup stage saat
+    // ini
     @FXML
     private void handleKembali(ActionEvent event) {
         if (previousStage != null) {
@@ -115,6 +166,7 @@ public class FXMLStatistikAppsController implements Initializable {
         }
     }
 
+    // Memperbarui grafik statistik durasi blokir per aplikasi
     private void updateStatistics() {
         statistikChart.getData().clear();
         if (riwayatList == null || riwayatList.getData().isEmpty()) {
@@ -130,7 +182,8 @@ public class FXMLStatistikAppsController implements Initializable {
                 }
             }
         }
-        if (appDurations.isEmpty()) return;
+        if (appDurations.isEmpty())
+            return;
 
         List<Map.Entry<String, Integer>> sortedApps = appDurations.entrySet().stream()
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
@@ -146,6 +199,7 @@ public class FXMLStatistikAppsController implements Initializable {
         statistikChart.getData().add(series);
     }
 
+    // Menampilkan alert informasi kepada pengguna
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
